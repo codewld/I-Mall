@@ -13,6 +13,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()]
     }),
     Components({
+      dirs: ['element-plus'],
       resolvers: [ElementPlusResolver()]
     })
   ],
