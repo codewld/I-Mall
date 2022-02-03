@@ -1,10 +1,37 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-let username = ref('admin')
+const loginFormData = ref({
+  username: '',
+  password: ''
+})
 </script>
 
 <template>
-  Login
-  <el-input v-model="username" placeholder="Please input"/>
+  <div class="h-full flex justify-center items-center bg text-center">
+    <div class="w-96 h-96 py-6 px-8 border-solid border border-gray-300 rounded-xl space-y-8 bg-white bg-opacity-95">
+      <h1 class="mt-10 text-5xl tracking-wider">I-Mall</h1>
+      <el-form label-position="top" :model="loginFormData" ref="loginForm">
+        <el-form-item label="账号：" prop="username">
+          <el-input type="text" v-model.trim="loginFormData.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码：" prop="password">
+          <el-input type="password" v-model.trim="loginFormData.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item class="mt-6">
+          <el-button type="primary" class="w-full">立即登录</el-button>
+        </el-form-item>
+      </el-form>
+      <div>
+        <label class="text-gray-400">没有账号？</label>
+        <router-link to="/register" class="text-blue-600 hover:text-blue-800">注册新账号</router-link>
+      </div>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.bg {
+  @apply bg-login bg-center bg-fixed bg-no-repeat bg-cover
+}
+</style>

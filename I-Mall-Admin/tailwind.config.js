@@ -4,7 +4,11 @@ module.exports = {
     './src/**/*.{vue,js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      backgroundImage: {
+        'login': "url('/src/assets/img/login_bg.jpg')",
+      }
+    }
   },
   plugins: []
 }
