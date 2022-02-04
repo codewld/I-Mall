@@ -9,7 +9,7 @@ body, html, #app {
     padding: 0;
 }
 
-body, p, ul, ol, dl, li, dt, dd {
+body, p, ul, ol, dl, li, dt, dd, a, a:active, a:visited, a:hover {
     font-size: 14px;
     font-family: "Microsoft Yahei", sans-serif;
     color: #333;
@@ -33,10 +33,5 @@ button {
 }
 
 a, a:active, a:visited {
-    color: #ccc;
     text-decoration: none;
-}
-
-a:hover {
-    color: #333;
 }
