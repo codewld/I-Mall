@@ -10,6 +10,14 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+/**
+ * <p>
+ * Swagger 配置类
+ * </p>
+ *
+ * @author codewld
+ * @since 2022-02-04
+ */
 @Configuration
 @EnableOpenApi
 public class SwaggerConfig {

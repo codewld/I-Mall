@@ -13,6 +13,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * <p>
+ * MyBatis Plus Generator 工具类
+ * </p>
+ *
+ * @author codewld
+ * @since 2022-02-04
+ */
 public class GeneratorUtil {
 
     private static HashMap<String, Object> configuration;
