@@ -33,7 +33,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--lombok-->
+        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -41,14 +41,14 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--mysql-->
+        <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!--mybatis-plus-->
+        <!-- mybatis-plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
