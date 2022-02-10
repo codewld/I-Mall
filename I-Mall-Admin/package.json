@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@types/node": "^17.0.14",
-    "element-plus": "^1.3.0-beta.10",
-    "vue": "^3.2.25",
+    "element-plus": "^2.0.1",
+    "vue": "^3.2.30",
     "vue-router": "^4.0.12"
   },
   "devDependencies": {
