@@ -25,3 +25,8 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# JWT
+jwt:
+  secret:  # 密钥
+  expiration: 604800 # 过期时长，以秒为单位
