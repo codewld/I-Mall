@@ -18,4 +18,11 @@ public interface UmsAdminService extends IService<UmsAdmin> {
      */
     UmsAdmin getByUsername(String username);
 
+    /**
+     * 分页查询
+     * @param pageNum 页数
+     * @param pageSize 每页条数
+     */
+    Object page(Integer pageNum, Integer pageSize);
+
 }
