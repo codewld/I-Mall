@@ -1,7 +1,7 @@
 package pers.codewld.imall.service;
 
-import pers.codewld.imall.entity.UmsAdmin;
 import com.baomidou.mybatisplus.extension.service.IService;
+import pers.codewld.imall.entity.UmsAdmin;
 
 /**
  * <p>
@@ -12,5 +12,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-02-04
  */
 public interface UmsAdminService extends IService<UmsAdmin> {
+
+    /**
+     * 根据username查询
+     */
+    UmsAdmin getByUsername(String username);
 
 }

@@ -1,10 +1,11 @@
 package pers.codewld.imall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 import pers.codewld.imall.entity.UmsAdmin;
 import pers.codewld.imall.mapper.UmsAdminMapper;
 import pers.codewld.imall.service.UmsAdminService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -16,5 +17,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> implements UmsAdminService {
+
+    @Override
+    public UmsAdmin getByUsername(String username) {
+        return this.getOne(new QueryWrapper<UmsAdmin>().eq("username", username), false);
+    }
 
 }
