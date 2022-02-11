@@ -1,4 +1,4 @@
-package pers.codewld.imall.myBatisPlusGenerator;
+package pers.codewld.imall.generator;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
