@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- * Redis 工具类类
+ * Redis 工具类
  * </p>
  *
  * @author codewld

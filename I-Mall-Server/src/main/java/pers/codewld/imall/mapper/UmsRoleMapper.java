@@ -1,6 +1,6 @@
 package pers.codewld.imall.mapper;
 
-import pers.codewld.imall.entity.UmsRole;
+import pers.codewld.imall.model.entity.UmsRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

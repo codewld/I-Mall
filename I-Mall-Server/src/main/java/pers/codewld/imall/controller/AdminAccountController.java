@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pers.codewld.imall.param.LoginParam;
+import pers.codewld.imall.model.param.LoginParam;
 import pers.codewld.imall.service.AdminAccountService;
 
 /**

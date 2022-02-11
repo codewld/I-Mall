@@ -28,9 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UmsAdminService umsAdminService;
 
-    @Autowired
-    JWTUtil JWTUtil;
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 该语句的作用是：去除默认生成的密码

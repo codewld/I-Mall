@@ -1,4 +1,4 @@
-package pers.codewld.imall.entity;
+package pers.codewld.imall.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

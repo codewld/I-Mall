@@ -1,6 +1,6 @@
 package pers.codewld.imall.service.impl;
 
-import pers.codewld.imall.entity.UmsMenu;
+import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.mapper.UmsMenuMapper;
 import pers.codewld.imall.service.UmsMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

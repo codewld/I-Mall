@@ -1,7 +1,7 @@
 package pers.codewld.imall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import pers.codewld.imall.entity.UmsAdmin;
+import pers.codewld.imall.model.entity.UmsAdmin;
 
 /**
  * <p>

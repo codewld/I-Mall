@@ -1,6 +1,6 @@
 package pers.codewld.imall.service;
 
-import pers.codewld.imall.param.LoginParam;
+import pers.codewld.imall.model.param.LoginParam;
 
 /**
  * <p>

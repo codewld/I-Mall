@@ -1,4 +1,4 @@
-package pers.codewld.imall.param;
+package pers.codewld.imall.model.param;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;

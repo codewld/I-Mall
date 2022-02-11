@@ -1,6 +1,6 @@
 package pers.codewld.imall.service.impl;
 
-import pers.codewld.imall.entity.UmsRole;
+import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.mapper.UmsRoleMapper;
 import pers.codewld.imall.service.UmsRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
