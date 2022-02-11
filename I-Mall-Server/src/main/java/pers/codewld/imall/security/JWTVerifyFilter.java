@@ -1,11 +1,10 @@
 package pers.codewld.imall.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import pers.codewld.imall.util.BeanUtil;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,18 +24,15 @@ import java.io.IOException;
  * @author codewld
  * @since 2022-02-11
  */
-@Component
 public class JWTVerifyFilter extends GenericFilterBean {
-
-    @Autowired
-    JWTUtil JWTUtil;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        JWTUtil jwtUtil = BeanUtil.getBean(JWTUtil.class);
         HttpServletRequest req = (HttpServletRequest) request;
         String jwtToken = req.getHeader("authorization");
-        if (!"/login".equals(req.getServletPath()) && jwtToken != null && !JWTUtil.isInvalid(jwtToken)) {
-            MyUserDetails user = JWTUtil.decode(jwtToken);
+        if (!"/login".equals(req.getServletPath()) && jwtToken != null && !jwtUtil.isInvalid(jwtToken)) {
+            MyUserDetails user = jwtUtil.decode(jwtToken);
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
