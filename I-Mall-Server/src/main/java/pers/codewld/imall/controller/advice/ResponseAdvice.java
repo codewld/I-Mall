@@ -33,7 +33,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // 若原返回结果为String，需要生成响应体、转换为JSON，再返回
-        if (body instanceof String) {
+        if (body instanceof String || String.class.equals(returnType.getGenericParameterType())) {
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             try {
