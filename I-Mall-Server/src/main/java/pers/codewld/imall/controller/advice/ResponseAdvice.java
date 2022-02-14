@@ -1,5 +1,6 @@
 package pers.codewld.imall.controller.advice;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.MethodParameter;
@@ -33,9 +34,10 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // 若原返回结果为String，需要生成响应体、转换为JSON，再返回
         if (body instanceof String) {
-            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             try {
-                return objectMapper.writeValueAsString(new ResultVO(body));
+                return mapper.writeValueAsString(new ResultVO(body));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

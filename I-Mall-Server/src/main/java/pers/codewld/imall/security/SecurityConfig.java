@@ -1,5 +1,6 @@
 package pers.codewld.imall.security;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -94,6 +95,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
-        writer.println(new ObjectMapper().writeValueAsString(resultVO));
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        writer.println(mapper.writeValueAsString(resultVO));
     }
 }
