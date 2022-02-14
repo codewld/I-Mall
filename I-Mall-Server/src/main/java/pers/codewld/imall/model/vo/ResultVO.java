@@ -29,6 +29,10 @@ public class ResultVO {
      */
     private final Object data;
 
+    public ResultVO(ResultCode resultCode) {
+        this(resultCode, null);
+    }
+
     public ResultVO(Object data) {
         this(ResultCode.SUCCESS, data);
     }

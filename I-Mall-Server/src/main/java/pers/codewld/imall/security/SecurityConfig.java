@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pers.codewld.imall.model.enums.ResultCode;
+import pers.codewld.imall.model.vo.ResultVO;
 import pers.codewld.imall.service.UmsAdminService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,12 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 未登录异常
         http
                 .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> returnResult(response, "未登录"));
+                .authenticationEntryPoint((request, response, authException) -> returnResult(response, new ResultVO(ResultCode.UNAUTHORIZED)));
 
         // 未授权异常
         http
                 .exceptionHandling()
-                .accessDeniedHandler((request, response, accessDeniedException) -> returnResult(response, "未授权"));
+                .accessDeniedHandler((request, response, accessDeniedException) -> returnResult(response, new ResultVO(ResultCode.FORBIDDEN)));
 
         // 禁用跨站请求保护
         http
@@ -88,10 +90,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 向前端返回结果
      */
-    private void returnResult(HttpServletResponse response, Object resultObj) throws IOException {
+    private void returnResult(HttpServletResponse response, ResultVO resultVO) throws IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
-        writer.println(new ObjectMapper().writeValueAsString(resultObj));
+        writer.println(new ObjectMapper().writeValueAsString(resultVO));
     }
 }
