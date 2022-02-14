@@ -53,12 +53,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 未登录异常
         http
                 .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> returnResult(response, new ResultVO(ResultCode.UNAUTHORIZED)));
+                .authenticationEntryPoint((request, response, authException) -> returnResult(response, ResultVO.fail(ResultCode.UNAUTHORIZED)));
 
         // 未授权异常
         http
                 .exceptionHandling()
-                .accessDeniedHandler((request, response, accessDeniedException) -> returnResult(response, new ResultVO(ResultCode.FORBIDDEN)));
+                .accessDeniedHandler((request, response, accessDeniedException) -> returnResult(response, ResultVO.fail(ResultCode.FORBIDDEN)));
 
         // 禁用跨站请求保护
         http

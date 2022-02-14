@@ -37,11 +37,15 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             try {
-                return mapper.writeValueAsString(new ResultVO(body));
+                return mapper.writeValueAsString(ResultVO.success(body));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
-        return new ResultVO(body);
+        // 如果已经包装为响应体，直接返回
+        if (body instanceof ResultVO) {
+            return body;
+        }
+        return ResultVO.success(body);
     }
 }

@@ -21,9 +21,9 @@ public enum ResultCode {
 
     VALIDATE_FAILED(2000, "参数错误"),
 
-    UNAUTHORIZED(8000, "未登录"),
+    UNAUTHORIZED(9100, "未登录"),
 
-    FORBIDDEN(9000, "未授权");
+    FORBIDDEN(9200, "未授权");
 
     /**
      * 状态码
