@@ -46,8 +46,12 @@ public class ResultVO {
         return new ResultVO(ResultCode.FAILED.getCode(), msg, null);
     }
 
-    public static ResultVO fail(ResultCode resultCode) {
+    public static ResultVO error(ResultCode resultCode) {
         return new ResultVO(resultCode, null);
+    }
+
+    public static ResultVO error(ResultCode resultCode, String msg) {
+        return new ResultVO(resultCode.getCode(), msg, null);
     }
 
     private ResultVO(ResultCode resultCode, Object data) {
