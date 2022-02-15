@@ -4,13 +4,13 @@ import pers.codewld.imall.model.param.LoginParam;
 
 /**
  * <p>
- * 后台账户 服务类
+ * 账户 服务类
  * </p>
  *
  * @author codewld
  * @since 2022-02-10
  */
-public interface AdminAccountService {
+public interface AccountService {
 
     /**
      * 登录

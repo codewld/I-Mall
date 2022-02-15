@@ -7,19 +7,19 @@ import org.springframework.stereotype.Service;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.param.LoginParam;
 import pers.codewld.imall.security.JWTUtil;
-import pers.codewld.imall.service.AdminAccountService;
+import pers.codewld.imall.service.AccountService;
 import pers.codewld.imall.service.UmsAdminService;
 
 /**
  * <p>
- * 后台账户 服务实现类
+ * 账户 服务实现类
  * </p>
  *
  * @author codewld
  * @since 2022-02-10
  */
 @Service
-public class AdminAccountServiceImpl implements AdminAccountService {
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     UmsAdminService umsAdminService;
