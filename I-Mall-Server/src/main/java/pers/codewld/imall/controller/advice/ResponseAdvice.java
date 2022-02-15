@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import pers.codewld.imall.model.vo.ResultVO;
 
+import java.util.Map;
+
 /**
  * <p>
  * 全局统一响应处理类
@@ -32,6 +34,10 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // 放行404响应
+        if (body instanceof Map && ((Map<?, ?>) body).get("status").equals(404)) {
+            return body;
+        }
         // 若原返回结果为String，需要生成响应体、转换为JSON，再返回
         if (body instanceof String || String.class.equals(returnType.getGenericParameterType())) {
             ObjectMapper mapper = new ObjectMapper();
