@@ -17,6 +17,7 @@ instance.interceptors.request.use(
     config.headers.Authorization = token
     return config
   }, () => {
+    ElMessage.error('请检查网络')
     return Promise.reject('网络错误')
   }
 )
@@ -47,6 +48,7 @@ instance.interceptors.response.use(
     // 其它错误
     return Promise.reject(res.data.msg)
   }, () => {
+    ElMessage.error('请检查网络')
     return Promise.reject('响应错误')
   }
 )
