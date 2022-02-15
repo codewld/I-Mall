@@ -31,7 +31,7 @@ public class JWTVerifyFilter extends GenericFilterBean {
         JWTUtil jwtUtil = BeanUtil.getBean(JWTUtil.class);
         HttpServletRequest req = (HttpServletRequest) request;
         String jwtToken = req.getHeader("authorization");
-        if (!"/login".equals(req.getServletPath()) && jwtToken != null && !jwtUtil.isInvalid(jwtToken)) {
+        if (!req.getServletPath().contains("login") && jwtToken != null && !jwtUtil.isInvalid(jwtToken)) {
             MyUserDetails user = jwtUtil.decode(jwtToken);
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
