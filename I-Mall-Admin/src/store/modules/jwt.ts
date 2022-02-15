@@ -15,5 +15,8 @@ export const useJWTStore = defineStore({
     set(value: string) {
       this.value = value
     }
+  },
+  persist: {
+    enabled: true
   }
 })
