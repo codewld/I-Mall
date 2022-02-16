@@ -63,7 +63,7 @@ instance.interceptors.response.use(
  * @param data 传递的数据
  * @return Promise
  */
-const request = <T>(path: string, method: Method = 'get', data ?: object): Promise<T> => {
+function request<T>(path: string, method: Method = 'get', data ?: object): Promise<T> {
   return instance.request({
     url: path,
     method: method,

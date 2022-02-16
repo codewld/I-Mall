@@ -3,6 +3,6 @@ import request from '@/api/request';
 /**
  * hello
  */
-export const rHello = () => {
-  return request<string>("/hello", 'get')
+export function rHello(): Promise<string> {
+  return request('/hello', 'get')
 }

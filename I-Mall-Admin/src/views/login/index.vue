@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { rLogin } from '@/api/account'
 import { useJWTStore } from '@/store';
@@ -9,7 +9,7 @@ import router from '@/router';
 /**
  * 登录表单数据
  */
-const loginFormData = ref({
+const loginFormData: Ref<Account.loginParam> = ref({
   username: '',
   password: ''
 })
