@@ -3,8 +3,12 @@ import { useJWTStore } from '@/store';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 
+const managementLayout = () => import('@/layouts/management/index.vue')
 const login = () => import('@/views/login/index.vue')
 const home = () => import('@/views/home/index.vue')
+const admin = () => import('@/views/ums/admin/index.vue')
+const role = () => import('@/views/ums/role/index.vue')
+const menu = () => import('@/views/ums/menu/index.vue')
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -20,8 +24,36 @@ const router = createRouter({
     },
     {
       path: '/home',
-      name: 'home',
-      component: home
+      component: managementLayout,
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: home
+        }
+      ]
+    },
+    {
+      path: '/ums',
+      component: managementLayout,
+      redirect: '/ums/admin',
+      children: [
+        {
+          path: 'admin',
+          name: 'admin',
+          component: admin
+        },
+        {
+          path: 'role',
+          name: 'role',
+          component: role
+        },
+        {
+          path: 'menu',
+          name: 'menu',
+          component: menu
+        }
+      ]
     }
   ]
 })
