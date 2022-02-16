@@ -2,10 +2,13 @@ import axios, { Method } from 'axios';
 import router from '@/router';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
-import { statusCode, baseURL } from '@/config';
+import { baseURL, statusCode } from '@/config';
 import { unref } from 'vue';
+import { useJWTStore } from '@/store';
 
-let instance = axios.create({
+const JWTStore = useJWTStore()
+
+const instance = axios.create({
   baseURL: baseURL,
   timeout: 5000
 })
@@ -13,8 +16,7 @@ let instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config: any) => {
-    let token = 'jwt'
-    config.headers.Authorization = token
+    config.headers.Authorization = JWTStore.value
     return config
   }, () => {
     ElMessage.error('请检查网络')
@@ -32,6 +34,7 @@ instance.interceptors.response.use(
     // 未登录
     if (res.data.code == statusCode.UNAUTHORIZED) {
       ElMessage.error('身份验证失败，跳转至登录页')
+      JWTStore.reset()
       return new Promise((resolve, reject) => {
         router.replace('login').then(() => {
           reject('请重新登录')

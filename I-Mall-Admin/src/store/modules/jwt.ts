@@ -12,8 +12,17 @@ export const useJWTStore = defineStore({
     }
   },
   actions: {
+    /**
+     * 设置JWT值
+     */
     set(value: string) {
       this.value = value
+    },
+    /**
+     * 清空JWT值
+     */
+    reset() {
+      this.value = undefined
     }
   },
   persist: {

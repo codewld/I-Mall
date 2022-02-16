@@ -1,10 +1,32 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
+import { rLogin } from '@/api/account'
+import { useJWTStore } from '@/store';
+import router from '@/router';
 
+
+/**
+ * 登录表单数据
+ */
 const loginFormData = ref({
   username: '',
   password: ''
 })
+
+/**
+ * 登录
+ */
+const login = () => {
+  rLogin(loginFormData).then(res => {
+    const JWTStore = useJWTStore()
+    JWTStore.set(res)
+    router.push('home')
+    ElMessage.success('登录成功')
+  }).catch(err => {
+    ElMessage.warning(err)
+  })
+}
 </script>
 
 <template>
@@ -19,7 +41,7 @@ const loginFormData = ref({
           <el-input type="password" v-model.trim="loginFormData.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item class="mt-6">
-          <el-button type="primary" class="w-full">立即登录</el-button>
+          <el-button type="primary" class="w-full" @click="login">立即登录</el-button>
         </el-form-item>
       </el-form>
       <div>
