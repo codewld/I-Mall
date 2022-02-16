@@ -3,8 +3,9 @@ import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { rLogin } from '@/api/account'
 import { useJWTStore } from '@/store';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 
 /**
  * 登录表单数据
@@ -31,7 +32,8 @@ const login = () => {
 
 <template>
   <div class="h-full flex justify-center items-center bg-login bg-center bg-fixed bg-no-repeat bg-cover text-center">
-    <div class="w-96 h-96 py-6 px-8 border-solid border border-gray-300 rounded-xl space-y-8 bg-white bg-opacity-95">
+    <div
+        class="w-96 h-96 py-6 px-8 border-solid border border-transparent rounded-3xl space-y-8 bg-white bg-opacity-95">
       <h1 class="mt-10 text-5xl tracking-wider">I-Mall</h1>
       <el-form label-position="top" :model="loginFormData" ref="loginForm">
         <el-form-item label="账号：" prop="username">

@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
   if (!JWT) {
     if (to.name !== 'login') {
       ElMessage.warning('请登录')
-      return next('login')
+      return next({ name: 'login' })
     } else {
       return next()
     }
@@ -75,7 +75,7 @@ router.beforeEach((to, from, next) => {
   // 不允许已登录的情况下进入登录页
   if (to.name === 'login') {
     ElMessage.warning('您已登录')
-    return next()
+    return next({ name: 'home' })
   }
   next()
 })
