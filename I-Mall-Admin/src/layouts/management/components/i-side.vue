@@ -8,7 +8,7 @@ const activeRoute = computed(() => route.path)
 </script>
 
 <template>
-  <el-menu router :default-active="activeRoute" class="h-full">
+  <el-menu router :default-active="activeRoute" class="h-full select-none">
     <el-menu-item index="/home">
       首页
     </el-menu-item>

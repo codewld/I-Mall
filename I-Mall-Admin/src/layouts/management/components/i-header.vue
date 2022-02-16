@@ -34,14 +34,14 @@ const logout = () => {
   const JWTStore = useJWTStore()
   JWTStore.reset()
   ElMessage.success('退出成功')
-  router.replace('login')
+  router.replace({ name: 'login' })
 }
 </script>
 
 <template>
   <div
-      class="h-full px-6 box-border z-10 flex justify-between items-center border-0 border-b border-gray-300 border-solid">
-    <h1 class="text-4xl tracking-wider">
+      class="h-full px-6 z-10 flex justify-between items-center border-0 border-b border-gray-300 border-solid select-none">
+    <h1 @click="router.push({name: 'home'})" class="text-4xl font-bold tracking-wider cursor-pointer">
       I-Mall
     </h1>
     <div>

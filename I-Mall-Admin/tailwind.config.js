@@ -8,6 +8,12 @@ module.exports = {
     extend: {
       backgroundImage: {
         'login': "url('/src/assets/img/login_bg.jpg')",
+      },
+      width: {
+        '112': '28rem'
+      },
+      height: {
+        '112': '28rem'
       }
     }
   },
