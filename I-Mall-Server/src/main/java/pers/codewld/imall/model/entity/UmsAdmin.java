@@ -3,10 +3,11 @@ package pers.codewld.imall.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import pers.codewld.imall.security.MyUserDetails;
 
@@ -22,8 +23,9 @@ import java.util.Collection;
  * @author codewld
  * @since 2022-02-04
  */
-@Getter
-@Setter
+@JsonIgnoreProperties({"enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
+@EqualsAndHashCode(callSuper = true)
+@Data
 @TableName("ums_admin")
 @ApiModel(value = "UmsAdmin对象", description = "后台用户表")
 public class UmsAdmin extends MyUserDetails implements Serializable {
@@ -55,8 +57,8 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     @ApiModelProperty("最后登录时间")
     private LocalDateTime loginTime;
 
-    @ApiModelProperty("帐号启用状态：0->禁用；1->启用")
-    private Integer status;
+    @ApiModelProperty("帐号启用状态")
+    private Boolean status;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -65,6 +67,6 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
 
     @Override
     public boolean isEnabled() {
-        return status == 1;
+        return status;
     }
 }

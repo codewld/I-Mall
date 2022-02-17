@@ -1,6 +1,6 @@
 package pers.codewld.imall.model.vo;
 
-import lombok.Getter;
+import lombok.Data;
 import pers.codewld.imall.model.enums.ResultCode;
 
 /**
@@ -11,7 +11,7 @@ import pers.codewld.imall.model.enums.ResultCode;
  * @author codewld
  * @since 2022-02-12
  */
-@Getter
+@Data
 public class ResultVO {
 
     /**

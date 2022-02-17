@@ -1,8 +1,7 @@
 package pers.codewld.imall.model.param;
 
 import io.swagger.annotations.ApiModel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -15,8 +14,7 @@ import javax.validation.constraints.Size;
  * @author codewld
  * @since 2022-02-06
  */
-@Getter
-@Setter
+@Data
 @ApiModel(value = "LoginParam对象", description = "登录参数")
 public class LoginParam {
 

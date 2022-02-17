@@ -1,7 +1,6 @@
 package pers.codewld.imall.security;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,8 +17,7 @@ import java.util.Collection;
  * @author codewld
  * @since 2022-02-11
  */
-@Getter
-@Setter
+@Data
 public class MyUserDetails implements UserDetails {
 
     private Long id;
