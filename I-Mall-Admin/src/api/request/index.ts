@@ -64,11 +64,20 @@ instance.interceptors.response.use(
  * @return Promise
  */
 function request<T>(path: string, method: Method = 'get', data ?: object): Promise<T> {
-  return instance.request({
-    url: path,
-    method: method,
-    data: unref(data)
-  })
+  let unRefData = unref(data)
+  if (method === 'get' || method === 'GET') {
+    return instance.request({
+      url: path,
+      method: method,
+      params: unRefData
+    })
+  } else {
+    return instance.request({
+      url: path,
+      method: method,
+      data: unRefData
+    })
+  }
 }
 
 export default request
