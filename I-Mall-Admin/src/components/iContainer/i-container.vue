@@ -10,7 +10,11 @@
 </template>
 
 <style scoped>
-/deep/ .el-space__item, .el-space {
+:deep(.el-space__item) {
+  width: 100%;
+}
+
+:deep(.el-space) {
   width: 100%;
 }
 </style>
