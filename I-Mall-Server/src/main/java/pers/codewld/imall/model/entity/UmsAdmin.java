@@ -23,7 +23,7 @@ import java.util.Collection;
  * @author codewld
  * @since 2022-02-04
  */
-@JsonIgnoreProperties({"enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
+@JsonIgnoreProperties({"password", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("ums_admin")
@@ -48,7 +48,7 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     @ApiModelProperty("昵称")
     private String nickName;
 
-    @ApiModelProperty("备注信息")
+    @ApiModelProperty("备注")
     private String note;
 
     @ApiModelProperty("创建时间")
@@ -57,7 +57,7 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     @ApiModelProperty("最后登录时间")
     private LocalDateTime loginTime;
 
-    @ApiModelProperty("帐号启用状态")
+    @ApiModelProperty("启用状态")
     private Boolean status;
 
     @Override

@@ -37,8 +37,6 @@ public class PageVO<T> {
     private List<T> list;
 
     public PageVO(Page<T> page) {
-        this.pageNum = page.getCurrent();
-        this.pageSize = page.getSize();
         this.total = page.getTotal();
         this.list = page.getRecords();
     }
