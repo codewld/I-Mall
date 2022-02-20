@@ -12,7 +12,7 @@ import ISide from './components/i-side.vue';
       <el-aside width="200px">
         <i-side/>
       </el-aside>
-      <el-main>
+      <el-main class="relative">
         <router-view/>
       </el-main>
     </el-container>
