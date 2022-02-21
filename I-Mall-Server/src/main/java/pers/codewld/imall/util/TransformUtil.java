@@ -1,6 +1,7 @@
 package pers.codewld.imall.util;
 
 import pers.codewld.imall.model.entity.UmsAdmin;
+import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,18 @@ public class TransformUtil {
         LocalDateTime loginTime = umsAdmin.getLoginTime();
         Boolean status = umsAdmin.getStatus();
         return new UmsAdminVO(id, username, icon, email, nickName, note, createTime, loginTime, status);
+    }
+
+    public static UmsAdmin transform(UmsAdminParam umsAdminParam) {
+        UmsAdmin umsAdmin = new UmsAdmin();
+        umsAdmin.setUsername(umsAdminParam.getUsername());
+        umsAdmin.setPassword(umsAdminParam.getPassword());
+        umsAdmin.setIcon(umsAdminParam.getIcon());
+        umsAdmin.setEmail(umsAdminParam.getEmail());
+        umsAdmin.setNickName(umsAdminParam.getNickName());
+        umsAdmin.setNote(umsAdminParam.getNote());
+        umsAdmin.setStatus(umsAdminParam.getStatus());
+        return umsAdmin;
     }
 
 }

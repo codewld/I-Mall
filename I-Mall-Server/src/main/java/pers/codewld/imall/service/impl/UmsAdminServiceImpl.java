@@ -3,14 +3,18 @@ package pers.codewld.imall.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.mapper.UmsAdminMapper;
+import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
+import pers.codewld.imall.security.MD5PasswordEncoder;
 import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.util.TransformUtil;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +28,24 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> implements UmsAdminService {
+
+    @Autowired
+    MD5PasswordEncoder md5PasswordEncoder;
+
+    @Override
+    public Boolean add(UmsAdminParam umsAdminParam) {
+        UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
+        umsAdmin.setCreateTime(LocalDateTime.now());
+        umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
+        return this.save(umsAdmin);
+    }
+
+    @Override
+    public Boolean update(Long id, UmsAdminParam umsAdminParam) {
+        UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
+        umsAdmin.setId(id);
+        return this.updateById(umsAdmin);
+    }
 
     @Override
     public UmsAdmin getByUsername(String username) {

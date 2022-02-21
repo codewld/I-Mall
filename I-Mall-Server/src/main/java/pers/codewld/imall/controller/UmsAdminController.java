@@ -4,11 +4,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import pers.codewld.imall.model.entity.UmsAdmin;
+import org.springframework.web.bind.annotation.*;
+import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.service.UmsAdminService;
@@ -30,6 +27,24 @@ public class UmsAdminController {
 
     @Autowired
     UmsAdminService umsAdminService;
+
+    @PostMapping()
+    @ApiOperation("新增用户")
+    public Object add(@RequestBody @Validated UmsAdminParam umsAdminParam) {
+        return umsAdminService.add(umsAdminParam);
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除用户")
+    public Boolean del(@PathVariable @ApiParam("用户id") Long id) {
+        return umsAdminService.removeById(id);
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("修改用户")
+    public Object update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated UmsAdminParam umsAdminParam) {
+        return umsAdminService.update(id, umsAdminParam);
+    }
 
     @GetMapping("/list")
     @ApiOperation("分页查询用户列表")
