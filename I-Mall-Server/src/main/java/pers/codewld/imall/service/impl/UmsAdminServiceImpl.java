@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.mapper.UmsAdminMapper;
 import pers.codewld.imall.model.param.UmsAdminParam;
+import pers.codewld.imall.model.param.UmsAdminQueryParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
@@ -58,8 +59,18 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize) {
-        Page<UmsAdmin> page = this.page(new Page<>(pageNum, pageSize));
+    public PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize, UmsAdminQueryParam umsAdminQueryParam) {
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
+        String username = umsAdminQueryParam.getUsername();
+        String email = umsAdminQueryParam.getEmail();
+        String nickName = umsAdminQueryParam.getNickName();
+        Boolean status = umsAdminQueryParam.getStatus();
+        queryWrapper
+                .like(username != null, "username", username)
+                .like(email != null, "email", email)
+                .like(nickName != null, "nick_name", nickName)
+                .eq(status != null, "status", status);
+        Page<UmsAdmin> page = this.page(new Page<>(pageNum, pageSize), queryWrapper);
         long total = page.getTotal();
         List<UmsAdminVO> list = page.getRecords().stream().map(TransformUtil::transform).collect(Collectors.toList());
         return new PageVO<>(total, list);

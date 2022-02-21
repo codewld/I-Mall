@@ -11,14 +11,14 @@ import javax.validation.constraints.Size;
 
 /**
  * <p>
- * UmsAdmin参数对象
+ * UmsAdmin参数类
  * </p>
  *
  * @author codewld
  * @since 2022-02-21
  */
 @Data
-@ApiModel(value = "UmsAdminParam对象", description = "UmsAdmin参数对象")
+@ApiModel(value = "UmsAdminParam对象", description = "UmsAdmin参数类")
 public class UmsAdminParam {
 
     @NotBlank(groups = ValidatorConfig.Group.add.class, message = "用户名不能为空")

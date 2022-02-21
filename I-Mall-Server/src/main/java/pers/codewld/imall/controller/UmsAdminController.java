@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pers.codewld.imall.config.ValidatorConfig;
 import pers.codewld.imall.model.param.UmsAdminParam;
+import pers.codewld.imall.model.param.UmsAdminQueryParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.service.UmsAdminService;
@@ -48,11 +49,11 @@ public class UmsAdminController {
     }
 
     @GetMapping("/list")
-    @ApiOperation("分页查询用户列表")
+    @ApiOperation("查询用户列表，分页，可搜索")
     public PageVO<UmsAdminVO> list(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
-                                   @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize) throws InterruptedException {
-        Thread.currentThread().sleep(1000);
-        return umsAdminService.page(pageNum, pageSize);
+                                   @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize,
+                                   UmsAdminQueryParam umsAdminQueryParam) {
+        return umsAdminService.page(pageNum, pageSize, umsAdminQueryParam);
     }
 
 }
