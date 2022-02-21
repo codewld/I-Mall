@@ -20,28 +20,11 @@ import java.time.LocalDateTime;
 public class TransformUtil {
 
     public static UmsAdminVO transform(UmsAdmin umsAdmin) {
-        Long id = umsAdmin.getId();
-        String username = umsAdmin.getUsername();
-        String icon = umsAdmin.getIcon();
-        String email = umsAdmin.getEmail();
-        String nickName = umsAdmin.getNickName();
-        String note = umsAdmin.getNote();
-        LocalDateTime createTime = umsAdmin.getCreateTime();
-        LocalDateTime loginTime = umsAdmin.getLoginTime();
-        Boolean status = umsAdmin.getStatus();
-        return new UmsAdminVO(id, username, icon, email, nickName, note, createTime, loginTime, status);
+        return new UmsAdminVO(umsAdmin.getId(), umsAdmin.getUsername(), umsAdmin.getIcon(), umsAdmin.getEmail(), umsAdmin.getNickName(), umsAdmin.getNote(), umsAdmin.getCreateTime(), umsAdmin.getUpdateTime(), umsAdmin.getLoginTime(), umsAdmin.getStatus());
     }
 
-    public static UmsAdmin transform(UmsAdminParam umsAdminParam) {
-        UmsAdmin umsAdmin = new UmsAdmin();
-        umsAdmin.setUsername(umsAdminParam.getUsername());
-        umsAdmin.setPassword(umsAdminParam.getPassword());
-        umsAdmin.setIcon(umsAdminParam.getIcon());
-        umsAdmin.setEmail(umsAdminParam.getEmail());
-        umsAdmin.setNickName(umsAdminParam.getNickName());
-        umsAdmin.setNote(umsAdminParam.getNote());
-        umsAdmin.setStatus(umsAdminParam.getStatus());
-        return umsAdmin;
+    public static UmsAdmin transform(UmsAdminParam UmsAdminParam) {
+        return new UmsAdmin(UmsAdminParam.getUsername(), UmsAdminParam.getPassword(), UmsAdminParam.getIcon(), UmsAdminParam.getEmail(), UmsAdminParam.getNickName(), UmsAdminParam.getNote(), UmsAdminParam.getStatus());
     }
 
 }

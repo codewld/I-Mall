@@ -40,6 +40,9 @@ public class UmsAdminVO implements Serializable {
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;
 
+    @ApiModelProperty("更新时间")
+    private LocalDateTime updateTime;
+
     @ApiModelProperty("最后登录时间")
     private LocalDateTime loginTime;
 

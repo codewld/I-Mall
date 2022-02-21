@@ -35,8 +35,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Override
     public Boolean add(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
-        umsAdmin.setCreateTime(LocalDateTime.now());
         umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
+        umsAdmin.setCreateTime(LocalDateTime.now());
         return this.save(umsAdmin);
     }
 
@@ -44,6 +44,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public Boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setId(id);
+        umsAdmin.setUpdateTime(LocalDateTime.now());
         return this.updateById(umsAdmin);
     }
 
