@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.groups.Default;
 
 /**
  * <p>
@@ -27,6 +28,17 @@ public class ValidatorConfig {
                 .failFast(true)
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
+    }
+
+    /**
+     * 校验分组
+     */
+    public interface Group extends Default {
+        interface add extends Group {
+        }
+
+        interface update extends Group {
+        }
     }
 
 }

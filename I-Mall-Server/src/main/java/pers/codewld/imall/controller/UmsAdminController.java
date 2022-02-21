@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pers.codewld.imall.config.ValidatorConfig;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
@@ -30,7 +31,7 @@ public class UmsAdminController {
 
     @PostMapping()
     @ApiOperation("新增用户")
-    public Object add(@RequestBody @Validated UmsAdminParam umsAdminParam) {
+    public Object add(@RequestBody @Validated(ValidatorConfig.Group.add.class) UmsAdminParam umsAdminParam) {
         return umsAdminService.add(umsAdminParam);
     }
 
@@ -42,7 +43,7 @@ public class UmsAdminController {
 
     @PutMapping("/{id}")
     @ApiOperation("修改用户")
-    public Object update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated UmsAdminParam umsAdminParam) {
+    public Boolean update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated UmsAdminParam umsAdminParam) {
         return umsAdminService.update(id, umsAdminParam);
     }
 
