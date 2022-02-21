@@ -54,7 +54,23 @@ const isSearching: Ref<boolean> = ref(false)
 /**
  * 搜索参数
  */
-const searchParam: Ref<object> = ref({})
+const searchParam: Ref = ref({})
+
+/**
+ * 获取加工后的搜索参数
+ */
+const getValidSearchParam = () => {
+  if (isSearching.value) {
+    let validSearchParam: any = {}
+    for (let key in searchParam.value) {
+      if (searchParam.value[key] !== undefined && searchParam.value[key] !== null && searchParam.value[key] !== '') {
+        validSearchParam[key] = searchParam.value[key]
+      }
+    }
+    return validSearchParam
+  }
+  return null
+}
 
 /**
  * 开始搜索
@@ -101,7 +117,7 @@ const dataList: Ref<CURD.dataList<unknown>> = ref({
  */
 const doLoad = () => {
   isLoading.value = true
-  props.loadFunction(pageParam, isSearching.value ? searchParam : null).then(res => {
+  props.loadFunction(pageParam, getValidSearchParam()).then(res => {
     dataList.value = res
   }).catch(err => {
     ElMessage.warning(err)
