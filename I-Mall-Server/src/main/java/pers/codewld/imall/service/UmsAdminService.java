@@ -3,6 +3,7 @@ package pers.codewld.imall.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.vo.PageVO;
+import pers.codewld.imall.model.vo.UmsAdminVO;
 
 /**
  * <p>
@@ -24,6 +25,6 @@ public interface UmsAdminService extends IService<UmsAdmin> {
      * @param pageNum 页数
      * @param pageSize 每页条数
      */
-    PageVO<UmsAdmin> page(Integer pageNum, Integer pageSize);
+    PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize);
 
 }

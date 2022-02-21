@@ -17,16 +17,6 @@ import java.util.List;
 public class PageVO<T> {
 
     /**
-     * 当前页数
-     */
-    private Long pageNum;
-
-    /**
-     * 每页条数
-     */
-    private Long pageSize;
-
-    /**
      * 总条数
      */
     private Long total;
@@ -39,6 +29,11 @@ public class PageVO<T> {
     public PageVO(Page<T> page) {
         this.total = page.getTotal();
         this.list = page.getRecords();
+    }
+
+    public PageVO(Long total, List<T> list) {
+        this.total = total;
+        this.list = list;
     }
 
 }

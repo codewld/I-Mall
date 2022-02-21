@@ -23,7 +23,7 @@ import java.util.Collection;
  * @author codewld
  * @since 2022-02-04
  */
-@JsonIgnoreProperties({"password", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
+@JsonIgnoreProperties({"enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("ums_admin")

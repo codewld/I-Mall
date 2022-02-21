@@ -7,7 +7,12 @@ import org.springframework.stereotype.Service;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.mapper.UmsAdminMapper;
 import pers.codewld.imall.model.vo.PageVO;
+import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.service.UmsAdminService;
+import pers.codewld.imall.util.TransformUtil;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -27,9 +32,11 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public PageVO<UmsAdmin> page(Integer pageNum, Integer pageSize) {
+    public PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize) {
         Page<UmsAdmin> page = this.page(new Page<>(pageNum, pageSize));
-        return new PageVO<>(page);
+        long total = page.getTotal();
+        List<UmsAdminVO> list = page.getRecords().stream().map(TransformUtil::transform).collect(Collectors.toList());
+        return new PageVO<>(total, list);
     }
 
 }
