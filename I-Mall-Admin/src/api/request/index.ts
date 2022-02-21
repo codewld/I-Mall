@@ -3,7 +3,7 @@ import router from '@/router';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { baseURL, statusCode } from '@/config';
-import { unref } from 'vue';
+import { Ref, unref } from 'vue';
 import { useJWTStore } from '@/store';
 
 const JWTStore = useJWTStore()
@@ -63,7 +63,7 @@ instance.interceptors.response.use(
  * @param data 传递的数据
  * @return Promise
  */
-function request<T>(path: string, method: Method = 'get', data ?: object): Promise<T> {
+function request<T>(path: string, method: Method = 'get', data ?: Ref<object> | object): Promise<T> {
   let unRefData = unref(data)
   if (method === 'get' || method === 'GET') {
     return instance.request({

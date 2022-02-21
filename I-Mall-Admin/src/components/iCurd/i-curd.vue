@@ -34,10 +34,10 @@ const props = defineProps({
     required: true
   },
   /**
-   * 分页查询方法方法
+   * 数据查询方法
    */
-  listFunction: {
-    type: Function as PropType<CURD.listFunction<unknown>>,
+  loadFunction: {
+    type: Function as PropType<CURD.loadFunction<unknown>>,
     required: true
   }
 })
@@ -60,9 +60,9 @@ const pageParam: Ref<CURD.pageParam> = ref({
 })
 
 /**
- * 分页数据
+ * 数据列表
  */
-const pageData: Ref<CURD.pageData<unknown>> = ref({
+const dataList: Ref<CURD.dataList<unknown>> = ref({
   total: 0,
   list: []
 })
@@ -70,7 +70,7 @@ const pageData: Ref<CURD.pageData<unknown>> = ref({
 /**
  * 分页查询数据列表
  */
-const list = () => {
+const doLoad = () => {
   isLoading.value = true
   props.listFunction(pageParam).then(res => {
     pageData.value = res
@@ -87,7 +87,7 @@ const list = () => {
 watch(
     pageParam,
     () => {
-      list()
+      doLoad()
     },
     { deep: true, immediate: true }
 )
@@ -139,7 +139,7 @@ const doAdd = () => {
   props.addFunction(formData).then(() => {
     ElMessage.success('操作成功')
     dialogVisible.value = false
-    list()
+    doLoad()
   }).catch(err => {
     ElMessage.warning(err)
   })
@@ -151,7 +151,7 @@ const doAdd = () => {
 const doDel = () => {
   props.delFunction(currentRow.value.id).then(() => {
     ElMessage.success('操作成功')
-    list()
+    doLoad()
   }).catch(err => {
     ElMessage.warning(err)
   })
@@ -184,7 +184,7 @@ const doUpdate = () => {
   props.updateFunction(currentRow.value.id, data).then(() => {
     ElMessage.success('操作成功')
     dialogVisible.value = false
-    list()
+    doLoad()
   }).catch(err => {
     ElMessage.warning(err)
   })
@@ -233,7 +233,7 @@ const handleSeeForm = () => {
         </div>
       </template>
       <!--表格-->
-      <el-table v-loading="isLoading" :data="pageData.list" stripe highlight-current-row
+      <el-table v-loading="isLoading" :data="dataList.list" stripe highlight-current-row
                 @current-change="handleCurrentChange">
         <template v-for="(field, key) in fieldList" :key="key">
           <el-table-column v-if="field.tableConf.display ?? true"
@@ -249,7 +249,7 @@ const handleSeeForm = () => {
         </template>
       </el-table>
       <!--分页-->
-      <el-pagination :page-sizes="[4, 8, 16]" layout="total, sizes, prev, pager, next, jumper" :total="pageData.total"
+      <el-pagination :page-sizes="[4, 8, 16]" layout="total, sizes, prev, pager, next, jumper" :total="dataList.total"
                      v-model:current-page="pageParam.pageNum" v-model:page-size="pageParam.pageSize"
                      class="justify-center mt-5">
       </el-pagination>
@@ -259,12 +259,10 @@ const handleSeeForm = () => {
   <el-dialog v-model="dialogVisible" title="Tips" width="50%">
     <el-form :model="formData" inline label-position="top" class="justify-between">
       <template v-for="(field, key) in fieldList" :key="key">
-        <el-form-item v-if="field?.formConf?.[actionType] ?? true" :label="`${field.name}：`" class="w-2/5">
-          <slot :name="`form-item-${field.code}`"
-                :row="formData"
-                :disabled="(field?.formConf?.readOnly && actionType !== 'add') || actionType === 'see'">
+        <el-form-item v-if="field?.formConf?.[actionType] ?? true" :label="`${field.name}：`" class="w-2/5 flex-grow">
+          <slot :name="`form-item-${field.code}`" :row="formData" :disabled="actionType === 'see'">
             <el-input v-model.trim="formData[field.code]"
-                      :disabled="(field?.formConf?.readOnly && actionType !== 'add') || actionType === 'see'"
+                      :disabled="actionType === 'see'"
                       :placeholder="actionType === 'see' ? '' : `请输入${field.name}`"/>
           </slot>
         </el-form-item>

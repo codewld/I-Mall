@@ -18,9 +18,9 @@ declare namespace CURD {
   type updateFunction<T> = (id: number, data: T) => Promise<string>
 
   /**
-   * 分页查询方法
+   * 数据查询方法
    */
-  type listFunction<T> = (data: Ref<pageParam>) => Promise<pageData<T>>
+  type loadFunction<T> = (pageParam: Ref<pageParam>, searchParam: Ref<object> | null) => Promise<dataList<T>>
 
   /**
    * 分页参数
@@ -31,9 +31,9 @@ declare namespace CURD {
   }
 
   /**
-   * 分页数据
+   * 数据列表
    */
-  interface pageData<T> {
+  interface dataList<T> {
     total: number,
     list: T[]
   }
@@ -53,10 +53,9 @@ declare namespace CURD {
    * 表单配置信息
    */
   interface formConf {
-    readOnly?: boolean,
     add?: boolean,
     update?: boolean,
-    see?: boolean,
+    see?: boolean
   }
 
   /**

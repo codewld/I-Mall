@@ -21,7 +21,7 @@ const fieldList: CURD.field[] = [
 </script>
 
 <template>
-  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :list-function="rList"
+  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :load-function="rList"
           :field-list="fieldList">
     <!--自定义表格列-->
     <template v-slot:table-column-status="scope">
