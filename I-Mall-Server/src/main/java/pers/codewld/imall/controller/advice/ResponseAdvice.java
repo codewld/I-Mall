@@ -34,6 +34,10 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // 放行Swagger
+        if (request.getURI().getPath().matches("(.*)swagger(.*)|(.*)api-docs(.*)")) {
+            return body;
+        }
         // 放行404响应
         if (body instanceof Map && ((Map<?, ?>) body).get("status").equals(404)) {
             return body;
