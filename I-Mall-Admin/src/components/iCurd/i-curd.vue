@@ -42,7 +42,36 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['add', 'del', 'update', 'see']);
+const emits = defineEmits(['add', 'del', 'update', 'see'])
+
+
+// -- 搜索相关 --
+/**
+ * 是否正在进行搜索
+ */
+const isSearching: Ref<boolean> = ref(false)
+
+/**
+ * 搜索参数
+ */
+const searchParam: Ref<object> = ref({})
+
+/**
+ * 开始搜索
+ */
+const doSearch = () => {
+  isSearching.value = true
+  doLoad()
+}
+
+/**
+ * 重置搜索
+ */
+const resetSearch = () => {
+  searchParam.value = {}
+  isSearching.value = false
+  doLoad()
+}
 
 
 // -- 数据加载相关 --
@@ -72,8 +101,8 @@ const dataList: Ref<CURD.dataList<unknown>> = ref({
  */
 const doLoad = () => {
   isLoading.value = true
-  props.listFunction(pageParam).then(res => {
-    pageData.value = res
+  props.loadFunction(pageParam, isSearching.value ? searchParam : null).then(res => {
+    dataList.value = res
   }).catch(err => {
     ElMessage.warning(err)
   }).finally(() => {
@@ -208,12 +237,21 @@ const handleSeeForm = () => {
         <div class="flex justify-between">
           <p>搜索区</p>
           <div>
-            <el-button>重置</el-button>
-            <el-button type="primary">搜索</el-button>
+            <el-button @click="resetSearch">重置</el-button>
+            <el-button type="primary" @click="doSearch">搜索</el-button>
           </div>
         </div>
       </template>
-      <slot name="search"></slot>
+      <el-form :model="searchParam" inline>
+        <template v-for="(field, key) in fieldList" :key="key">
+          <el-form-item v-if="field?.searchConf?.display" :label="`${field.name}：`">
+            <slot :name="`search-item-${field.code}`" :row="searchParam">
+              <el-input v-model.trim="searchParam[field.code]"
+                        :placeholder="`请输入${field.name}`"/>
+            </slot>
+          </el-form-item>
+        </template>
+      </el-form>
     </el-card>
     <!--数据区-->
     <el-card shadow="never">

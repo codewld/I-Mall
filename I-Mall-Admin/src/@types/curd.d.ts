@@ -39,6 +39,13 @@ declare namespace CURD {
   }
 
   /**
+   * 搜索配置信息
+   */
+  interface searchConf {
+    display: boolean
+  }
+
+  /**
    * 表格配置信息
    */
   interface tableConf {
@@ -65,7 +72,8 @@ declare namespace CURD {
     code: string,
     name: string,
     tableConf?: tableConf,
-    formConf?: formConf
+    formConf?: formConf,
+    searchConf?: searchConf
   }
 
 }

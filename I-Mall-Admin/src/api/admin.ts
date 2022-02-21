@@ -25,8 +25,8 @@ export const rUpdate: CURD.updateFunction<Admin.adminParam> = (id, data) => {
 }
 
 /**
- * 分页查询用户列表
+ * 查询用户列表
  */
-export const rList: CURD.listFunction<Admin.admin> = (data) => {
-  return request(`${ PREFIX }/list`, 'get', data)
+export const rList: CURD.loadFunction<Admin.admin> = (pageParam, searchParam) => {
+  return request(`${ PREFIX }/list`, 'get', {...pageParam?.value, ...searchParam?.value})
 }
