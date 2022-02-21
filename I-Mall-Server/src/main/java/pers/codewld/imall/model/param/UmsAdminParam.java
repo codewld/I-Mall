@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 public class UmsAdminParam {
 
     @NotBlank(groups = ValidatorConfig.Group.add.class, message = "用户名不能为空")
-    @Size(min = 5, max = 10, message = "用户名长度应在5-10之间")
+    @Size(min = 4, max = 10, message = "用户名长度应在4-10之间")
     private String username;
 
     @NotBlank(groups = ValidatorConfig.Group.add.class, message = "密码不能为空")

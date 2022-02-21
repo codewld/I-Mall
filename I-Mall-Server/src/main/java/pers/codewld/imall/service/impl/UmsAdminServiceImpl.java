@@ -44,6 +44,9 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public Boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setId(id);
+        if (umsAdmin.getPassword() != null) {
+            umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
+        }
         umsAdmin.setUpdateTime(LocalDateTime.now());
         return this.updateById(umsAdmin);
     }
