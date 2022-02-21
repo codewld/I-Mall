@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 全局统一响应处理类
+ * 响应处理类
  * </p>
  * <p>
  * 将接口的返回结果加工为统一响应体
@@ -55,6 +55,14 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         // 如果已经包装为响应体，直接返回
         if (body instanceof ResultVO) {
             return body;
+        }
+        // 如果返回Boolean值，则生成对应的响应体再返回
+        if (body instanceof Boolean) {
+            if ((Boolean) body) {
+                return ResultVO.success();
+            } else {
+                return ResultVO.fail();
+            }
         }
         return ResultVO.success(body);
     }
