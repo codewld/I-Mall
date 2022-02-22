@@ -274,6 +274,7 @@ const handleSeeForm = () => {
         <div class="flex justify-between">
           <p>数据区</p>
           <el-button-group>
+            <slot name="table-button-i-front"/>
             <el-button type="primary" @click="handleAddForm">添加</el-button>
             <el-popconfirm title="是否要进行删除？" @confirm="doDel">
               <template #reference>
@@ -282,12 +283,14 @@ const handleSeeForm = () => {
             </el-popconfirm>
             <el-button type="warning" @click="handleUpdateForm" :disabled="!currentRow">修改</el-button>
             <el-button type="success" @click="handleSeeForm" :disabled="!currentRow">查看</el-button>
+            <slot name="table-button-i-rear"/>
           </el-button-group>
         </div>
       </template>
       <!--表格-->
       <el-table v-loading="isLoading" :data="dataList.list" stripe highlight-current-row
                 @current-change="handleCurrentChange">
+        <slot name="table-column-i-front"/>
         <template v-for="(field, key) in fieldList" :key="key">
           <el-table-column v-if="field.tableConf.display ?? true"
                            :prop="field.code" :label="field.name"
@@ -300,6 +303,7 @@ const handleSeeForm = () => {
             </template>
           </el-table-column>
         </template>
+        <slot name="table-column-i-rear"/>
       </el-table>
       <!--分页-->
       <el-pagination :page-sizes="[4, 8, 16]" layout="total, sizes, prev, pager, next, jumper" :total="dataList.total"
@@ -311,6 +315,7 @@ const handleSeeForm = () => {
 
   <el-dialog v-model="dialogVisible" title="Tips" width="50%">
     <el-form :model="formData" inline label-position="top" class="justify-between">
+      <slot name="form-item-i-front"/>
       <template v-for="(field, key) in fieldList" :key="key">
         <el-form-item v-if="field?.formConf?.[actionType] ?? true" :label="`${field.name}：`" class="w-2/5 flex-grow">
           <slot :name="`form-item-${field.code}`" :row="formData" :disabled="actionType === 'see'">
@@ -320,6 +325,7 @@ const handleSeeForm = () => {
           </slot>
         </el-form-item>
       </template>
+      <slot name="form-item-i-rear"/>
     </el-form>
     <template #footer>
       <el-button @click="dialogVisible = false">取消</el-button>

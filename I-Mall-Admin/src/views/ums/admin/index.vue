@@ -14,8 +14,8 @@ const fieldList: CURD.field[] = [
   { code: 'createTime', name: '创建时间', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'updateTime', name: '更新时间', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'loginTime', name: '最后登录时间', tableConf: { display: false }, formConf: { add: false, update: false } },
-  { code: 'status', name: '启用状态', tableConf: { width: 80, fixed: 'right' }, searchConf: { display: true } },
-  { code: 'note', name: '备注', tableConf: { minWidth: 200 } },
+  { code: 'status', name: '启用状态', tableConf: { width: 80 }, searchConf: { display: true } },
+  { code: 'note', name: '备注', tableConf: { minWidth: 200 } }
 ]
 </script>
 

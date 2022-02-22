@@ -5,8 +5,8 @@ declare namespace Admin {
   interface admin {
     id: number,
     username: string,
-    email: string,
     nickName: string,
+    email: string,
     note: string,
     createTime: string,
     updateTime: string,
@@ -22,7 +22,7 @@ declare namespace Admin {
     password?: string,
     email?: string,
     nickName?: string,
-    note: string,
+    note?: string,
     status?: boolean
   }
 
