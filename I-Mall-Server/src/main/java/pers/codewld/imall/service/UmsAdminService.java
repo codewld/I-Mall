@@ -7,6 +7,8 @@ import pers.codewld.imall.model.param.UmsAdminQueryParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 后台用户表 服务类
@@ -21,6 +23,11 @@ public interface UmsAdminService extends IService<UmsAdmin> {
      * 新增用户
      */
     boolean add(UmsAdminParam umsAdminParam);
+
+    /**
+     * 删除用户
+     */
+    boolean del(Long id);
 
     /**
      * 修改用户
@@ -39,4 +46,19 @@ public interface UmsAdminService extends IService<UmsAdmin> {
      * @param umsAdminQueryParam 搜索参数
      */
     PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize, UmsAdminQueryParam umsAdminQueryParam);
+
+    /**
+     * 获取黑名单 [黑名单为所有被禁用的用户]
+     */
+    List<Long> getBlacklist();
+
+    /**
+     * 刷新黑名单 [清空缓冲，下次获取黑名单时需重新获取]
+     */
+    void refreshBlacklist();
+
+    /**
+     * 判断用户是否在黑名单中
+     */
+    boolean isInBlacklist(Long id);
 }

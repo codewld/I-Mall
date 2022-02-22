@@ -4,6 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.util.BeanUtil;
 
 import javax.servlet.FilterChain;
@@ -33,10 +34,22 @@ public class JWTVerifyFilter extends GenericFilterBean {
         String jwtToken = req.getHeader("authorization");
         if (!req.getServletPath().contains("login") && jwtToken != null && !jwtUtil.isInvalid(jwtToken)) {
             MyUserDetails user = jwtUtil.decode(jwtToken);
+            if (isDisabled(user)) {
+                chain.doFilter(request, response);
+                return;
+            }
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         chain.doFilter(request, response);
+    }
+
+    /**
+     * 判断该用户是否被禁用
+     */
+    boolean isDisabled(MyUserDetails user) {
+        UmsAdminService umsAdminService = BeanUtil.getBean(UmsAdminService.class);
+        return umsAdminService.isInBlacklist(user.getId());
     }
 
 }

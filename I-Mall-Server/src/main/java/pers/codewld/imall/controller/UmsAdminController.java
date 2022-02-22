@@ -39,7 +39,7 @@ public class UmsAdminController {
     @DeleteMapping("/{id}")
     @ApiOperation("删除用户")
     public boolean del(@PathVariable @ApiParam("用户id") Long id) {
-        return umsAdminService.removeById(id);
+        return umsAdminService.del(id);
     }
 
     @PutMapping("/{id}")
