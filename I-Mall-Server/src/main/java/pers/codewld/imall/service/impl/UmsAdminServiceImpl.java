@@ -18,7 +18,6 @@ import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.util.BeanUtil;
 import pers.codewld.imall.util.TransformUtil;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +46,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public boolean add(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
-        umsAdmin.setCreateTime(LocalDateTime.now());
         // 未设置status或设置status为false时，更新黑名单
         if (umsAdmin.getStatus() == null || !umsAdmin.getStatus()) {
             getBean().refreshBlacklist();
@@ -70,7 +68,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         if (umsAdmin.getPassword() != null) {
             umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
         }
-        umsAdmin.setUpdateTime(LocalDateTime.now());
         // 如果设置了status，更新黑名单
         if (umsAdmin.getStatus() != null) {
             getBean().refreshBlacklist();
