@@ -32,19 +32,19 @@ public class UmsAdminController {
 
     @PostMapping()
     @ApiOperation("新增用户")
-    public Object add(@RequestBody @Validated(ValidatorConfig.Group.add.class) UmsAdminParam umsAdminParam) {
+    public boolean add(@RequestBody @Validated(ValidatorConfig.Group.add.class) UmsAdminParam umsAdminParam) {
         return umsAdminService.add(umsAdminParam);
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation("删除用户")
-    public Boolean del(@PathVariable @ApiParam("用户id") Long id) {
+    public boolean del(@PathVariable @ApiParam("用户id") Long id) {
         return umsAdminService.removeById(id);
     }
 
     @PutMapping("/{id}")
     @ApiOperation("修改用户")
-    public Boolean update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated UmsAdminParam umsAdminParam) {
+    public boolean update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated UmsAdminParam umsAdminParam) {
         return umsAdminService.update(id, umsAdminParam);
     }
 

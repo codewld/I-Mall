@@ -34,7 +34,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     MD5PasswordEncoder md5PasswordEncoder;
 
     @Override
-    public Boolean add(UmsAdminParam umsAdminParam) {
+    public boolean add(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
         umsAdmin.setCreateTime(LocalDateTime.now());
@@ -42,7 +42,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public Boolean update(Long id, UmsAdminParam umsAdminParam) {
+    public boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setId(id);
         if (umsAdmin.getPassword() != null) {

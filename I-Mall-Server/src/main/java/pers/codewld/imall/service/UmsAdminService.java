@@ -20,12 +20,12 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     /**
      * 新增用户
      */
-    Boolean add(UmsAdminParam umsAdminParam);
+    boolean add(UmsAdminParam umsAdminParam);
 
     /**
      * 修改用户
      */
-    Boolean update(Long id, UmsAdminParam umsAdminParam);
+    boolean update(Long id, UmsAdminParam umsAdminParam);
 
     /**
      * 根据username查询
