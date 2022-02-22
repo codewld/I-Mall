@@ -5,13 +5,13 @@ declare namespace Admin {
   interface admin {
     id: number,
     username: string,
+    status: boolean,
     nickName: string,
     email: string,
     note: string,
     createTime: string,
     updateTime: string,
-    loginTime: string,
-    status: boolean
+    loginTime: string
   }
 
   /**
@@ -20,10 +20,10 @@ declare namespace Admin {
   interface adminParam {
     username?: string,
     password?: string,
-    email?: string,
+    status?: boolean,
     nickName?: string,
+    email?: string,
     note?: string,
-    status?: boolean
   }
 
 }
