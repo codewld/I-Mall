@@ -45,7 +45,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Override
     public boolean add(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
-        umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
         // 未设置status或设置status为false时，更新黑名单
         if (umsAdmin.getStatus() == null || !umsAdmin.getStatus()) {
             getBean().refreshBlacklist();
@@ -65,9 +64,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setId(id);
-        if (umsAdmin.getPassword() != null) {
-            umsAdmin.setPassword(md5PasswordEncoder.encode(umsAdmin.getPassword()));
-        }
         // 如果设置了status，更新黑名单
         if (umsAdmin.getStatus() != null) {
             getBean().refreshBlacklist();

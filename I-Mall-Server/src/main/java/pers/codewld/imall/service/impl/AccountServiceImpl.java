@@ -1,5 +1,6 @@
 package pers.codewld.imall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -10,6 +11,8 @@ import pers.codewld.imall.model.param.LoginParam;
 import pers.codewld.imall.security.JWTUtil;
 import pers.codewld.imall.service.AccountService;
 import pers.codewld.imall.service.UmsAdminService;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -39,6 +42,13 @@ public class AccountServiceImpl implements AccountService {
         }
         if (!umsAdmin.getStatus()) {
             throw new DisabledException("账号被禁用");
+        }
+        // 保存登录记录
+        UpdateWrapper<UmsAdmin> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", umsAdmin.getId()).set("login_time", LocalDateTime.now());
+        boolean res = umsAdminService.update(updateWrapper);
+        if (!res) {
+            throw new RuntimeException("登录记录保存失败");
         }
         return jwtUtil.sign(umsAdmin);
     }

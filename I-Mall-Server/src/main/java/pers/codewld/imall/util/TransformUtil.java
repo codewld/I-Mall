@@ -3,8 +3,7 @@ package pers.codewld.imall.util;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.UmsAdminVO;
-
-import java.time.LocalDateTime;
+import pers.codewld.imall.security.MD5PasswordEncoder;
 
 /**
  * <p>
@@ -24,7 +23,13 @@ public class TransformUtil {
     }
 
     public static UmsAdmin transform(UmsAdminParam UmsAdminParam) {
-        return new UmsAdmin(UmsAdminParam.getUsername(), UmsAdminParam.getPassword(), UmsAdminParam.getEmail(), UmsAdminParam.getNickName(), UmsAdminParam.getNote(), UmsAdminParam.getStatus());
+        String rawPassword = UmsAdminParam.getPassword();
+        MD5PasswordEncoder md5PasswordEncoder = BeanUtil.getBean(MD5PasswordEncoder.class);
+        String password = null;
+        if (rawPassword != null) {
+            password = md5PasswordEncoder.encode(rawPassword);
+        }
+        return new UmsAdmin(UmsAdminParam.getUsername(), password, UmsAdminParam.getEmail(), UmsAdminParam.getNickName(), UmsAdminParam.getNote(), UmsAdminParam.getStatus());
     }
 
 }

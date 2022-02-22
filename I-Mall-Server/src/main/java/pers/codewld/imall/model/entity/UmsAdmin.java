@@ -35,17 +35,20 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
+    @ApiModelProperty("id")
     private Long id;
 
+    @ApiModelProperty("用户名")
     private String username;
 
+    @ApiModelProperty("密码")
     private String password;
-
-    @ApiModelProperty("邮箱")
-    private String email;
 
     @ApiModelProperty("昵称")
     private String nickName;
+
+    @ApiModelProperty("邮箱")
+    private String email;
 
     @ApiModelProperty("备注")
     private String note;
