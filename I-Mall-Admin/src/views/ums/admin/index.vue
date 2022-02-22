@@ -9,14 +9,13 @@ const fieldList: CURD.field[] = [
   { code: 'id', name: 'id', tableConf: { width: 80, fixed: 'left' }, formConf: { add: false, update: false } },
   { code: 'username', name: '用户名', tableConf: { width: 200 }, searchConf: { display: true } },
   { code: 'password', name: '密码', tableConf: { display: false }, formConf: { see: false } },
-  { code: 'icon', name: '头像', tableConf: { display: false } },
   { code: 'email', name: '邮箱', tableConf: { width: 200 }, searchConf: { display: true } },
   { code: 'nickName', name: '昵称', tableConf: { width: 200 }, searchConf: { display: true } },
-  { code: 'note', name: '备注', tableConf: { minWidth: 200 } },
   { code: 'createTime', name: '创建时间', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'updateTime', name: '更新时间', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'loginTime', name: '最后登录时间', tableConf: { display: false }, formConf: { add: false, update: false } },
-  { code: 'status', name: '启用状态', tableConf: { width: 80, fixed: 'right' }, searchConf: { display: true } }
+  { code: 'status', name: '启用状态', tableConf: { width: 80, fixed: 'right' }, searchConf: { display: true } },
+  { code: 'note', name: '备注', tableConf: { minWidth: 200 } },
 ]
 </script>
 
@@ -25,7 +24,10 @@ const fieldList: CURD.field[] = [
           :field-list="fieldList">
     <!--自定义搜索-->
     <template v-slot:search-item-status="scope">
-      <el-switch v-model="scope.row.status" :disabled="scope.disabled"/>
+      <el-select v-model="scope.row.status" clearable placeholder="请选择">
+        <el-option :value="true" label="启用"></el-option>
+        <el-option :value="false" label="禁用"></el-option>
+      </el-select>
     </template>
     <!--自定义表格列-->
     <template v-slot:table-column-status="scope">
@@ -47,7 +49,7 @@ const fieldList: CURD.field[] = [
     </template>
     <!--自定义表单项-->
     <template v-slot:form-item-password="scope">
-      <el-input v-model.trim="scope.row.password" :disabled="scope.disabled" placeholer="请输入新密码"/>
+      <el-input v-model.trim="scope.row.password" :disabled="scope.disabled" placeholder="请输入新密码"/>
     </template>
     <template v-slot:form-item-status="scope">
       <el-switch v-model="scope.row.status" :disabled="scope.disabled"/>

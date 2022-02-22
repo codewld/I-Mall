@@ -252,18 +252,17 @@ const handleSeeForm = () => {
       <template #header>
         <div class="flex justify-between">
           <p>搜索区</p>
-          <div>
+          <el-button-group>
             <el-button @click="resetSearch">重置</el-button>
             <el-button type="primary" @click="doSearch">搜索</el-button>
-          </div>
+          </el-button-group>
         </div>
       </template>
       <el-form :model="searchParam" inline>
         <template v-for="(field, key) in fieldList" :key="key">
           <el-form-item v-if="field?.searchConf?.display" :label="`${field.name}：`">
             <slot :name="`search-item-${field.code}`" :row="searchParam">
-              <el-input v-model.trim="searchParam[field.code]"
-                        :placeholder="`请输入${field.name}`"/>
+              <el-input v-model.trim="searchParam[field.code]" :placeholder="`请输入${field.name}`"/>
             </slot>
           </el-form-item>
         </template>
