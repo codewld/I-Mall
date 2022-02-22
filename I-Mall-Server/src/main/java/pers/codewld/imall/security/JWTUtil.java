@@ -36,9 +36,9 @@ public class JWTUtil {
     /**
      * 签发
      */
-    public String sign(UserDetails userDetails) {
+    public String sign(MyUserDetails myUserDetails) {
         return JWT.create()
-                .withAudience(userDetails.getUsername())
+                .withAudience(myUserDetails.getId().toString(), myUserDetails.getUsername())
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiration * 1000))
                 .sign(algorithm());
@@ -70,9 +70,11 @@ public class JWTUtil {
         }
         // 提取信息
         DecodedJWT decodedJWT = JWT.decode(token);
-        String username = decodedJWT.getAudience().get(0);
+        Long id = Long.valueOf(decodedJWT.getAudience().get(0));
+        String username = decodedJWT.getAudience().get(1);
         // 重新组合为对象
         MyUserDetails myUserDetails = new MyUserDetails();
+        myUserDetails.setId(id);
         myUserDetails.setUsername(username);
         return myUserDetails;
     }
