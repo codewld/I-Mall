@@ -44,6 +44,9 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     @ApiModelProperty("密码")
     private String password;
 
+    @ApiModelProperty("启用状态")
+    private Boolean status;
+
     @ApiModelProperty("昵称")
     private String nickName;
 
@@ -64,9 +67,6 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     @ApiModelProperty("最后登录时间")
     private LocalDateTime loginTime;
 
-    @ApiModelProperty("启用状态")
-    private Boolean status;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -77,12 +77,4 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
         return status;
     }
 
-    public UmsAdmin(String username, String password, String email, String nickName, String note, Boolean status) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.nickName = nickName;
-        this.note = note;
-        this.status = status;
-    }
 }

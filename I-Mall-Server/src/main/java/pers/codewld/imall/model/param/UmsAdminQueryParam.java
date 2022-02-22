@@ -20,15 +20,17 @@ import javax.validation.constraints.Size;
 public class UmsAdminQueryParam {
 
     @Size(min = 4, max = 10, message = "用户名长度应在4-10之间")
+    @ApiModelProperty("用户名")
     private String username;
+
+    @ApiModelProperty("启用状态")
+    private Boolean status;
+
+    @ApiModelProperty("昵称")
+    private String nickName;
 
     @Email
     @ApiModelProperty("邮箱")
     private String email;
 
-    @ApiModelProperty("昵称")
-    private String nickName;
-
-    @ApiModelProperty("启用状态")
-    private Boolean status;
 }

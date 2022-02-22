@@ -19,7 +19,17 @@ import pers.codewld.imall.security.MD5PasswordEncoder;
 public class TransformUtil {
 
     public static UmsAdminVO transform(UmsAdmin umsAdmin) {
-        return new UmsAdminVO(umsAdmin.getId(), umsAdmin.getUsername(), umsAdmin.getEmail(), umsAdmin.getNickName(), umsAdmin.getNote(), umsAdmin.getCreateTime(), umsAdmin.getUpdateTime(), umsAdmin.getLoginTime(), umsAdmin.getStatus());
+        UmsAdminVO umsAdminVO = new UmsAdminVO();
+        umsAdminVO.setId(umsAdmin.getId());
+        umsAdminVO.setUsername(umsAdmin.getUsername());
+        umsAdminVO.setStatus(umsAdmin.getStatus());
+        umsAdminVO.setNickName(umsAdmin.getNickName());
+        umsAdminVO.setEmail(umsAdmin.getEmail());
+        umsAdminVO.setNote(umsAdmin.getNote());
+        umsAdminVO.setCreateTime(umsAdmin.getCreateTime());
+        umsAdminVO.setUpdateTime(umsAdmin.getUpdateTime());
+        umsAdminVO.setLoginTime(umsAdmin.getLoginTime());
+        return umsAdminVO;
     }
 
     public static UmsAdmin transform(UmsAdminParam UmsAdminParam) {
@@ -29,7 +39,14 @@ public class TransformUtil {
         if (rawPassword != null) {
             password = md5PasswordEncoder.encode(rawPassword);
         }
-        return new UmsAdmin(UmsAdminParam.getUsername(), password, UmsAdminParam.getEmail(), UmsAdminParam.getNickName(), UmsAdminParam.getNote(), UmsAdminParam.getStatus());
+        UmsAdmin umsAdmin = new UmsAdmin();
+        umsAdmin.setUsername(UmsAdminParam.getUsername());
+        umsAdmin.setPassword(password);
+        umsAdmin.setStatus(UmsAdminParam.getStatus());
+        umsAdmin.setNickName(UmsAdminParam.getNickName());
+        umsAdmin.setEmail(UmsAdminParam.getEmail());
+        umsAdmin.setNote(UmsAdminParam.getNote());
+        return umsAdmin;
     }
 
 }

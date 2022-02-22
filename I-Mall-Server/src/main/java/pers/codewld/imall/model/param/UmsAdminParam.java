@@ -23,23 +23,25 @@ public class UmsAdminParam {
 
     @NotBlank(groups = ValidatorConfig.Group.add.class, message = "用户名不能为空")
     @Size(min = 4, max = 10, message = "用户名长度应在4-10之间")
+    @ApiModelProperty("用户名")
     private String username;
 
     @NotBlank(groups = ValidatorConfig.Group.add.class, message = "密码不能为空")
     @Size(min = 5, max = 10, message = "密码长度应在5-10之间")
+    @ApiModelProperty("密码")
     private String password;
+
+    @ApiModelProperty("启用状态")
+    private Boolean status;
+
+    @ApiModelProperty("昵称")
+    private String nickName;
 
     @Email
     @ApiModelProperty("邮箱")
     private String email;
 
-    @ApiModelProperty("昵称")
-    private String nickName;
-
     @ApiModelProperty("备注")
     private String note;
-
-    @ApiModelProperty("启用状态")
-    private Boolean status;
 
 }

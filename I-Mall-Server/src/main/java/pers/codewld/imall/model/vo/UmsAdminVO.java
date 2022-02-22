@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,18 +19,24 @@ import java.time.LocalDateTime;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "UmsAdminVO对象", description = "后台用户表 VO类")
 public class UmsAdminVO implements Serializable {
 
+    @ApiModelProperty("id")
     private Long id;
 
+    @ApiModelProperty("用户名")
     private String username;
 
-    @ApiModelProperty("邮箱")
-    private String email;
+    @ApiModelProperty("启用状态")
+    private Boolean status;
 
     @ApiModelProperty("昵称")
     private String nickName;
+
+    @ApiModelProperty("邮箱")
+    private String email;
 
     @ApiModelProperty("备注")
     private String note;
@@ -42,8 +49,5 @@ public class UmsAdminVO implements Serializable {
 
     @ApiModelProperty("最后登录时间")
     private LocalDateTime loginTime;
-
-    @ApiModelProperty("启用状态")
-    private Boolean status;
 
 }
