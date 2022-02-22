@@ -1,6 +1,7 @@
 package pers.codewld.imall.controller.advice;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,11 +24,10 @@ import javax.validation.ConstraintViolationException;
 public class ExceptionAdvice {
 
     /**
-     * 登录失败异常处理
+     * 账号相关异常处理
      */
-    @ExceptionHandler(BadCredentialsException.class)
+    @ExceptionHandler({BadCredentialsException.class, DisabledException.class})
     public ResultVO badCredentialsException(Exception e) {
-        e.printStackTrace();
         return ResultVO.fail(e.getMessage());
     }
 
