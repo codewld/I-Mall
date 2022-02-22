@@ -29,9 +29,6 @@ public class UmsAdminParam {
     @Size(min = 5, max = 10, message = "密码长度应在5-10之间")
     private String password;
 
-    @ApiModelProperty("头像")
-    private String icon;
-
     @Email
     @ApiModelProperty("邮箱")
     private String email;

@@ -20,11 +20,11 @@ import java.time.LocalDateTime;
 public class TransformUtil {
 
     public static UmsAdminVO transform(UmsAdmin umsAdmin) {
-        return new UmsAdminVO(umsAdmin.getId(), umsAdmin.getUsername(), umsAdmin.getIcon(), umsAdmin.getEmail(), umsAdmin.getNickName(), umsAdmin.getNote(), umsAdmin.getCreateTime(), umsAdmin.getUpdateTime(), umsAdmin.getLoginTime(), umsAdmin.getStatus());
+        return new UmsAdminVO(umsAdmin.getId(), umsAdmin.getUsername(), umsAdmin.getEmail(), umsAdmin.getNickName(), umsAdmin.getNote(), umsAdmin.getCreateTime(), umsAdmin.getUpdateTime(), umsAdmin.getLoginTime(), umsAdmin.getStatus());
     }
 
     public static UmsAdmin transform(UmsAdminParam UmsAdminParam) {
-        return new UmsAdmin(UmsAdminParam.getUsername(), UmsAdminParam.getPassword(), UmsAdminParam.getIcon(), UmsAdminParam.getEmail(), UmsAdminParam.getNickName(), UmsAdminParam.getNote(), UmsAdminParam.getStatus());
+        return new UmsAdmin(UmsAdminParam.getUsername(), UmsAdminParam.getPassword(), UmsAdminParam.getEmail(), UmsAdminParam.getNickName(), UmsAdminParam.getNote(), UmsAdminParam.getStatus());
     }
 
 }

@@ -25,9 +25,6 @@ public class UmsAdminVO implements Serializable {
 
     private String username;
 
-    @ApiModelProperty("头像")
-    private String icon;
-
     @ApiModelProperty("邮箱")
     private String email;
 

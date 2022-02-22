@@ -43,9 +43,6 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
 
     private String password;
 
-    @ApiModelProperty("头像")
-    private String icon;
-
     @ApiModelProperty("邮箱")
     private String email;
 
@@ -77,10 +74,9 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
         return status;
     }
 
-    public UmsAdmin(String username, String password, String icon, String email, String nickName, String note, Boolean status) {
+    public UmsAdmin(String username, String password, String email, String nickName, String note, Boolean status) {
         this.username = username;
         this.password = password;
-        this.icon = icon;
         this.email = email;
         this.nickName = nickName;
         this.note = note;
