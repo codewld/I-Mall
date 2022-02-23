@@ -1,7 +1,9 @@
 package pers.codewld.imall.util;
 
 import pers.codewld.imall.model.entity.UmsAdmin;
+import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsAdminParam;
+import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
 
@@ -47,6 +49,14 @@ public class TransformUtil {
         umsAdmin.setEmail(UmsAdminParam.getEmail());
         umsAdmin.setNote(UmsAdminParam.getNote());
         return umsAdmin;
+    }
+
+    public static UmsRole transform(UmsRoleParam umsRoleParam) {
+        UmsRole umsRole = new UmsRole();
+        umsRole.setName(umsRoleParam.getName());
+        umsRole.setStatus(umsRoleParam.getStatus());
+        umsRole.setNote(umsRoleParam.getNote());
+        return umsRole;
     }
 
 }

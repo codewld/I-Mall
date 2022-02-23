@@ -1,9 +1,19 @@
 package pers.codewld.imall.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import pers.codewld.imall.config.ValidatorConfig;
+import pers.codewld.imall.model.entity.UmsRole;
+import pers.codewld.imall.model.param.UmsRoleParam;
+import pers.codewld.imall.model.vo.PageVO;
+import pers.codewld.imall.service.UmsRoleService;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 /**
  * <p>
@@ -16,5 +26,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/ums-role")
 public class UmsRoleController {
+
+    @Autowired
+    UmsRoleService umsRoleService;
+
+    @PostMapping()
+    @ApiOperation("新增角色")
+    public boolean add(@RequestBody @Validated(ValidatorConfig.Group.add.class) UmsRoleParam umsRoleParam) {
+        return umsRoleService.add(umsRoleParam);
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除角色")
+    public boolean del(@PathVariable @ApiParam("角色id") Long id) {
+        return umsRoleService.del(id);
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("修改角色")
+    public boolean update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated UmsRoleParam umsRoleParam) {
+        return umsRoleService.update(id, umsRoleParam);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("查询角色列表，分页，可搜索")
+    public PageVO<UmsRole> list(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
+                                @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize,
+                                @RequestParam(value = "name", required = false) @Size(min = 4, max = 20, message = "用户名长度应在4-20之间") @ApiParam("名称") String name,
+                                @RequestParam(value = "status", required = false) @ApiParam("启用状态") Boolean status) {
+        return umsRoleService.list(pageNum, pageSize, name, status);
+    }
+
 
 }
