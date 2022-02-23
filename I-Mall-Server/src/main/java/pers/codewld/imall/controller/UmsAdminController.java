@@ -12,6 +12,7 @@ import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.service.UmsAdminService;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * <p>
@@ -31,7 +32,7 @@ public class UmsAdminController {
 
     @PostMapping()
     @ApiOperation("新增用户")
-    public boolean add(@RequestBody @Validated(ValidatorConfig.Group.add.class) UmsAdminParam umsAdminParam) {
+    public boolean add(@RequestBody @Validated(ValidatorConfig.Group.add.class) @ApiParam("用户参数") UmsAdminParam umsAdminParam) {
         return umsAdminService.add(umsAdminParam);
     }
 
@@ -43,7 +44,7 @@ public class UmsAdminController {
 
     @PutMapping("/{id}")
     @ApiOperation("修改用户")
-    public boolean update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated UmsAdminParam umsAdminParam) {
+    public boolean update(@PathVariable @ApiParam("用户id") Long id, @RequestBody @Validated @ApiParam("用户参数") UmsAdminParam umsAdminParam) {
         return umsAdminService.update(id, umsAdminParam);
     }
 
@@ -56,6 +57,19 @@ public class UmsAdminController {
                                    @RequestParam(value = "nickName", required = false) @ApiParam("昵称") String nickName,
                                    @RequestParam(value = "email", required = false) @ApiParam("邮箱") String email) {
         return umsAdminService.list(pageNum, pageSize, username, status, nickName, email);
+    }
+
+    @PutMapping("/role/{id}")
+    @ApiOperation("修改用户的角色列表")
+    public boolean updateRoleList(@PathVariable @ApiParam("用户id") Long id,
+                                  @RequestBody(required = false) @ApiParam("角色id列表") List<Long> roleIdList) {
+        return umsAdminService.updateRoleList(id, roleIdList);
+    }
+
+    @GetMapping("/role/{id}")
+    @ApiOperation("获取用户的角色列表")
+    public List<Long> getRoleList(@PathVariable @ApiParam("用户id") Long id) {
+        return umsAdminService.getRoleList(id);
     }
 
 }

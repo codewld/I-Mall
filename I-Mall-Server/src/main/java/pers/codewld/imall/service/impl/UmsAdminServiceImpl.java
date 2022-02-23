@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsAdminMapper;
+import pers.codewld.imall.mapper.UmsAdminRoleRelationMapper;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.model.param.UmsAdminParam;
@@ -35,6 +37,9 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Autowired
     MD5PasswordEncoder md5PasswordEncoder;
+
+    @Autowired
+    UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
 
     /**
      * 获取自身的Bean，以避免直接调用自身时AOP的失效
@@ -114,6 +119,25 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public boolean isInBlacklist(Long id) {
         List<Long> blacklist = getBean().getBlacklist();
         return blacklist.contains(id);
+    }
+
+    @Transactional
+    @Override
+    public boolean updateRoleList(Long id, List<Long> roleIdList) {
+        umsAdminRoleRelationMapper.deleteRelationByAdminId(id);
+        if (roleIdList == null || roleIdList.size() == 0) {
+            return true;
+        }
+        int res = umsAdminRoleRelationMapper.insertRelation(id, roleIdList);
+        if (res != roleIdList.size()) {
+            throw new CustomException(ResultCode.FAILED);
+        }
+        return true;
+    }
+
+    @Override
+    public List<Long> getRoleList(Long id) {
+        return umsAdminRoleRelationMapper.selectRoleListByAdminId(id);
     }
 
 }

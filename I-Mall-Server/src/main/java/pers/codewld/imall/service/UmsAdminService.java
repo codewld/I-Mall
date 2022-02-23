@@ -59,4 +59,21 @@ public interface UmsAdminService extends IService<UmsAdmin> {
      * 判断用户是否在黑名单中
      */
     boolean isInBlacklist(Long id);
+
+    /**
+     * 修改用户的角色列表
+     *
+     * @param id         用户id
+     * @param roleIdList 角色id列表
+     * @return 修改结果
+     */
+    boolean updateRoleList(Long id, List<Long> roleIdList);
+
+    /**
+     * 获取用户的角色列表
+     *
+     * @param id 用户id
+     * @return 角色列表
+     */
+    List<Long> getRoleList(Long id);
 }
