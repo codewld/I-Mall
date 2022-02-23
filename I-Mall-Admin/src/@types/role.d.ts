@@ -5,7 +5,6 @@ declare namespace Role {
   interface role {
     id: number,
     name: string,
-    status: boolean,
     note: string,
     createTime: string,
     updateTime: string
@@ -15,8 +14,7 @@ declare namespace Role {
    * Role参数
    */
   interface roleParam {
-    name?: string,
-    status?: boolean
+    name?: string
   }
 
 }
