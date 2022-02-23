@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsAdminMapper;
 import pers.codewld.imall.model.entity.UmsAdmin;
+import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
@@ -41,10 +43,27 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return BeanUtil.getBean(UmsAdminService.class);
     }
 
+    /**
+     * 检查用户名是否重复
+     */
+    private void checkUsernameDuplicate(UmsAdmin umsAdmin) {
+        String username = umsAdmin.getUsername();
+        if (username == null) {
+            return;
+        }
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
+                .eq("username", username);
+        long count = this.count(queryWrapper);
+        if (count > 0) {
+            throw new CustomException(ResultCode.VALIDATE_FAILED, "用户名重复");
+        }
+    }
+
     @CacheEvict(value = "blacklist", allEntries = true)
     @Override
     public boolean add(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
+        this.checkUsernameDuplicate(umsAdmin);
         return this.save(umsAdmin);
     }
 
@@ -59,6 +78,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setId(id);
+        this.checkUsernameDuplicate(umsAdmin);
         return this.updateById(umsAdmin);
     }
 
