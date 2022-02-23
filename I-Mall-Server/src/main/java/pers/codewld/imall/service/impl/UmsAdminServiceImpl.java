@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import pers.codewld.imall.mapper.UmsAdminMapper;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.param.UmsAdminParam;
-import pers.codewld.imall.model.param.UmsAdminQueryParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
@@ -78,12 +77,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize, UmsAdminQueryParam umsAdminQueryParam) {
+    public PageVO<UmsAdminVO> list(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email) {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
-        String username = umsAdminQueryParam.getUsername();
-        String email = umsAdminQueryParam.getEmail();
-        String nickName = umsAdminQueryParam.getNickName();
-        Boolean status = umsAdminQueryParam.getStatus();
         queryWrapper
                 .like(username != null, "username", username)
                 .like(email != null, "email", email)

@@ -3,7 +3,6 @@ package pers.codewld.imall.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.param.UmsAdminParam;
-import pers.codewld.imall.model.param.UmsAdminQueryParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 
@@ -41,11 +40,15 @@ public interface UmsAdminService extends IService<UmsAdmin> {
 
     /**
      * 查询用户列表，分页，可搜索
-     * @param pageNum 页数
+     *
+     * @param pageNum  页数
      * @param pageSize 每页条数
-     * @param umsAdminQueryParam 搜索参数
+     * @param username 用户名
+     * @param status   启用状态
+     * @param nickName 昵称
+     * @param email    邮箱
      */
-    PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize, UmsAdminQueryParam umsAdminQueryParam);
+    PageVO<UmsAdminVO> list(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email);
 
     /**
      * 获取黑名单 [黑名单为所有被禁用的用户]
