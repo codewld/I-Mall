@@ -3,22 +3,22 @@ import { Ref } from 'vue';
 declare namespace CURD {
 
   /**
-   * 添加方法
+   * 添加
    */
   type addFunction<T> = (data: T) => Promise<string>
 
   /**
-   * 删除方法
+   * 删除
    */
   type delFunction = (id: number) => Promise<string>
 
   /**
-   * 修改方法
+   * 修改
    */
   type updateFunction<T> = (id: number, data: T) => Promise<string>
 
   /**
-   * 数据查询方法
+   * 列表查询
    */
   type loadFunction<T> = (pageParam: Ref<pageParam>, searchParam: Ref<object> | null) => Promise<dataList<T>>
 
