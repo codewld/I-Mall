@@ -5,6 +5,7 @@ import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 
 import java.util.List;
 
@@ -61,19 +62,19 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     boolean isInBlacklist(Long id);
 
     /**
-     * 修改用户的角色列表
+     * 修改用户的角色
      *
      * @param id         用户id
      * @param roleIdList 角色id列表
      * @return 修改结果
      */
-    boolean updateRoleList(Long id, List<Long> roleIdList);
+    boolean updateRole(Long id, List<Long> roleIdList);
 
     /**
-     * 获取用户的角色列表
+     * 查询用户的角色标记列表
      *
      * @param id 用户id
-     * @return 角色列表
+     * @return 角色标记列表
      */
-    List<Long> getRoleList(Long id);
+    List<UmsRoleMarkVO> listRoleMark(Long id);
 }

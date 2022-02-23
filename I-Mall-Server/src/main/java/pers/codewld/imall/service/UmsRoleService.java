@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.PageVO;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -38,4 +41,8 @@ public interface UmsRoleService extends IService<UmsRole> {
      */
     PageVO<UmsRole> list(Integer pageNum, Integer pageSize, String name);
 
+    /**
+     * 查询角色标记列表
+     */
+    List<UmsRoleMarkVO> listMark();
 }

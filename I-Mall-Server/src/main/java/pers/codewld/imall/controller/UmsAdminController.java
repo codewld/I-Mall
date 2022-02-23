@@ -9,6 +9,7 @@ import pers.codewld.imall.config.ValidatorConfig;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.service.UmsAdminService;
 
 import javax.validation.constraints.Min;
@@ -60,16 +61,16 @@ public class UmsAdminController {
     }
 
     @PutMapping("/role/{id}")
-    @ApiOperation("修改用户的角色列表")
-    public boolean updateRoleList(@PathVariable @ApiParam("用户id") Long id,
-                                  @RequestBody(required = false) @ApiParam("角色id列表") List<Long> roleIdList) {
-        return umsAdminService.updateRoleList(id, roleIdList);
+    @ApiOperation("修改用户的角色")
+    public boolean updateRole(@PathVariable @ApiParam("用户id") Long id,
+                              @RequestBody(required = false) @ApiParam("角色id列表") List<Long> roleIdList) {
+        return umsAdminService.updateRole(id, roleIdList);
     }
 
     @GetMapping("/role/{id}")
-    @ApiOperation("获取用户的角色列表")
-    public List<Long> getRoleList(@PathVariable @ApiParam("用户id") Long id) {
-        return umsAdminService.getRoleList(id);
+    @ApiOperation("查询用户的角色标记列表")
+    public List<UmsRoleMarkVO> listRoleMark(@PathVariable @ApiParam("用户id") Long id) {
+        return umsAdminService.listRoleMark(id);
     }
 
 }

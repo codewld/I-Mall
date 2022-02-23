@@ -1,6 +1,7 @@
 package pers.codewld.imall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 
 import java.util.List;
 
@@ -18,21 +19,21 @@ public interface UmsAdminRoleRelationMapper {
     /**
      * 新增关系
      */
-    int insertRelation(Long adminId, List<Long> roleIdList);
+    int insert(Long adminId, List<Long> roleIdList);
 
     /**
-     * 根据用户ID删除关系
+     * 根据用户ID删除
      */
-    int deleteRelationByAdminId(Long adminId);
+    int deleteByAdminId(Long adminId);
 
     /**
-     * 根据角色ID删除关系
+     * 根据角色ID删除
      */
-    int deleteRelationByRoleId(Long roleId);
+    int deleteByRoleId(Long roleId);
 
     /**
-     * 根据用户ID查询角色列表
+     * 根据用户ID查询角色标记列表
      */
-    List<Long> selectRoleListByAdminId(Long adminId);
+    List<UmsRoleMarkVO> selectRoleMarkListByAdminId(Long adminId);
 
 }

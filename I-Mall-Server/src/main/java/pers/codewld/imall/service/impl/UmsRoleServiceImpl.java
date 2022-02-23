@@ -11,10 +11,12 @@ import pers.codewld.imall.mapper.UmsRoleMapper;
 import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.PageVO;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.TransformUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -39,7 +41,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     @Transactional
     @Override
     public boolean del(Long id) {
-        umsAdminRoleRelationMapper.deleteRelationByRoleId(id);
+        umsAdminRoleRelationMapper.deleteByRoleId(id);
         return this.removeById(id);
     }
 
@@ -59,5 +61,11 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
         long total = page.getTotal();
         List<UmsRole> list = page.getRecords();
         return new PageVO<>(total, list);
+    }
+
+    @Override
+    public List<UmsRoleMarkVO> listMark() {
+        List<UmsRole> roleList = this.list();
+        return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());
     }
 }

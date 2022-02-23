@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pers.codewld.imall.mapper.UmsAdminRoleRelationMapper">
-    <insert id="insertRelation">
+    <insert id="insert">
         INSERT INTO
         ums_admin_role_relation(admin_id, role_id)
         VALUES
@@ -10,21 +10,23 @@
         </foreach>
     </insert>
 
-    <delete id="deleteRelationByAdminId">
+    <delete id="deleteByAdminId">
         DELETE
         FROM ums_admin_role_relation
         WHERE admin_id = #{adminId}
     </delete>
 
-    <delete id="deleteRelationByRoleId">
+    <delete id="deleteByRoleId">
         DELETE
         FROM ums_admin_role_relation
         WHERE role_id = #{roleId}
     </delete>
 
-    <select id="selectRoleListByAdminId" resultType="java.lang.Long">
-        SELECT role_id
-        FROM ums_admin_role_relation
-        WHERE admin_id = #{adminId}
+    <select id="selectRoleMarkListByAdminId" resultType="pers.codewld.imall.model.vo.UmsRoleMarkVO">
+        SELECT ums_role.id, ums_role.name
+        FROM ums_role,
+             ums_admin_role_relation
+        WHERE ums_role.id = ums_admin_role_relation.role_id
+          and ums_admin_role_relation.admin_id = #{adminId}
     </select>
 </mapper>

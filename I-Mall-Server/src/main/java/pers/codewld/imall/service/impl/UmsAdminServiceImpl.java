@@ -16,6 +16,7 @@ import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
 import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.util.BeanUtil;
@@ -123,12 +124,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Transactional
     @Override
-    public boolean updateRoleList(Long id, List<Long> roleIdList) {
-        umsAdminRoleRelationMapper.deleteRelationByAdminId(id);
+    public boolean updateRole(Long id, List<Long> roleIdList) {
+        umsAdminRoleRelationMapper.deleteByAdminId(id);
         if (roleIdList == null || roleIdList.size() == 0) {
             return true;
         }
-        int res = umsAdminRoleRelationMapper.insertRelation(id, roleIdList);
+        int res = umsAdminRoleRelationMapper.insert(id, roleIdList);
         if (res != roleIdList.size()) {
             throw new CustomException(ResultCode.FAILED);
         }
@@ -136,8 +137,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public List<Long> getRoleList(Long id) {
-        return umsAdminRoleRelationMapper.selectRoleListByAdminId(id);
+    public List<UmsRoleMarkVO> listRoleMark(Long id) {
+        return umsAdminRoleRelationMapper.selectRoleMarkListByAdminId(id);
     }
 
 }

@@ -10,10 +10,12 @@ import pers.codewld.imall.config.ValidatorConfig;
 import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.PageVO;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.service.UmsRoleService;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * <p>
@@ -56,5 +58,10 @@ public class UmsRoleController {
         return umsRoleService.list(pageNum, pageSize, name);
     }
 
+    @GetMapping("/list/mark")
+    @ApiOperation("查询角色标记列表，直接以列表形式返回")
+    public List<UmsRoleMarkVO> listMark() {
+        return umsRoleService.listMark();
+    }
 
 }

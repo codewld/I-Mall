@@ -5,6 +5,7 @@ import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.UmsAdminVO;
+import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
 
 /**
@@ -56,6 +57,13 @@ public class TransformUtil {
         umsRole.setName(umsRoleParam.getName());
         umsRole.setNote(umsRoleParam.getNote());
         return umsRole;
+    }
+
+    public static UmsRoleMarkVO transform(UmsRole umsRole) {
+        UmsRoleMarkVO umsRoleMarkVO = new UmsRoleMarkVO();
+        umsRoleMarkVO.setId(umsRole.getId());
+        umsRoleMarkVO.setName(umsRole.getName());
+        return umsRoleMarkVO;
     }
 
 }
