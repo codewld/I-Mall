@@ -21,11 +21,6 @@ public class UmsAdminServiceTest {
     }
 
     @Test
-    public void testRefreshBlacklist() {
-        umsAdminService.refreshBlacklist();
-    }
-
-    @Test
     public void testIsInBlacklist() {
         System.out.println(umsAdminService.isInBlacklist(3L));
         System.out.println(umsAdminService.isInBlacklist(5L));

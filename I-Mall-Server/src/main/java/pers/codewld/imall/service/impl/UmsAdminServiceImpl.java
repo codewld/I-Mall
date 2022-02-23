@@ -41,32 +41,24 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return BeanUtil.getBean(UmsAdminService.class);
     }
 
+    @CacheEvict(value = "blacklist", allEntries = true)
     @Override
     public boolean add(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
-        // 未设置status或设置status为false时，更新黑名单
-        if (umsAdmin.getStatus() == null || !umsAdmin.getStatus()) {
-            getBean().refreshBlacklist();
-        }
         return this.save(umsAdmin);
     }
 
+    @CacheEvict(value = "blacklist", allEntries = true)
     @Override
     public boolean del(Long id) {
-        boolean res = this.removeById(id);
-        // 更新黑名单
-        getBean().refreshBlacklist();
-        return res;
+        return this.removeById(id);
     }
 
+    @CacheEvict(value = "blacklist", allEntries = true)
     @Override
     public boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setId(id);
-        // 如果设置了status，更新黑名单
-        if (umsAdmin.getStatus() != null) {
-            getBean().refreshBlacklist();
-        }
         return this.updateById(umsAdmin);
     }
 
@@ -96,12 +88,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id").eq("status", 0);
         return this.listObjs(queryWrapper, o -> (long) o);
-    }
-
-    @CacheEvict(value = "blacklist", allEntries = true)
-    @Override
-    public void refreshBlacklist() {
-
     }
 
     @Override

@@ -56,11 +56,6 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     List<Long> getBlacklist();
 
     /**
-     * 刷新黑名单 [清空缓冲，下次获取黑名单时需重新获取]
-     */
-    void refreshBlacklist();
-
-    /**
      * 判断用户是否在黑名单中
      */
     boolean isInBlacklist(Long id);
