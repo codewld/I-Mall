@@ -84,14 +84,14 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Override
     public UmsAdmin getByUsername(String username) {
-        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>().eq("username", username);
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
+                .eq("username", username);
         return this.getOne(queryWrapper, false);
     }
 
     @Override
     public PageVO<UmsAdminVO> list(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email) {
-        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
-        queryWrapper
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
                 .like(username != null, "username", username)
                 .like(email != null, "email", email)
                 .like(nickName != null, "nick_name", nickName)
@@ -105,8 +105,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Cacheable(value = "blacklist")
     @Override
     public List<Long> getBlacklist() {
-        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id").eq("status", 0);
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
+                .select("id").eq("status", 0);
         return this.listObjs(queryWrapper, o -> (long) o);
     }
 
