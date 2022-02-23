@@ -34,9 +34,6 @@ public class UmsRole implements Serializable {
     @ApiModelProperty("名称")
     private String name;
 
-    @ApiModelProperty("启用状态")
-    private Boolean status;
-
     @ApiModelProperty("备注")
     private String note;
 

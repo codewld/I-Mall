@@ -51,11 +51,10 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
-    public PageVO<UmsRole> list(Integer pageNum, Integer pageSize, String name, Boolean status) {
+    public PageVO<UmsRole> list(Integer pageNum, Integer pageSize, String name) {
         QueryWrapper<UmsRole> queryWrapper = new QueryWrapper<>();
         queryWrapper
-                .like(name != null, "name", name)
-                .eq(status != null, "status", status);
+                .like(name != null, "name", name);
         Page<UmsRole> page = this.page(new Page<>(pageNum, pageSize), queryWrapper);
         long total = page.getTotal();
         List<UmsRole> list = page.getRecords();

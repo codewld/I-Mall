@@ -54,7 +54,6 @@ public class TransformUtil {
     public static UmsRole transform(UmsRoleParam umsRoleParam) {
         UmsRole umsRole = new UmsRole();
         umsRole.setName(umsRoleParam.getName());
-        umsRole.setStatus(umsRoleParam.getStatus());
         umsRole.setNote(umsRoleParam.getNote());
         return umsRole;
     }
