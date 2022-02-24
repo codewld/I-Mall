@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>
- * 后台用户表 前端控制器
+ * 后台用户 前端控制器
  * </p>
  *
  * @author codewld
@@ -49,15 +49,15 @@ public class UmsAdminController {
         return umsAdminService.update(id, umsAdminParam);
     }
 
-    @GetMapping("/list")
-    @ApiOperation("查询用户列表，分页，可搜索")
-    public PageVO<UmsAdminVO> list(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
+    @GetMapping("/page")
+    @ApiOperation("分页查询用户列表，可搜索")
+    public PageVO<UmsAdminVO> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
                                    @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize,
                                    @RequestParam(value = "username", required = false) @ApiParam("用户名") String username,
                                    @RequestParam(value = "status", required = false) @ApiParam("启用状态") Boolean status,
                                    @RequestParam(value = "nickName", required = false) @ApiParam("昵称") String nickName,
                                    @RequestParam(value = "email", required = false) @ApiParam("邮箱") String email) {
-        return umsAdminService.list(pageNum, pageSize, username, status, nickName, email);
+        return umsAdminService.page(pageNum, pageSize, username, status, nickName, email);
     }
 
     @PutMapping("/role/{id}")
@@ -68,7 +68,7 @@ public class UmsAdminController {
     }
 
     @GetMapping("/role/{id}")
-    @ApiOperation("查询用户的角色标记列表")
+    @ApiOperation("批量查询用户的角色标记")
     public List<UmsRoleMarkVO> listRoleMark(@PathVariable @ApiParam("用户id") Long id) {
         return umsAdminService.listRoleMark(id);
     }

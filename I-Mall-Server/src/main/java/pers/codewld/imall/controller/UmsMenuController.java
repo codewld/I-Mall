@@ -32,13 +32,13 @@ public class UmsMenuController {
     UmsMenuService umsMenuService;
 
     @GetMapping("/list")
-    @ApiOperation("查询位于根结点的菜单列表")
+    @ApiOperation("批量查询位于根结点的菜单")
     List<UmsMenu> listRoot() {
         return umsMenuService.listRoot();
     }
 
     @GetMapping("/list/{id}")
-    @ApiOperation("查询父结点下的子菜单")
+    @ApiOperation("批量查询父结点下的子菜单")
     List<UmsMenu> listSon(@PathVariable @ApiParam("菜单ID") Long id) {
         return umsMenuService.listSon(id);
     }

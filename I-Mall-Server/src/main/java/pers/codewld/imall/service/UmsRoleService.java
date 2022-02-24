@@ -34,15 +34,15 @@ public interface UmsRoleService extends IService<UmsRole> {
     boolean update(Long id, UmsRoleParam umsRoleParam);
 
     /**
-     * 查询角色列表，分页，可搜索
+     * 分页查询角色列表，可搜索
      * @param pageNum 页数
      * @param pageSize 每页条数
      * @param name 名称
      */
-    PageVO<UmsRole> list(Integer pageNum, Integer pageSize, String name);
+    PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name);
 
     /**
-     * 查询所有的角色标记，以列表形式返回
+     * 批量查询角色标记
      */
-    List<UmsRoleMarkVO> listAllMark();
+    List<UmsRoleMarkVO> listMark();
 }

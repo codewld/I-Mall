@@ -53,7 +53,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
-    public PageVO<UmsRole> list(Integer pageNum, Integer pageSize, String name) {
+    public PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name) {
         QueryWrapper<UmsRole> queryWrapper = new QueryWrapper<>();
         queryWrapper
                 .like(name != null, "name", name);
@@ -64,7 +64,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
-    public List<UmsRoleMarkVO> listAllMark() {
+    public List<UmsRoleMarkVO> listMark() {
         List<UmsRole> roleList = this.list();
         return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());
     }

@@ -44,14 +44,14 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     @ApiModelProperty("密码")
     private String password;
 
-    @ApiModelProperty("启用状态")
-    private Boolean status;
-
     @ApiModelProperty("昵称")
     private String nickName;
 
     @ApiModelProperty("邮箱")
     private String email;
+
+    @ApiModelProperty("启用状态")
+    private Boolean status;
 
     @ApiModelProperty("备注")
     private String note;

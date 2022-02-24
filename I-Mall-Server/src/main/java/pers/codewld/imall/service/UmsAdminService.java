@@ -40,7 +40,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     UmsAdmin getByUsername(String username);
 
     /**
-     * 查询用户列表，分页，可搜索
+     * 分页查询用户列表，可搜索
      *
      * @param pageNum  页数
      * @param pageSize 每页条数
@@ -49,7 +49,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
      * @param nickName 昵称
      * @param email    邮箱
      */
-    PageVO<UmsAdminVO> list(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email);
+    PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email);
 
     /**
      * 获取黑名单 [黑名单为所有被禁用的用户]

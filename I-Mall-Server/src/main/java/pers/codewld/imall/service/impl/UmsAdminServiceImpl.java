@@ -96,7 +96,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public PageVO<UmsAdminVO> list(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email) {
+    public PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email) {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
                 .like(username != null, "username", username)
                 .like(email != null, "email", email)

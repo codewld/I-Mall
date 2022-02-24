@@ -16,12 +16,12 @@ import java.util.List;
 public interface UmsMenuService extends IService<UmsMenu> {
 
     /**
-     * 查询位于根结点的菜单列表
+     * 批量查询位于根结点的菜单
      */
     List<UmsMenu> listRoot();
 
     /**
-     * 查询父结点下的子菜单
+     * 批量查询父结点下的子菜单
      */
     List<UmsMenu> listSon(Long id);
 

@@ -25,9 +25,9 @@ public class TransformUtil {
         UmsAdminVO umsAdminVO = new UmsAdminVO();
         umsAdminVO.setId(umsAdmin.getId());
         umsAdminVO.setUsername(umsAdmin.getUsername());
-        umsAdminVO.setStatus(umsAdmin.getStatus());
         umsAdminVO.setNickName(umsAdmin.getNickName());
         umsAdminVO.setEmail(umsAdmin.getEmail());
+        umsAdminVO.setStatus(umsAdmin.getStatus());
         umsAdminVO.setNote(umsAdmin.getNote());
         umsAdminVO.setCreateTime(umsAdmin.getCreateTime());
         umsAdminVO.setUpdateTime(umsAdmin.getUpdateTime());
@@ -45,9 +45,9 @@ public class TransformUtil {
         UmsAdmin umsAdmin = new UmsAdmin();
         umsAdmin.setUsername(UmsAdminParam.getUsername());
         umsAdmin.setPassword(password);
-        umsAdmin.setStatus(UmsAdminParam.getStatus());
         umsAdmin.setNickName(UmsAdminParam.getNickName());
         umsAdmin.setEmail(UmsAdminParam.getEmail());
+        umsAdmin.setStatus(UmsAdminParam.getStatus());
         umsAdmin.setNote(UmsAdminParam.getNote());
         return umsAdmin;
     }

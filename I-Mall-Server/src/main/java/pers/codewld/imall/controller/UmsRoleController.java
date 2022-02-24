@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * <p>
- * 后台用户角色表 前端控制器
+ * 后台角色 前端控制器
  * </p>
  *
  * @author codewld
@@ -50,18 +50,18 @@ public class UmsRoleController {
         return umsRoleService.update(id, umsRoleParam);
     }
 
-    @GetMapping("/list")
-    @ApiOperation("查询角色列表，分页，可搜索")
-    public PageVO<UmsRole> list(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
+    @GetMapping("/page")
+    @ApiOperation("分页查询角色列表，可搜索")
+    public PageVO<UmsRole> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
                                 @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize,
                                 @RequestParam(value = "name", required = false) @Size(min = 4, max = 20, message = "用户名长度应在4-20之间") @ApiParam("名称") String name) {
-        return umsRoleService.list(pageNum, pageSize, name);
+        return umsRoleService.page(pageNum, pageSize, name);
     }
 
     @GetMapping("/list/mark")
-    @ApiOperation("查询所有的角色标记，以列表形式返回")
-    public List<UmsRoleMarkVO> listAllMark() {
-        return umsRoleService.listAllMark();
+    @ApiOperation("批量查询角色标记")
+    public List<UmsRoleMarkVO> listMark() {
+        return umsRoleService.listMark();
     }
 
 }
