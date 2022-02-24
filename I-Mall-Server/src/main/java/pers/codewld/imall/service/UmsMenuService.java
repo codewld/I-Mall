@@ -1,7 +1,9 @@
 package pers.codewld.imall.service;
 
-import pers.codewld.imall.model.entity.UmsMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
+import pers.codewld.imall.model.entity.UmsMenu;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +14,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-02-04
  */
 public interface UmsMenuService extends IService<UmsMenu> {
+
+    /**
+     * 查询位于根结点的菜单列表
+     */
+    List<UmsMenu> listRoot();
+
+    /**
+     * 查询父结点下的子菜单
+     */
+    List<UmsMenu> listSon(Long id);
 
 }
