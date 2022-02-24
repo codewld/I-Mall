@@ -1,8 +1,10 @@
 package pers.codewld.imall.util;
 
 import pers.codewld.imall.model.entity.UmsAdmin;
+import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsAdminParam;
+import pers.codewld.imall.model.param.UmsMenuParam;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.model.vo.UmsRoleMarkVO;
@@ -64,6 +66,21 @@ public class TransformUtil {
         umsRoleMarkVO.setId(umsRole.getId());
         umsRoleMarkVO.setName(umsRole.getName());
         return umsRoleMarkVO;
+    }
+
+    public static UmsMenu transform(UmsMenuParam umsMenuParam) {
+        UmsMenu umsMenu = new UmsMenu();
+        umsMenu.setParentId(umsMenuParam.getParentId());
+        umsMenu.setLeaf(umsMenuParam.getLeaf());
+        umsMenu.setSort(umsMenuParam.getSort());
+        umsMenu.setCode(umsMenuParam.getCode());
+        umsMenu.setName(umsMenuParam.getName());
+        umsMenu.setComponent(umsMenuParam.getComponent());
+        umsMenu.setPath(umsMenuParam.getPath());
+        umsMenu.setIcon(umsMenuParam.getIcon());
+        umsMenu.setStatus(umsMenuParam.getStatus());
+        umsMenu.setNote(umsMenuParam.getNote());
+        return umsMenu;
     }
 
 }

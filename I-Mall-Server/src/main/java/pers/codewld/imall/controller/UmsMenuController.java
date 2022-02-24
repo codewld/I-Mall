@@ -5,12 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pers.codewld.imall.config.ValidatorConfig;
 import pers.codewld.imall.model.entity.UmsMenu;
+import pers.codewld.imall.model.param.UmsMenuParam;
 import pers.codewld.imall.service.UmsMenuService;
 
 import java.util.List;
@@ -30,6 +28,25 @@ public class UmsMenuController {
 
     @Autowired
     UmsMenuService umsMenuService;
+
+    @PostMapping()
+    @ApiOperation("添加菜单")
+    public boolean add(@RequestBody @Validated(ValidatorConfig.Group.add.class) @ApiParam("菜单参数") UmsMenuParam umsMenuParam) {
+        return umsMenuService.add(umsMenuParam);
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除菜单")
+    public boolean del(@PathVariable @ApiParam("菜单id") Long id) {
+        return umsMenuService.del(id);
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("修改菜单")
+    public boolean update(@PathVariable @ApiParam("菜单id") Long id,
+                          @RequestBody @Validated @ApiParam("菜单参数") UmsMenuParam umsMenuParam) {
+        return umsMenuService.update(id, umsMenuParam);
+    }
 
     @GetMapping("/list")
     @ApiOperation("批量查询位于根结点的菜单")

@@ -2,6 +2,7 @@ package pers.codewld.imall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import pers.codewld.imall.model.entity.UmsMenu;
+import pers.codewld.imall.model.param.UmsMenuParam;
 
 import java.util.List;
 
@@ -14,6 +15,21 @@ import java.util.List;
  * @since 2022-02-04
  */
 public interface UmsMenuService extends IService<UmsMenu> {
+
+    /**
+     * 添加菜单
+     */
+    boolean add(UmsMenuParam umsMenuParam);
+
+    /**
+     * 删除菜单
+     */
+    boolean del(Long id);
+
+    /**
+     * 修改菜单
+     */
+    boolean update(Long id, UmsMenuParam umsMenuParam);
 
     /**
      * 批量查询位于根结点的菜单
