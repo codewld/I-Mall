@@ -19,7 +19,7 @@ import java.util.List;
 public interface UmsRoleService extends IService<UmsRole> {
 
     /**
-     * 新增角色
+     * 添加角色
      */
     boolean add(UmsRoleParam umsRoleParam);
 
@@ -42,7 +42,7 @@ public interface UmsRoleService extends IService<UmsRole> {
     PageVO<UmsRole> list(Integer pageNum, Integer pageSize, String name);
 
     /**
-     * 查询角色标记列表
+     * 查询所有的角色标记，以列表形式返回
      */
-    List<UmsRoleMarkVO> listMark();
+    List<UmsRoleMarkVO> listAllMark();
 }

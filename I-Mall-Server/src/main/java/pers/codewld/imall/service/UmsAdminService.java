@@ -20,7 +20,7 @@ import java.util.List;
 public interface UmsAdminService extends IService<UmsAdmin> {
 
     /**
-     * 新增用户
+     * 添加用户
      */
     boolean add(UmsAdminParam umsAdminParam);
 

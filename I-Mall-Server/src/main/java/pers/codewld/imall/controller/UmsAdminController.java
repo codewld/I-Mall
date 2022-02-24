@@ -32,7 +32,7 @@ public class UmsAdminController {
     UmsAdminService umsAdminService;
 
     @PostMapping()
-    @ApiOperation("新增用户")
+    @ApiOperation("添加用户")
     public boolean add(@RequestBody @Validated(ValidatorConfig.Group.add.class) @ApiParam("用户参数") UmsAdminParam umsAdminParam) {
         return umsAdminService.add(umsAdminParam);
     }

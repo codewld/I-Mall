@@ -33,7 +33,7 @@ public class UmsRoleController {
     UmsRoleService umsRoleService;
 
     @PostMapping()
-    @ApiOperation("新增角色")
+    @ApiOperation("添加角色")
     public boolean add(@RequestBody @Validated(ValidatorConfig.Group.add.class) UmsRoleParam umsRoleParam) {
         return umsRoleService.add(umsRoleParam);
     }
@@ -59,9 +59,9 @@ public class UmsRoleController {
     }
 
     @GetMapping("/list/mark")
-    @ApiOperation("查询角色标记列表，直接以列表形式返回")
-    public List<UmsRoleMarkVO> listMark() {
-        return umsRoleService.listMark();
+    @ApiOperation("查询所有的角色标记，以列表形式返回")
+    public List<UmsRoleMarkVO> listAllMark() {
+        return umsRoleService.listAllMark();
     }
 
 }

@@ -64,7 +64,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
-    public List<UmsRoleMarkVO> listMark() {
+    public List<UmsRoleMarkVO> listAllMark() {
         List<UmsRole> roleList = this.list();
         return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());
     }
