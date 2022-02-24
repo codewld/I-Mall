@@ -11,6 +11,14 @@ declare namespace Role {
   }
 
   /**
+   * Role标记
+   */
+  interface roleMark {
+    id: number,
+    name: string
+  }
+
+  /**
    * Role参数
    */
   interface roleParam {

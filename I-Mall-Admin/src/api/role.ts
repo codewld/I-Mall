@@ -31,3 +31,10 @@ export const rUpdate: CURD.updateFunction<Role.roleParam> = (id, data) => {
 export const rList: CURD.loadFunction<Role.role> = (pageParam, searchParam) => {
   return request(`${ PREFIX }/list`, 'get', {...unref(pageParam), ...unref(searchParam)})
 }
+
+/**
+ * 查询所有角色的标记
+ */
+export const rListAllMark = (): Promise<Role.roleMark[]> => {
+  return request(`${ PREFIX }/list/mark`, 'get')
+}

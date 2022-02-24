@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { rAdd, rDel, rUpdate, rList } from '@/api/admin';
+import { rAdd, rDel, rUpdate, rList, rUpdateRole, rListRoleMark } from '@/api/admin';
+import { rListAllMark } from '@/api/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import { Check, Close } from '@element-plus/icons-vue';
 import ICurd from '@/components/iCurd';
 import { CURD } from '@/@types/curd';
+import { Ref, ref } from 'vue';
+import { ElMessage } from 'element-plus';
+import 'element-plus/es/components/message/style/css';
 
 const fieldList: CURD.field[] = [
   { code: 'id', name: 'id', tableConf: { width: 80, fixed: 'left' }, formConf: { add: false, update: false } },
@@ -17,6 +21,65 @@ const fieldList: CURD.field[] = [
   { code: 'updateTime', name: '更新时间', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'loginTime', name: '最后登录时间', tableConf: { display: false }, formConf: { add: false, update: false } }
 ]
+
+// -- 角色相关 --
+/**
+ * 对话框是否可见
+ */
+const roleDialogVisible = ref(false)
+
+/**
+ * 所有角色列表
+ */
+const allRoleList: Ref<Role.roleMark[]> = ref([])
+
+/**
+ * 当前用户的ID
+ */
+const adminId: Ref<number> = ref(0)
+
+/**
+ * 用户对应角色ID列表
+ */
+const roleIdList: Ref<number[]> = ref([])
+
+/**
+ * 未经修改的用户对应角色ID列表
+ */
+const originRoleIdList: Ref<number[]> = ref([])
+
+/**
+ * 处理角色对话框
+ */
+const handleRoleDialog = (id: number) => {
+  Promise.all([rListAllMark(), rListRoleMark(id)])
+      .then(res => {
+        allRoleList.value = res[0]
+        adminId.value = id
+        roleIdList.value = Array.from(res[1], item => item.id)
+        originRoleIdList.value = [...roleIdList.value]
+        roleDialogVisible.value = true
+      })
+      .catch(err => {
+        ElMessage.warning(err)
+      })
+}
+
+/**
+ * 处理用户对应角色的修改
+ */
+const handleUpdateRole = () => {
+  if (originRoleIdList.value.sort().toString() === roleIdList.value.sort().toString()) {
+    ElMessage.warning('请修改')
+    return
+  }
+  rUpdateRole(adminId.value, roleIdList.value).then(() => {
+    ElMessage.success('修改成功')
+    roleDialogVisible.value = false
+  }).catch(err => {
+    ElMessage.warning(err)
+  })
+}
 </script>
 
 <template>
@@ -63,5 +126,27 @@ const fieldList: CURD.field[] = [
     <template v-slot:form-item-loginTime="scope">
       <el-date-picker v-model="scope.row.loginTime" type="datetime" :disabled="scope.disabled" placeholder="暂无"/>
     </template>
+
+    <!--扩展对角色的操作-->
+    <template v-slot:table-column-i-rear>
+      <el-table-column fixed="right" label="角色" align="center" width="60">
+        <template v-slot:default="scope">
+          <el-button type="text" size="small" @click="handleRoleDialog(scope.row.id)">分配</el-button>
+        </template>
+      </el-table-column>
+    </template>
   </i-curd>
+
+  <!--角色信息对话框-->
+  <el-dialog v-model="roleDialogVisible" title="角色分配" width="30%">
+    <el-checkbox-group v-model="roleIdList" class="flex flex-col">
+      <el-checkbox v-for="(item, key) in allRoleList" :key="key" :label="item.id">{{ item.name }}</el-checkbox>
+    </el-checkbox-group>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="roleDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleUpdateRole">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>

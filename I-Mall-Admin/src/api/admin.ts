@@ -29,5 +29,19 @@ export const rUpdate: CURD.updateFunction<Admin.adminParam> = (id, data) => {
  * 列表查询
  */
 export const rList: CURD.loadFunction<Admin.admin> = (pageParam, searchParam) => {
-  return request(`${ PREFIX }/list`, 'get', {...unref(pageParam), ...unref(searchParam)})
+  return request(`${ PREFIX }/list`, 'get', { ...unref(pageParam), ...unref(searchParam) })
+}
+
+/**
+ * 修改用户的角色
+ */
+export const rUpdateRole = (id: number, roleIdList: number[]): Promise<string> => {
+  return request(`${ PREFIX }/role/${ id }`, 'put', roleIdList)
+}
+
+/**
+ * 查询用户的角色标记列表
+ */
+export const rListRoleMark = (id: number): Promise<Role.roleMark[]> => {
+  return request(`${ PREFIX }/role/${ id }`, 'get')
 }
