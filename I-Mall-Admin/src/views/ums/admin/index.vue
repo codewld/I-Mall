@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { rAdd, rDel, rUpdate, rList, rUpdateRole, rListRoleMark } from '@/api/admin';
-import { rListAllMark } from '@/api/role';
+import { rAdd, rDel, rUpdate, rPage, rUpdateRole, rListRoleMark } from '@/api/admin';
+import { rListMark } from '@/api/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import { Check, Close } from '@element-plus/icons-vue';
 import ICurd from '@/components/iCurd';
@@ -10,16 +10,16 @@ import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 
 const fieldList: CURD.field[] = [
-  { code: 'id', name: 'id', tableConf: { width: 80, fixed: 'left' }, formConf: { add: false, update: false } },
+  { code: 'id', name: 'id', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'username', name: '用户名', tableConf: { width: 200 }, searchConf: { display: true } },
   { code: 'password', name: '密码', tableConf: { display: false }, formConf: { see: false } },
-  { code: 'status', name: '启用状态', tableConf: { width: 80 }, searchConf: { display: true } },
   { code: 'nickName', name: '昵称', tableConf: { width: 200 }, searchConf: { display: true } },
   { code: 'email', name: '邮箱', tableConf: { width: 200 }, searchConf: { display: true } },
+  { code: 'status', name: '启用状态', tableConf: { width: 80 }, searchConf: { display: true } },
   { code: 'note', name: '备注', tableConf: { minWidth: 200 } },
-  { code: 'createTime', name: '创建时间', tableConf: { display: false }, formConf: { add: false, update: false } },
-  { code: 'updateTime', name: '更新时间', tableConf: { display: false }, formConf: { add: false, update: false } },
-  { code: 'loginTime', name: '最后登录时间', tableConf: { display: false }, formConf: { add: false, update: false } }
+  { code: 'createTime', name: '创建时间', tableConf: { width: 200 }, formConf: { add: false, update: false } },
+  { code: 'updateTime', name: '更新时间', tableConf: { width: 200 }, formConf: { add: false, update: false } },
+  { code: 'loginTime', name: '最后登录时间', tableConf: { width: 200 }, formConf: { add: false, update: false } }
 ]
 
 // -- 角色相关 --
@@ -52,7 +52,7 @@ const originRoleIdList: Ref<number[]> = ref([])
  * 处理角色对话框
  */
 const handleRoleDialog = (id: number) => {
-  Promise.all([rListAllMark(), rListRoleMark(id)])
+  Promise.all([rListMark(), rListRoleMark(id)])
       .then(res => {
         allRoleList.value = res[0]
         adminId.value = id
@@ -83,7 +83,7 @@ const handleUpdateRole = () => {
 </script>
 
 <template>
-  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :load-function="rList"
+  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :page-function="rPage"
           :field-list="fieldList">
     <!--自定义搜索-->
     <template v-slot:search-item-status="scope">

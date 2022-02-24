@@ -26,15 +26,15 @@ export const rUpdate: CURD.updateFunction<Role.roleParam> = (id, data) => {
 }
 
 /**
- * 列表查询
+ * 分页查询
  */
-export const rList: CURD.loadFunction<Role.role> = (pageParam, searchParam) => {
-  return request(`${ PREFIX }/list`, 'get', {...unref(pageParam), ...unref(searchParam)})
+export const rPage: CURD.pageFunction<Role.role> = (pageParam, searchParam) => {
+  return request(`${ PREFIX }/page`, 'get', {...unref(pageParam), ...unref(searchParam)})
 }
 
 /**
- * 查询所有角色的标记
+ * 批量查询角色标记
  */
-export const rListAllMark = (): Promise<Role.roleMark[]> => {
+export const rListMark = (): Promise<Role.roleMark[]> => {
   return request(`${ PREFIX }/list/mark`, 'get')
 }

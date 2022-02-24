@@ -34,11 +34,18 @@ const props = defineProps({
     required: true
   },
   /**
-   * 数据查询方法
+   * 分页查询方法
    */
-  loadFunction: {
-    type: Function as PropType<CURD.loadFunction<unknown>>,
+  pageFunction: {
+    type: Function as PropType<CURD.pageFunction<unknown>>,
     required: true
+  },
+  /**
+   * 是否需要搜索区
+   */
+  search: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -113,11 +120,11 @@ const dataList: Ref<CURD.dataList<unknown>> = ref({
 })
 
 /**
- * 分页查询数据列表
+ * 分页查询
  */
 const doLoad = () => {
   isLoading.value = true
-  props.loadFunction(pageParam, getValidSearchParam()).then(res => {
+  props.pageFunction(pageParam, getValidSearchParam()).then(res => {
     dataList.value = res
   }).catch(err => {
     ElMessage.warning(err)
@@ -248,7 +255,7 @@ const handleSeeForm = () => {
 <template>
   <i-container>
     <!--搜索区-->
-    <el-card shadow="never">
+    <el-card shadow="never" v-if="search">
       <template #header>
         <div class="flex justify-between">
           <p>搜索区</p>
@@ -313,6 +320,7 @@ const handleSeeForm = () => {
     </el-card>
   </i-container>
 
+  <!--增、改、查 对话框-->
   <el-dialog v-model="dialogVisible" title="Tips" width="50%">
     <el-form :model="formData" inline label-position="top" class="justify-between">
       <slot name="form-item-i-front"/>

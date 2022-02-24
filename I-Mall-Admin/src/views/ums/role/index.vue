@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import {rAdd, rDel, rUpdate, rList} from '@/api/role';
+import {rAdd, rDel, rUpdate, rPage} from '@/api/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import { Check, Close } from '@element-plus/icons-vue';
 import { CURD } from '@/@types/curd';
 import ICurd from '@/components/iCurd/i-curd.vue';
 
 const fieldList: CURD.field[] = [
-  { code: 'id', name: 'id', tableConf: { width: 80, fixed: 'left' }, formConf: { add: false, update: false } },
+  { code: 'id', name: 'id', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'name', name: '名称', tableConf: { width: 200 }, searchConf: { display: true } },
   { code: 'note', name: '备注', tableConf: { minWidth: 200 } },
-  { code: 'createTime', name: '创建时间', tableConf: { display: false }, formConf: { add: false, update: false } },
-  { code: 'updateTime', name: '更新时间', tableConf: { display: false }, formConf: { add: false, update: false } }
+  { code: 'createTime', name: '创建时间', tableConf: { width: 200 }, formConf: { add: false, update: false } },
+  { code: 'updateTime', name: '更新时间', tableConf: { width: 200 }, formConf: { add: false, update: false } }
 ]
 </script>
 
 <template>
-  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :load-function="rList"
+  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :page-function="rPage"
           :field-list="fieldList">
     <!--自定义表格列-->
     <template v-slot:table-column-createTime="scope">

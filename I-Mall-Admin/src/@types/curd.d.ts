@@ -18,9 +18,9 @@ declare namespace CURD {
   type updateFunction<T> = (id: number, data: T) => Promise<string>
 
   /**
-   * 列表查询
+   * 分页查询
    */
-  type loadFunction<T> = (pageParam: Ref<pageParam>, searchParam: Ref<object> | null) => Promise<dataList<T>>
+  type pageFunction<T> = (pageParam: Ref<pageParam>, searchParam: Ref<object> | null) => Promise<dataList<T>>
 
   /**
    * 分页参数
