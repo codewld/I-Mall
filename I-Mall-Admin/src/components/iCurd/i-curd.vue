@@ -120,7 +120,7 @@ const dataList: Ref<CURD.dataList<unknown>> = ref({
 })
 
 /**
- * 分页查询
+ * 加载数据，分页查询
  */
 const doLoad = () => {
   isLoading.value = true
@@ -176,9 +176,9 @@ let formData = ref()
 const actionType: Ref<string | undefined> = ref(undefined)
 
 /**
- * 处理添加表单
+ * 准备添加
  */
-const handleAddForm = () => {
+const beforeAdd = () => {
   formData.value = {}
   actionType.value = 'add'
   dialogVisible.value = true
@@ -210,18 +210,18 @@ const doDel = () => {
 }
 
 /**
- * 处理修改表单
+ * 准备修改
  */
-const handleUpdateForm = () => {
+const beforeUpdate = () => {
   formData.value = { ...currentRow.value }
   actionType.value = 'update'
   dialogVisible.value = true
 }
 
 /**
- * 执行修改
+ * 获取有效修改数据
  */
-const doUpdate = () => {
+const getValidUpdateData = () => {
   let data: any = {}
   for (let key in formData.value) {
     if (formData.value[key] !== undefined && formData.value[key] !== null && formData.value[key] !== ''
@@ -229,6 +229,14 @@ const doUpdate = () => {
       data[key] = formData.value[key]
     }
   }
+  return data
+}
+
+/**
+ * 执行修改
+ */
+const doUpdate = () => {
+  const data = getValidUpdateData()
   if (Object.getOwnPropertyNames(data).length === 0) {
     ElMessage.warning('请修改')
     return
@@ -243,9 +251,9 @@ const doUpdate = () => {
 }
 
 /**
- * 处理查看表单
+ * 准备查看
  */
-const handleSeeForm = () => {
+const beforeSee = () => {
   formData.value = currentRow.value
   actionType.value = 'see'
   dialogVisible.value = true
@@ -282,14 +290,14 @@ const handleSeeForm = () => {
           <p>数据区</p>
           <el-button-group>
             <slot name="table-button-i-front"/>
-            <el-button type="primary" @click="handleAddForm">添加</el-button>
+            <el-button type="primary" @click="beforeAdd">添加</el-button>
             <el-popconfirm title="是否要进行删除？" @confirm="doDel">
               <template #reference>
                 <el-button type="danger" @click="emits('del')" :disabled="!currentRow">删除</el-button>
               </template>
             </el-popconfirm>
-            <el-button type="warning" @click="handleUpdateForm" :disabled="!currentRow">修改</el-button>
-            <el-button type="success" @click="handleSeeForm" :disabled="!currentRow">查看</el-button>
+            <el-button type="warning" @click="beforeUpdate" :disabled="!currentRow">修改</el-button>
+            <el-button type="success" @click="beforeSee" :disabled="!currentRow">查看</el-button>
             <slot name="table-button-i-rear"/>
           </el-button-group>
         </div>
