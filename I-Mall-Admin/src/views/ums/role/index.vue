@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {rAdd, rDel, rUpdate, rPage} from '@/api/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
-import { Check, Close } from '@element-plus/icons-vue';
 import { CURD } from '@/@types/curd';
 import ICurd from '@/components/iCurd/i-curd.vue';
 

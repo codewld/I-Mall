@@ -2,8 +2,8 @@
 import { rAdd, rDel, rUpdate, rPage, rUpdateRole, rListRoleMark } from '@/api/admin';
 import { rListMark } from '@/api/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
-import { Check, Close } from '@element-plus/icons-vue';
 import ICurd from '@/components/iCurd';
+import IStatusIcon from '@/components/iStatusIcon';
 import { CURD } from '@/@types/curd';
 import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus';
@@ -94,12 +94,7 @@ const handleUpdateRole = () => {
     </template>
     <!--自定义表格列-->
     <template v-slot:table-column-status="scope">
-      <div class="flex items-center justify-center">
-        <el-icon :size="20" :color="scope.row.status ? 'green' : 'red'">
-          <Check v-if="scope.row.status"/>
-          <Close v-else/>
-        </el-icon>
-      </div>
+      <i-status-icon :status="scope.row.status"></i-status-icon>
     </template>
     <template v-slot:table-column-createTime="scope">
       {{ getFormattedDateTime(scope.row.createTime) }}
