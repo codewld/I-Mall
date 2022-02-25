@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pers.codewld.imall.config.ValidatorConfig;
 import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.model.param.UmsMenuParam;
+import pers.codewld.imall.model.vo.UmsMenuMarkVO;
 import pers.codewld.imall.service.UmsMenuService;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class UmsMenuController {
         return umsMenuService.update(id, umsMenuParam);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list/root")
     @ApiOperation("批量查询位于根结点的菜单")
     List<UmsMenu> listRoot() {
         return umsMenuService.listRoot();
@@ -58,6 +59,18 @@ public class UmsMenuController {
     @ApiOperation("批量查询父结点下的子菜单")
     List<UmsMenu> listSon(@PathVariable @ApiParam("菜单ID") Long id) {
         return umsMenuService.listSon(id);
+    }
+
+    @GetMapping("/list/mark/root")
+    @ApiOperation("批量查询位于根结点的菜单标记")
+    List<UmsMenuMarkVO> listRootMark() {
+        return umsMenuService.listRootMark();
+    }
+
+    @GetMapping("/list/mark/{id}")
+    @ApiOperation("批量查询父结点下的子菜单标记")
+    List<UmsMenuMarkVO> listSonMark(@PathVariable @ApiParam("菜单ID") Long id) {
+        return umsMenuService.listSonMark(id);
     }
 
 }

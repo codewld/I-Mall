@@ -34,29 +34,23 @@ public class UmsMenu implements Serializable {
     @ApiModelProperty("父级ID")
     private Long parentId;
 
-    @ApiModelProperty("是否为叶结点")
-    private Boolean leaf;
-
-    @ApiModelProperty("排序")
-    private Integer sort;
-
-    @ApiModelProperty("编号")
+    @ApiModelProperty("编码")
     private String code;
 
     @ApiModelProperty("名称")
     private String name;
+
+    @ApiModelProperty("排序")
+    private Integer sort;
+
+    @ApiModelProperty("是否为叶结点")
+    private Boolean hasChildren;
 
     @ApiModelProperty("组件")
     private String component;
 
     @ApiModelProperty("路径")
     private String path;
-
-    @ApiModelProperty("图标")
-    private String icon;
-
-    @ApiModelProperty("启用状态")
-    private Boolean status;
 
     @ApiModelProperty("备注")
     private String note;

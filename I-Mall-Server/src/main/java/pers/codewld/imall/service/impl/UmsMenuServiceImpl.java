@@ -1,15 +1,17 @@
 package pers.codewld.imall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import pers.codewld.imall.model.entity.UmsMenu;
-import pers.codewld.imall.mapper.UmsMenuMapper;
-import pers.codewld.imall.model.param.UmsMenuParam;
-import pers.codewld.imall.service.UmsMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import pers.codewld.imall.mapper.UmsMenuMapper;
+import pers.codewld.imall.model.entity.UmsMenu;
+import pers.codewld.imall.model.param.UmsMenuParam;
+import pers.codewld.imall.model.vo.UmsMenuMarkVO;
+import pers.codewld.imall.service.UmsMenuService;
 import pers.codewld.imall.util.TransformUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -52,5 +54,15 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         QueryWrapper<UmsMenu> queryWrapper = new QueryWrapper<UmsMenu>()
                 .eq("parent_id", id);
         return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<UmsMenuMarkVO> listRootMark() {
+        return this.listRoot().stream().map(TransformUtil::transform).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UmsMenuMarkVO> listSonMark(Long id) {
+        return this.listSon(id).stream().map(TransformUtil::transform).collect(Collectors.toList());
     }
 }

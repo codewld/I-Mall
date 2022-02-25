@@ -7,6 +7,7 @@ import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.param.UmsMenuParam;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.UmsAdminVO;
+import pers.codewld.imall.model.vo.UmsMenuMarkVO;
 import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
 
@@ -71,16 +72,22 @@ public class TransformUtil {
     public static UmsMenu transform(UmsMenuParam umsMenuParam) {
         UmsMenu umsMenu = new UmsMenu();
         umsMenu.setParentId(umsMenuParam.getParentId());
-        umsMenu.setLeaf(umsMenuParam.getLeaf());
-        umsMenu.setSort(umsMenuParam.getSort());
         umsMenu.setCode(umsMenuParam.getCode());
         umsMenu.setName(umsMenuParam.getName());
+        umsMenu.setSort(umsMenuParam.getSort());
+        umsMenu.setHasChildren(umsMenuParam.getHasChildren());
         umsMenu.setComponent(umsMenuParam.getComponent());
         umsMenu.setPath(umsMenuParam.getPath());
-        umsMenu.setIcon(umsMenuParam.getIcon());
-        umsMenu.setStatus(umsMenuParam.getStatus());
         umsMenu.setNote(umsMenuParam.getNote());
         return umsMenu;
+    }
+
+    public static UmsMenuMarkVO transform(UmsMenu umsMenu) {
+        UmsMenuMarkVO umsMenuMarkVO = new UmsMenuMarkVO();
+        umsMenuMarkVO.setId(umsMenu.getId());
+        umsMenuMarkVO.setName(umsMenu.getName());
+        umsMenuMarkVO.setHasChildren(umsMenu.getHasChildren());
+        return umsMenuMarkVO;
     }
 
 }
