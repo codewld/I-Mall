@@ -104,7 +104,7 @@ const actionType: Ref<string | undefined> = ref(undefined)
  */
 const beforeAdd = () => {
   formData.value = {
-    hasChildren: true
+    nonLeaf: true
   }
   actionType.value = 'add'
   dialogVisible.value = true
@@ -150,8 +150,7 @@ const beforeUpdate = () => {
 const getValidUpdateData = () => {
   let data: any = {}
   for (let key in formData.value) {
-    if (formData.value[key] !== undefined && formData.value[key] !== null && formData.value[key] !== ''
-        && formData.value[key] !== currentRow.value[key]) {
+    if (formData.value[key] !== currentRow.value[key]) {
       data[key] = formData.value[key]
     }
   }
@@ -203,7 +202,7 @@ const cascaderProps = {
         marks.unshift({
           id: 0,
           name: '无父级',
-          'hasChildren': false
+          nonLeaf: false
         })
       } else {
         marks = await rListSonMark(node.value)
@@ -223,18 +222,18 @@ const menuMark2Node = (marks: Menu.menuMark[]): any => {
     return {
       value: o.id,
       label: o.name,
-      leaf: !o.hasChildren
+      leaf: !o.nonLeaf
     }
   })
 }
 
 /**
- * 在表单中选择类型 [指定是否有子节点]
+ * 处理是否为非叶结点的选择
  */
-const handelHasChildrenChoose = (hasChildren: boolean) => {
-  if (hasChildren) {
-    formData.value.component = undefined
-    formData.value.path = undefined
+const handelNonLeafChoose = (nonLeaf: boolean) => {
+  if (nonLeaf) {
+    formData.value.component = null
+    formData.value.path = null
   }
 }
 </script>
@@ -261,12 +260,12 @@ const handelHasChildrenChoose = (hasChildren: boolean) => {
       <!--表格-->
       <el-table ref="table" v-loading="isLoading" :data="dataList" stripe highlight-current-row
                 @current-change="handleCurrentChange"
-                lazy :load="listSon" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id">
+                lazy :load="listSon" :tree-props="{children: 'children', hasChildren: 'nonLeaf'}" row-key="id">
         <el-table-column prop="name" label="名称" :width="200" label-class-name="text-center">
           <template v-slot:default="scope">
             <div class="inline-flex items-center">
               <el-icon :size="20" class="m-1.5">
-                <Folder v-if="scope.row.hasChildren"/>
+                <Folder v-if="scope.row.nonLeaf"/>
                 <Document v-else/>
               </el-icon>
               {{ scope.row.name }}
@@ -337,13 +336,13 @@ const handelHasChildrenChoose = (hasChildren: boolean) => {
         <el-input-number v-model="formData.sort" :disabled="actionType === 'see'" :min="0" :max="20"/>
       </el-form-item>
       <el-form-item label="类型：" class="w-full">
-        <el-radio-group v-model="formData.hasChildren" :disabled="actionType === 'see'"
-                        @change="handelHasChildrenChoose">
+        <el-radio-group v-model="formData.nonLeaf" :disabled="actionType === 'see'"
+                        @change="handelNonLeafChoose">
           <el-radio-button :label="true">菜单</el-radio-button>
           <el-radio-button :label="false">页面</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <template v-if="!formData.hasChildren">
+      <template v-if="!formData.nonLeaf">
         <el-form-item label="组件：" class="w-2/5 flex-grow">
           <el-input v-model.trim="formData.component" :disabled="actionType === 'see'"
                     :placeholder="actionType === 'see' ? '' : '请输入组件'">

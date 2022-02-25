@@ -8,7 +8,7 @@ declare namespace Menu {
     code: string,
     name: string,
     sort: number,
-    hasChildren: boolean,
+    nonLeaf: boolean,
     component: string,
     path: string,
     note: string,
@@ -22,7 +22,7 @@ declare namespace Menu {
   interface menuMark {
     id: number,
     name: string,
-    hasChildren: boolean
+    nonLeaf: boolean
   }
 
   /**
@@ -33,7 +33,7 @@ declare namespace Menu {
     code?: string,
     name?: string,
     sort?: number,
-    hasChildren?: boolean,
+    nonLeaf?: boolean,
     component?: string,
     path?: string,
     note?: string
