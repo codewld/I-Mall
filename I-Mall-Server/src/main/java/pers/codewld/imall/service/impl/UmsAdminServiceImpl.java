@@ -42,29 +42,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Autowired
     UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
 
-    /**
-     * 获取自身的Bean，以避免直接调用自身时AOP的失效
-     */
-    private UmsAdminService getBean() {
-        return BeanUtil.getBean(UmsAdminService.class);
-    }
-
-    /**
-     * 检查用户名是否重复
-     */
-    private void checkUsernameDuplicate(UmsAdmin umsAdmin) {
-        String username = umsAdmin.getUsername();
-        if (username == null) {
-            return;
-        }
-        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
-                .eq("username", username);
-        long count = this.count(queryWrapper);
-        if (count > 0) {
-            throw new CustomException(ResultCode.VALIDATE_FAILED, "用户名重复");
-        }
-    }
-
     @CacheEvict(value = "blacklist", allEntries = true)
     @Override
     public boolean add(UmsAdminParam umsAdminParam) {
@@ -139,6 +116,30 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Override
     public List<UmsRoleMarkVO> listRoleMark(Long id) {
         return umsAdminRoleRelationMapper.selectRoleMarkListByAdminId(id);
+    }
+
+
+    /**
+     * 获取自身的Bean，以避免直接调用自身时AOP的失效
+     */
+    private UmsAdminService getBean() {
+        return BeanUtil.getBean(UmsAdminService.class);
+    }
+
+    /**
+     * 检查用户名是否重复
+     */
+    private void checkUsernameDuplicate(UmsAdmin umsAdmin) {
+        String username = umsAdmin.getUsername();
+        if (username == null) {
+            return;
+        }
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
+                .eq("username", username);
+        long count = this.count(queryWrapper);
+        if (count > 0) {
+            throw new CustomException(ResultCode.VALIDATE_FAILED, "用户名重复");
+        }
     }
 
 }

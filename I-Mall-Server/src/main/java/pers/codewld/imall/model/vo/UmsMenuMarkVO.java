@@ -26,7 +26,7 @@ public class UmsMenuMarkVO {
     @ApiModelProperty("名称")
     private String name;
 
-    @ApiModelProperty("是否为叶结点")
-    private Boolean hasChildren;
+    @ApiModelProperty("是否为非叶结点")
+    private Boolean nonLeaf;
 
 }

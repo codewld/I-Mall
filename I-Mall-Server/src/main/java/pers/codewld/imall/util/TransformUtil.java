@@ -75,7 +75,7 @@ public class TransformUtil {
         umsMenu.setCode(umsMenuParam.getCode());
         umsMenu.setName(umsMenuParam.getName());
         umsMenu.setSort(umsMenuParam.getSort());
-        umsMenu.setHasChildren(umsMenuParam.getHasChildren());
+        umsMenu.setNonLeaf(umsMenuParam.getNonLeaf());
         umsMenu.setComponent(umsMenuParam.getComponent());
         umsMenu.setPath(umsMenuParam.getPath());
         umsMenu.setNote(umsMenuParam.getNote());
@@ -86,7 +86,7 @@ public class TransformUtil {
         UmsMenuMarkVO umsMenuMarkVO = new UmsMenuMarkVO();
         umsMenuMarkVO.setId(umsMenu.getId());
         umsMenuMarkVO.setName(umsMenu.getName());
-        umsMenuMarkVO.setHasChildren(umsMenu.getHasChildren());
+        umsMenuMarkVO.setNonLeaf(umsMenu.getNonLeaf());
         return umsMenuMarkVO;
     }
 

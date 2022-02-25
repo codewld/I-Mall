@@ -43,8 +43,8 @@ public class UmsMenu implements Serializable {
     @ApiModelProperty("排序")
     private Integer sort;
 
-    @ApiModelProperty("是否为叶结点")
-    private Boolean hasChildren;
+    @ApiModelProperty("是否为非叶结点")
+    private Boolean nonLeaf;
 
     @ApiModelProperty("组件")
     private String component;
