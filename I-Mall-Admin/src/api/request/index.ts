@@ -5,6 +5,7 @@ import 'element-plus/es/components/message/style/css';
 import { baseURL, statusCode } from '@/config';
 import { Ref, unref } from 'vue';
 import { useJWTStore } from '@/store';
+import { removeNull } from '@/utils/objUtil'
 
 const JWTStore = useJWTStore()
 
@@ -64,20 +65,19 @@ instance.interceptors.response.use(
  * @return Promise
  */
 function request<T>(path: string, method: Method = 'get', data ?: Ref<object> | object): Promise<T> {
-  let unRefData = unref(data)
+  let removeNullData = removeNull(unref(data))
   if (method === 'get' || method === 'GET') {
     return instance.request({
       url: path,
       method: method,
-      params: unRefData
-    })
-  } else {
-    return instance.request({
-      url: path,
-      method: method,
-      data: unRefData
+      params: removeNullData
     })
   }
+  return instance.request({
+    url: path,
+    method: method,
+    data: removeNullData
+  })
 }
 
 export default request
