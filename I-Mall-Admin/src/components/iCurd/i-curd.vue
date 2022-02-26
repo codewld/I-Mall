@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { PropType, ref, Ref, watch } from 'vue';
-import { ElMessage } from 'element-plus';
+import { PropType, ref, Ref} from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd';
+import useSearch from '@/composables/curd/useSearch';
+import useFormCurd from '@/composables/curd/useFormCurd';
+import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
+import usePage from '@/composables/curd/usePage';
 
 const props = defineProps({
   /**
@@ -39,234 +42,50 @@ const props = defineProps({
   pageFunction: {
     type: Function as PropType<CURD.pageFunction<unknown>>,
     required: true
-  },
-  /**
-   * 是否需要搜索区
-   */
-  search: {
-    type: Boolean,
-    default: true
   }
 })
 
-const emits = defineEmits(['add', 'del', 'update', 'see'])
+
+/**
+ * 加载扳机 [用于在组合式函数中调用加载方法]
+ */
+const loadTrigger: Ref<number> = ref(0)
 
 
 // -- 搜索相关 --
-/**
- * 是否正在进行搜索
- */
-const isSearching: Ref<boolean> = ref(false)
-
-/**
- * 搜索参数
- */
-const searchParam: Ref = ref({})
-
-/**
- * 获取加工后的搜索参数
- */
-const getValidSearchParam = () => {
-  if (isSearching.value) {
-    let validSearchParam: any = {}
-    for (let key in searchParam.value) {
-      if (searchParam.value[key] !== undefined && searchParam.value[key] !== null && searchParam.value[key] !== '') {
-        validSearchParam[key] = searchParam.value[key]
-      }
-    }
-    return validSearchParam
-  }
-  return null
-}
-
-/**
- * 开始搜索
- */
-const doSearch = () => {
-  isSearching.value = true
-  doLoad()
-}
-
-/**
- * 重置搜索
- */
-const resetSearch = () => {
-  searchParam.value = {}
-  isSearching.value = false
-  doLoad()
-}
+const { searchParam, doSearch, resetSearch } = useSearch(loadTrigger)
 
 
-// -- 数据加载相关 --
-/**
- * 是否正在加载中
- */
-const isLoading = ref(false)
-
-/**
- * 分页参数
- */
-const pageParam: Ref<CURD.pageParam> = ref({
-  pageNum: 1,
-  pageSize: 8
-})
-
-/**
- * 数据列表
- */
-const dataList: Ref<CURD.dataList<unknown>> = ref({
-  total: 0,
-  list: []
-})
-
-/**
- * 加载数据，分页查询
- */
-const doLoad = () => {
-  isLoading.value = true
-  props.pageFunction(pageParam, getValidSearchParam()).then(res => {
-    dataList.value = res
-  }).catch(err => {
-    ElMessage.warning(err)
-  }).finally(() => {
-    isLoading.value = false
-  })
-}
-
-/**
- * 监听分页参数的改变，查询用户列表
- */
-watch(
-    pageParam,
-    () => {
-      doLoad()
-    },
-    { deep: true, immediate: true }
-)
+// -- 分页查询相关 --
+const { pageParam, dataList } = usePage(loadTrigger, props.pageFunction, searchParam)
 
 
-// -- 表格选中情况相关 --
-/**
- * 当前被选中的行
- */
-const currentRow = ref()
-
-/**
- * 处理行的选中事件
- */
-const handleCurrentChange = (val: undefined) => {
-  currentRow.value = val
-}
+// -- 表格选中行相关 --
+const { currentRow, handleCurrentChange } = useTableCurrentRow()
 
 
-// -- CURD相关 --
-/**
- * dialog是否可见
- */
-const dialogVisible = ref(false)
+// -- 表单CURD相关 --
+const {
+  dialogVisible,
+  formData,
+  actionType,
+  beforeAdd,
+  doAdd,
+  doDel,
+  beforeUpdate,
+  doUpdate,
+  beforeSee
+} = useFormCurd(loadTrigger, currentRow, props.addFunction, props.delFunction, props.updateFunction)
 
-/**
- * 表单数据
- */
-let formData = ref()
-
-/**
- * 当前正在进行的操作 [增、改、查]
- */
-const actionType: Ref<string | undefined> = ref(undefined)
-
-/**
- * 准备添加
- */
-const beforeAdd = () => {
-  formData.value = {}
-  actionType.value = 'add'
-  dialogVisible.value = true
-}
-
-/**
- * 执行添加
- */
-const doAdd = () => {
-  props.addFunction(formData).then(() => {
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    doLoad()
-  }).catch(err => {
-    ElMessage.warning(err)
-  })
-}
-
-/**
- * 执行删除
- */
-const doDel = () => {
-  props.delFunction(currentRow.value.id).then(() => {
-    ElMessage.success('操作成功')
-    doLoad()
-  }).catch(err => {
-    ElMessage.warning(err)
-  })
-}
-
-/**
- * 准备修改
- */
-const beforeUpdate = () => {
-  formData.value = { ...currentRow.value }
-  actionType.value = 'update'
-  dialogVisible.value = true
-}
-
-/**
- * 获取有效修改数据
- */
-const getValidUpdateData = () => {
-  let data: any = {}
-  for (let key in formData.value) {
-    if (formData.value[key] !== undefined && formData.value[key] !== null && formData.value[key] !== ''
-        && formData.value[key] !== currentRow.value[key]) {
-      data[key] = formData.value[key]
-    }
-  }
-  return data
-}
-
-/**
- * 执行修改
- */
-const doUpdate = () => {
-  const data = getValidUpdateData()
-  if (Object.getOwnPropertyNames(data).length === 0) {
-    ElMessage.warning('请修改')
-    return
-  }
-  props.updateFunction(currentRow.value.id, data).then(() => {
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    doLoad()
-  }).catch(err => {
-    ElMessage.warning(err)
-  })
-}
-
-/**
- * 准备查看
- */
-const beforeSee = () => {
-  formData.value = currentRow.value
-  actionType.value = 'see'
-  dialogVisible.value = true
-}
 </script>
 
 <template>
   <i-container>
     <!--搜索区-->
-    <el-card shadow="never" v-if="search">
+    <el-card shadow="never">
       <template #header>
         <div class="flex justify-between">
-          <p>搜索区</p>
+          <p>搜索区</p>{{ loadTrigger }}
           <el-button-group>
             <el-button @click="resetSearch">重置</el-button>
             <el-button type="primary" @click="doSearch">搜索</el-button>
@@ -293,7 +112,7 @@ const beforeSee = () => {
             <el-button type="primary" @click="beforeAdd">添加</el-button>
             <el-popconfirm title="是否要进行删除？" @confirm="doDel">
               <template #reference>
-                <el-button type="danger" @click="emits('del')" :disabled="!currentRow">删除</el-button>
+                <el-button type="danger" :disabled="!currentRow">删除</el-button>
               </template>
             </el-popconfirm>
             <el-button type="warning" @click="beforeUpdate" :disabled="!currentRow">修改</el-button>
