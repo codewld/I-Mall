@@ -8,6 +8,7 @@ import { CURD } from '@/@types/curd';
 import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
+import { isSame } from '@/utils/arrayUtil';
 
 const fieldList: CURD.field[] = [
   { code: 'id', name: 'id', tableConf: { display: false }, formConf: { add: false, update: false } },
@@ -69,7 +70,7 @@ const handleRoleDialog = (id: number) => {
  * 处理用户对应角色的修改
  */
 const handleUpdateRole = () => {
-  if (originRoleIdList.value.sort().toString() === roleIdList.value.sort().toString()) {
+  if (isSame(originRoleIdList.value, roleIdList.value)) {
     ElMessage.warning('请修改')
     return
   }
