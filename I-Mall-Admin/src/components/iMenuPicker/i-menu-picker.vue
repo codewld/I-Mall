@@ -2,7 +2,7 @@
 import { rListRootMark, rListSonMark } from '@/api/menu';
 import { ElMessage } from 'element-plus/es';
 import 'element-plus/es/components/message/style/css';
-import { Document, Folder } from '@element-plus/icons-vue';
+import { House, Document, Folder } from '@element-plus/icons-vue';
 
 const props = defineProps({
   /**
@@ -81,7 +81,7 @@ const cascaderProps = {
               value: o.id,
               label: o.name,
               leaf: !o.nonLeaf,
-              disabled: !(props.chooseLeaf && !o.nonLeaf || props.chooseNonLeaf && o.nonLeaf)
+              disabled: o.id !== 0 && !(props.chooseLeaf && !o.nonLeaf || props.chooseNonLeaf && o.nonLeaf)
             }
           })
       )
@@ -93,11 +93,13 @@ const cascaderProps = {
 </script>
 
 <template>
-  <el-cascader :model-value="value" @change="(data) => emits('update:value', data)" :disabled="disabled" :props="cascaderProps">
+  <el-cascader :model-value="value" @change="(data) => emits('update:value', data)" :disabled="disabled"
+               :props="cascaderProps">
     <template #default="{ node, data }">
       <div class="inline-flex items-center">
         <el-icon class="m-1.5">
-          <Folder v-if="!data.leaf"/>
+          <House v-if="data.value === 0"/>
+          <Folder v-else-if="!data.leaf"/>
           <Document v-else/>
         </el-icon>
         {{ data.label }}
