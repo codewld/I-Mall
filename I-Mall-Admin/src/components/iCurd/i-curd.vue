@@ -57,7 +57,7 @@ const { searchParam, doSearch, resetSearch } = useSearch(loadTrigger)
 
 
 // -- 分页查询相关 --
-const { pageParam, dataList } = usePage(loadTrigger, props.pageFunction, searchParam)
+const { pageParam, dataList, isLoading } = usePage(loadTrigger, props.pageFunction, searchParam)
 
 
 // -- 表格选中行相关 --
@@ -85,7 +85,7 @@ const {
     <el-card shadow="never">
       <template #header>
         <div class="flex justify-between">
-          <p>搜索区</p>{{ loadTrigger }}
+          <p>搜索区</p>
           <el-button-group>
             <el-button @click="resetSearch">重置</el-button>
             <el-button type="primary" @click="doSearch">搜索</el-button>

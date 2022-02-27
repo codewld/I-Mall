@@ -59,7 +59,8 @@ export default function usePage(loadTrigger: Ref<number>, pageFunction: CURD.pag
 
   return {
     pageParam,
-    dataList
+    dataList,
+    isLoading
   }
 
 }
