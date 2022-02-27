@@ -9,6 +9,9 @@ interface KVObj {
  * 去除对象中的null值
  */
 export function removeNull(obj: KVObj | undefined) {
+  if (obj instanceof Array) {
+    return obj
+  }
   let res: KVObj = {}
   for (let key in obj) {
     if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
