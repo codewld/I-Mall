@@ -45,4 +45,19 @@ public interface UmsRoleService extends IService<UmsRole> {
      * 批量查询角色标记
      */
     List<UmsRoleMarkVO> listMark();
+
+    /**
+     * 修改角色的菜单
+     * @param id 角色id
+     * @param menuIdList 菜单id列表
+     * @return 修改结果
+     */
+    boolean updateMenu(Long id,List<Long> menuIdList);
+
+    /**
+     * 批量查询角色的菜单ID
+     * @param id 角色id
+     * @return 菜单ID
+     */
+    List<Long>  listMenuId(Long id);
 }

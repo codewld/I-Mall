@@ -64,4 +64,17 @@ public class UmsRoleController {
         return umsRoleService.listMark();
     }
 
+    @PutMapping("/menu/{id}")
+    @ApiOperation("修改角色的菜单")
+    public boolean updateMenu(@PathVariable @ApiParam("角色id") Long id,
+                              @RequestBody(required = false) @ApiParam("菜单id列表") List<Long> menuIdList) {
+        return umsRoleService.updateMenu(id, menuIdList);
+    }
+
+    @GetMapping("/menu/{id}")
+    @ApiOperation("批量查询角色的菜单ID列表")
+    public List<Long> listMenuId(@PathVariable @ApiParam("角色id") Long id) {
+        return umsRoleService.listMenuId(id);
+    }
+
 }

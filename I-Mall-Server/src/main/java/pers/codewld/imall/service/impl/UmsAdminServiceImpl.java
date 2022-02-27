@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsAdminMapper;
 import pers.codewld.imall.mapper.UmsAdminRoleRelationMapper;
@@ -103,7 +104,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Override
     public boolean updateRole(Long id, List<Long> roleIdList) {
         umsAdminRoleRelationMapper.deleteByAdminId(id);
-        if (roleIdList == null || roleIdList.size() == 0) {
+        if (CollectionUtils.isEmpty(roleIdList)) {
             return true;
         }
         int res = umsAdminRoleRelationMapper.insert(id, roleIdList);

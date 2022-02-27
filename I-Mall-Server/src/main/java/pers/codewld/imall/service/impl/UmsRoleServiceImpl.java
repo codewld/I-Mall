@@ -6,9 +6,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsAdminRoleRelationMapper;
 import pers.codewld.imall.mapper.UmsRoleMapper;
+import pers.codewld.imall.mapper.UmsRoleMenuRelationMapper;
 import pers.codewld.imall.model.entity.UmsRole;
+import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsRoleMarkVO;
@@ -31,6 +35,9 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
 
     @Autowired
     UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
+
+    @Autowired
+    UmsRoleMenuRelationMapper umsRoleMenuRelationMapper;
 
     @Override
     public boolean add(UmsRoleParam umsRoleParam) {
@@ -67,5 +74,24 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     public List<UmsRoleMarkVO> listMark() {
         List<UmsRole> roleList = this.list();
         return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public boolean updateMenu(Long id, List<Long> menuIdList) {
+        umsRoleMenuRelationMapper.deleteByRoleId(id);
+        if (CollectionUtils.isEmpty(menuIdList)) {
+            return true;
+        }
+        int res = umsRoleMenuRelationMapper.insert(id, menuIdList);
+        if (res != menuIdList.size()) {
+            throw new CustomException(ResultCode.FAILED);
+        }
+        return true;
+    }
+
+    @Override
+    public List<Long> listMenuId(Long id) {
+        return umsRoleMenuRelationMapper.selectMenuIdListByRoleId(id);
     }
 }
