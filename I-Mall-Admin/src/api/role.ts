@@ -1,6 +1,6 @@
 import request from '@/api/request';
 import { CURD } from '@/@types/curd';
-import { unref } from 'vue';
+import { Ref, unref } from 'vue';
 
 const PREFIX = '/ums-role'
 
@@ -29,7 +29,7 @@ export const rUpdate: CURD.updateFunction<Role.roleParam> = (id, data) => {
  * 分页查询
  */
 export const rPage: CURD.pageFunction<Role.role> = (pageParam, searchParam) => {
-  return request(`${ PREFIX }/page`, 'get', {...unref(pageParam), ...unref(searchParam)})
+  return request(`${ PREFIX }/page`, 'get', { ...unref(pageParam), ...unref(searchParam) })
 }
 
 /**
@@ -37,4 +37,18 @@ export const rPage: CURD.pageFunction<Role.role> = (pageParam, searchParam) => {
  */
 export const rListMark = (): Promise<Role.roleMark[]> => {
   return request(`${ PREFIX }/list/mark`, 'get')
+}
+
+/**
+ * 修改角色的菜单
+ */
+export const rUpdateMenu = (id: number, menuIdList: Ref<number[]>): Promise<string> => {
+  return request(`${ PREFIX }/menu/${ id }`, 'put', menuIdList)
+}
+
+/**
+ * 批量查询角色的菜单ID列表
+ */
+export const rListMenuId = (id: number): Promise<number[]> => {
+  return request(`${ PREFIX }/menu/${ id }`, 'get')
 }

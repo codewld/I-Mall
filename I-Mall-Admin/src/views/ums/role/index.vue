@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import {rAdd, rDel, rUpdate, rPage} from '@/api/role';
+import { rAdd, rDel, rUpdate, rPage, rListMenuId, rUpdateMenu } from '@/api/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import { CURD } from '@/@types/curd';
 import ICurd from '@/components/iCurd/i-curd.vue';
+import { Ref, ref } from 'vue';
+import { ElMessage } from 'element-plus/es';
+import IMenuPicker from '@/components/iMenuPicker';
+import { isSame } from '@/utils/arrayUtil';
 
 const fieldList: CURD.field[] = [
   { code: 'id', name: 'id', tableConf: { display: false }, formConf: { add: false, update: false } },
@@ -11,6 +15,57 @@ const fieldList: CURD.field[] = [
   { code: 'createTime', name: '创建时间', tableConf: { width: 200 }, formConf: { add: false, update: false } },
   { code: 'updateTime', name: '更新时间', tableConf: { width: 200 }, formConf: { add: false, update: false } }
 ]
+
+// -- 菜单相关 --
+/**
+ * 对话框是否可见
+ */
+const menuDialogVisible = ref(false)
+
+/**
+ * 当前角色的ID
+ */
+const roleId: Ref<number> = ref(0)
+
+/**
+ * 菜单ID列表
+ */
+const menuIdList: Ref<number[]> = ref([])
+
+/**
+ * 未经处理的菜单ID列表
+ */
+const originMenuIdList: Ref<number[]> = ref([])
+
+/**
+ * 处理角色对话框
+ */
+const handleRoleDialog = (id: number) => {
+  rListMenuId(id).then(res => {
+    roleId.value = id
+    menuIdList.value = res
+    originMenuIdList.value = [...res]
+    menuDialogVisible.value = true
+  }).catch(err => {
+    ElMessage.warning(err)
+  })
+}
+
+/**
+ * 处理用户对应角色的修改
+ */
+const handleUpdateRole = () => {
+  if (isSame(originMenuIdList.value, menuIdList.value)) {
+    ElMessage.warning('请修改')
+    return
+  }
+  rUpdateMenu(roleId.value, menuIdList).then(() => {
+    ElMessage.success('操作成功')
+    menuDialogVisible.value = false
+  }).catch(err =>{
+    ElMessage.warning(err)
+  })
+}
 </script>
 
 <template>
@@ -30,5 +85,25 @@ const fieldList: CURD.field[] = [
     <template v-slot:form-item-updateTime="scope">
       <el-date-picker v-model="scope.row.updateTime" type="datetime" :disabled="scope.disabled" placeholder="暂无"/>
     </template>
+
+    <!--扩展对菜单的操作-->
+    <template v-slot:table-column-i-rear>
+      <el-table-column fixed="right" label="菜单" align="center" width="60">
+        <template v-slot:default="scope">
+          <el-button type="text" size="small" @click="handleRoleDialog(scope.row.id)">分配</el-button>
+        </template>
+      </el-table-column>
+    </template>
   </i-curd>
+
+  <!--菜单信息对话框-->
+  <el-dialog v-model="menuDialogVisible" title="菜单分配" width="30%">
+    <i-menu-picker v-model:value="menuIdList" :multiple="true" :choose-non-leaf="false" :panel="true"/>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="menuDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleUpdateRole">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
