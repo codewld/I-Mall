@@ -39,15 +39,8 @@ export const rListSon = (id: number): Promise<Menu.menu[]> => {
 }
 
 /**
- * 批量查询位于根结点的菜单标记
+ * 批量查询菜单标记列表
  */
-export const rListRootMark = (): Promise<Menu.menuMark[]> => {
-  return request(`${ PREFIX }/list/mark/root`, 'get')
-}
-
-/**
- * 批量查询父结点下的子菜单标记
- */
-export const rListSonMark = (id: number): Promise<Menu.menuMark[]> => {
-  return request(`${ PREFIX }/list/mark/${ id }`, 'get')
+export const rListMark = (): Promise<Menu.menuMark[]> => {
+  return request(`${ PREFIX }/list/mark`, 'get')
 }

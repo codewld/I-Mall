@@ -22,7 +22,7 @@ declare namespace Menu {
   interface menuMark {
     id: number,
     name: string,
-    nonLeaf: boolean
+    children: menuMark[]
   }
 
   /**

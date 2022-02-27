@@ -254,7 +254,8 @@ const handelNonLeafChoose = (nonLeaf: boolean) => {
         <el-input v-model.trim="formData.id" :disabled="actionType === 'see'"/>
       </el-form-item>
       <el-form-item label="父级：" class="w-2/5 flex-grow">
-        <i-menu-picker v-model:value="formData.parentId" :disabled="actionType === 'see'" :choose-leaf="false"/>
+        <i-menu-picker v-model:value="formData.parentId"
+                       :disabled="actionType === 'see'" :choose-leaf="false" :add-root="true"/>
       </el-form-item>
       <el-form-item label="编码：" class="w-2/5 flex-grow">
         <el-input v-model.trim="formData.code" :disabled="actionType === 'see'"

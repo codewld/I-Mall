@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { rListRootMark, rListSonMark } from '@/api/menu';
+import { rListMark } from '@/api/menu';
 import { ElMessage } from 'element-plus/es';
 import 'element-plus/es/components/message/style/css';
 import { House, Document, Folder } from '@element-plus/icons-vue';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps({
   /**
@@ -38,19 +39,65 @@ const props = defineProps({
   chooseNonLeaf: {
     type: Boolean,
     default: true
+  },
+  /**
+   * 是否添加根节点
+   */
+  addRoot: {
+    type: Boolean,
+    default: false
   }
 });
 
 const emits = defineEmits(['update:value']);
 
 /**
+ * 树形数据
+ */
+const data = ref()
+
+onMounted(() => {
+  rListMark().then(res => {
+    const nodes = transform(res)
+    if (props.addRoot) {
+      nodes.unshift({
+        value: 0,
+        label: '无父级',
+        disabled: false,
+        children: null
+      })
+    }
+    data.value = nodes
+  }).catch(err => {
+    ElMessage.warning(err)
+  })
+})
+
+interface node {
+  value: number,
+  label: string,
+  disabled: boolean,
+  children: node[] | null
+}
+
+/**
+ * 将menu标记转换为级联选择器所需的节点
+ */
+const transform = (list: Menu.menuMark[]): node[] => {
+  return list.map(o => {
+    return {
+      value: o.id,
+      label: o.name,
+      disabled: !(props.chooseLeaf && !o.children || props.chooseNonLeaf && o.children),
+      children: o.children ? transform(o.children) : null
+    }
+  })
+}
+
+/**
  * 级联选择器配置选项
  */
 const cascaderProps = {
-  /**
-   * 懒加载
-   */
-  lazy: true,
   /**
    * 值仅包括节点，不包括节点路径
    */
@@ -62,44 +109,18 @@ const cascaderProps = {
   /**
    * 是否多选
    */
-  multiple: props.multiple,
-  async lazyLoad(node: any, resolve: (data: any[]) => void) {
-    try {
-      let marks
-      if (node.root) {
-        marks = await rListRootMark()
-        marks.unshift({
-          id: 0,
-          name: '无父级',
-          nonLeaf: false
-        })
-      } else {
-        marks = await rListSonMark(node.value)
-      }
-      resolve(marks.map(o => {
-            return {
-              value: o.id,
-              label: o.name,
-              leaf: !o.nonLeaf,
-              disabled: o.id !== 0 && !(props.chooseLeaf && !o.nonLeaf || props.chooseNonLeaf && o.nonLeaf)
-            }
-          })
-      )
-    } catch (err) {
-      ElMessage.warning(err as string)
-    }
-  }
+  multiple: props.multiple
 }
 </script>
 
 <template>
-  <el-cascader :model-value="value" @change="(data) => emits('update:value', data)" :disabled="disabled"
-               :props="cascaderProps">
+  <el-cascader :model-value="value" @change="data => emits('update:value', data)" :disabled="disabled"
+               :props="cascaderProps" :options="data">
     <template #default="{ node, data }">
       <div class="inline-flex items-center">
         <el-icon class="m-1.5">
           <House v-if="data.value === 0"/>
-          <Folder v-else-if="!data.leaf"/>
+          <Folder v-else-if="data.children"/>
           <Document v-else/>
         </el-icon>
         {{ data.label }}
