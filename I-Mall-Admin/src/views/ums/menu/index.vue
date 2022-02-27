@@ -153,6 +153,7 @@ const doUpdate = () => {
     ElMessage.success('操作成功')
     dialogVisible.value = false
     resetTable(currentRow.value.parentId)
+    resetTable(formData.value.parentId)
   }).catch(err => {
     ElMessage.warning(err)
   })
