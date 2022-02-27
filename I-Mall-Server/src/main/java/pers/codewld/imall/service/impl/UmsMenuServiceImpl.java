@@ -79,6 +79,9 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         if (parentId == null) {
             return;
         }
+        if (parentId == 0) {
+            return;
+        }
         UmsMenu parent = this.getById(parentId);
         if (parent == null || !parent.getNonLeaf()) {
             throw new CustomException(ResultCode.VALIDATE_FAILED, "父级ID错误");
