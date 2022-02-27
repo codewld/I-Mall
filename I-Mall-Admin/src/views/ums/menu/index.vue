@@ -4,8 +4,12 @@ import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { Document, Folder } from '@element-plus/icons-vue';
 import IContainer from '@/components/iContainer';
-import { rAdd, rDel, rUpdate, rListRoot, rListSon, rListRootMark, rListSonMark } from '@/api/menu';
+import { rAdd, rDel, rUpdate, rListRoot, rListSon } from '@/api/menu';
 import { getFormattedDateTime } from '@/utils/dateUtil';
+import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
+import { getChange } from '@/utils/objUtil';
+import IMenuPicker from '@/components/iMenuPicker';
+
 
 // -- 数据加载相关 --
 /**
@@ -50,23 +54,15 @@ const listSon = (tree: Menu.menu, treeNode: unknown, resolve: (data: Menu.menu[]
 }
 
 
+// -- 表格选中行相关 --
+const { currentRow, handleCurrentChange } = useTableCurrentRow()
+
+
 // -- 表格相关 --
 /**
  * 表格ref
  */
 const table = ref()
-
-/**
- * 当前被选中的行
- */
-const currentRow = ref()
-
-/**
- * 处理行的选中事件
- */
-const handleCurrentChange = (val: undefined) => {
-  currentRow.value = val
-}
 
 /**
  * 重置表格  以解决数据修改后不同步的问题
@@ -83,7 +79,7 @@ const resetTable = (parentId: number) => {
 }
 
 
-// -- CURD相关 --
+// -- 表单CURD相关 --
 /**
  * dialog是否可见
  */
@@ -145,23 +141,10 @@ const beforeUpdate = () => {
 }
 
 /**
- * 获取有效修改数据
- */
-const getValidUpdateData = () => {
-  let data: any = {}
-  for (let key in formData.value) {
-    if (formData.value[key] !== currentRow.value[key]) {
-      data[key] = formData.value[key]
-    }
-  }
-  return data
-}
-
-/**
  * 执行修改
  */
 const doUpdate = () => {
-  const data = getValidUpdateData()
+  const data = getChange(formData.value, currentRow.value)
   if (Object.getOwnPropertyNames(data).length === 0) {
     ElMessage.warning('请修改')
     return
@@ -186,47 +169,6 @@ const beforeSee = () => {
 
 
 // -- 表单项相关 --
-/**
- * 级联选择器配置选项
- */
-const cascaderProps = {
-  lazy: true,
-  emitPath: false,
-  checkStrictly: true,
-  disabled: 'leaf',
-  async lazyLoad(node: any, resolve: (data: any[]) => void) {
-    try {
-      let marks
-      if (node.root) {
-        marks = await rListRootMark()
-        marks.unshift({
-          id: 0,
-          name: '无父级',
-          nonLeaf: false
-        })
-      } else {
-        marks = await rListSonMark(node.value)
-      }
-      resolve(menuMark2Node(marks))
-    } catch (err) {
-      ElMessage.warning(err as string)
-    }
-  }
-}
-
-/**
- * 将Menu标记转换为级联选择器的结点
- */
-const menuMark2Node = (marks: Menu.menuMark[]): any => {
-  return marks.map(o => {
-    return {
-      value: o.id,
-      label: o.name,
-      leaf: !o.nonLeaf
-    }
-  })
-}
-
 /**
  * 处理是否为非叶结点的选择
  */
@@ -308,21 +250,10 @@ const handelNonLeafChoose = (nonLeaf: boolean) => {
   <el-dialog v-model="dialogVisible" width="50%" destroy-on-close>
     <el-form :model="formData" inline label-position="top" class="justify-between">
       <el-form-item v-if="actionType === 'see'" label="id：" class="w-2/5 flex-grow">
-        <el-input v-model.trim="formData.id" :disabled="actionType === 'see'"
-                  :placeholder="actionType === 'see' ? '' : '请输入id'"/>
+        <el-input v-model.trim="formData.id" :disabled="actionType === 'see'"/>
       </el-form-item>
       <el-form-item label="父级：" class="w-2/5 flex-grow">
-        <el-cascader v-model="formData.parentId" :disabled="actionType === 'see'" :props="cascaderProps">
-          <template #default="{ node, data }">
-            <div class="inline-flex items-center">
-              <el-icon class="m-1.5">
-                <Folder v-if="!data.leaf"/>
-                <Document v-else/>
-              </el-icon>
-              {{ data.label }}
-            </div>
-          </template>
-        </el-cascader>
+        <i-menu-picker v-model:value="formData.parentId" :disabled="actionType === 'see'" :choose-leaf="false"/>
       </el-form-item>
       <el-form-item label="编码：" class="w-2/5 flex-grow">
         <el-input v-model.trim="formData.code" :disabled="actionType === 'see'"
