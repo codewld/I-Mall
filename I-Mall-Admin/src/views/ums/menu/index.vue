@@ -186,7 +186,7 @@ const handelNonLeafChoose = (nonLeaf: boolean) => {
     <!--数据区-->
     <el-card shadow="never">
       <template #header>
-        <div class="flex justify-between">
+        <div class="flex justify-between items-center">
           <p>数据区</p>
           <el-button-group>
             <el-button type="primary" @click="beforeAdd">添加</el-button>

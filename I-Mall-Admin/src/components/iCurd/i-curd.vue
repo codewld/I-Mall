@@ -84,7 +84,7 @@ const {
     <!--搜索区-->
     <el-card shadow="never">
       <template #header>
-        <div class="flex justify-between">
+        <div class="flex justify-between items-center">
           <p>搜索区</p>
           <el-button-group>
             <el-button @click="resetSearch">重置</el-button>
@@ -105,7 +105,7 @@ const {
     <!--数据区-->
     <el-card shadow="never">
       <template #header>
-        <div class="flex justify-between">
+        <div class="flex justify-between items-center">
           <p>数据区</p>
           <el-button-group>
             <slot name="table-button-i-front"/>

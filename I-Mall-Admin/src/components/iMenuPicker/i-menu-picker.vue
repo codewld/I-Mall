@@ -46,6 +46,13 @@ const props = defineProps({
   addRoot: {
     type: Boolean,
     default: false
+  },
+  /**
+   * 是否使用级联面板
+   */
+  panel: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -114,8 +121,23 @@ const cascaderProps = {
 </script>
 
 <template>
-  <el-cascader :model-value="value" @change="data => emits('update:value', data)" :disabled="disabled"
-               :props="cascaderProps" :options="data">
+  <el-cascader-panel v-if="panel"
+             :model-value="value" @change="data => emits('update:value', data)"
+             :disabled="disabled" :props="cascaderProps" :options="data">
+    <template #default="{ node, data }">
+      <div class="inline-flex items-center">
+        <el-icon class="m-1.5">
+          <House v-if="data.value === 0"/>
+          <Folder v-else-if="data.children"/>
+          <Document v-else/>
+        </el-icon>
+        {{ data.label }}
+      </div>
+    </template>
+  </el-cascader-panel>
+  <el-cascader v-else
+                     :model-value="value" @change="data => emits('update:value', data)"
+                     :disabled="disabled" :props="cascaderProps" :options="data">
     <template #default="{ node, data }">
       <div class="inline-flex items-center">
         <el-icon class="m-1.5">
