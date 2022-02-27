@@ -68,7 +68,7 @@ public class UmsAdminController {
     }
 
     @GetMapping("/role/{id}")
-    @ApiOperation("批量查询用户的角色标记")
+    @ApiOperation("批量查询用户的角色标记列表")
     public List<UmsRoleMarkVO> listRoleMark(@PathVariable @ApiParam("用户id") Long id) {
         return umsAdminService.listRoleMark(id);
     }

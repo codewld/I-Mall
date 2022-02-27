@@ -59,7 +59,7 @@ public class UmsRoleController {
     }
 
     @GetMapping("/list/mark")
-    @ApiOperation("批量查询角色标记")
+    @ApiOperation("批量查询角色标记列表")
     public List<UmsRoleMarkVO> listMark() {
         return umsRoleService.listMark();
     }

@@ -27,6 +27,6 @@
         FROM ums_role,
              ums_admin_role_relation
         WHERE ums_role.id = ums_admin_role_relation.role_id
-          and ums_admin_role_relation.admin_id = #{adminId}
+          AND ums_admin_role_relation.admin_id = #{adminId}
     </select>
 </mapper>
