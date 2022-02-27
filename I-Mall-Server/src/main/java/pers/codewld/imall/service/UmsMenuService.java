@@ -43,13 +43,8 @@ public interface UmsMenuService extends IService<UmsMenu> {
     List<UmsMenu> listSon(Long id);
 
     /**
-     * 批量查询位于根结点的菜单标记
+     * 批量查询菜单标记列表，树形结构
      */
-    List<UmsMenuMarkVO> listRootMark();
-
-    /**
-     * 批量查询父结点下的子菜单标记
-     */
-    List<UmsMenuMarkVO> listSonMark(Long id);
+    List<UmsMenuMarkVO> listMark();
 
 }

@@ -86,7 +86,6 @@ public class TransformUtil {
         UmsMenuMarkVO umsMenuMarkVO = new UmsMenuMarkVO();
         umsMenuMarkVO.setId(umsMenu.getId());
         umsMenuMarkVO.setName(umsMenu.getName());
-        umsMenuMarkVO.setNonLeaf(umsMenu.getNonLeaf());
         return umsMenuMarkVO;
     }
 

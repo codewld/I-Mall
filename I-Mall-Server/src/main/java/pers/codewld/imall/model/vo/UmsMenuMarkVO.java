@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * <p>
  * 后台菜单标记 VO类
@@ -26,7 +28,7 @@ public class UmsMenuMarkVO {
     @ApiModelProperty("名称")
     private String name;
 
-    @ApiModelProperty("是否为非叶结点")
-    private Boolean nonLeaf;
+    @ApiModelProperty("子菜单列表")
+    private List<UmsMenuMarkVO> children;
 
 }

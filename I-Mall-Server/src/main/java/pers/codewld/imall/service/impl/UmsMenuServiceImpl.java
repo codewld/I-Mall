@@ -12,7 +12,9 @@ import pers.codewld.imall.model.vo.UmsMenuMarkVO;
 import pers.codewld.imall.service.UmsMenuService;
 import pers.codewld.imall.util.TransformUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -63,13 +65,44 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
-    public List<UmsMenuMarkVO> listRootMark() {
-        return this.listRoot().stream().map(TransformUtil::transform).collect(Collectors.toList());
+    public List<UmsMenuMarkVO> listMark() {
+        UmsMenuMarkVO top = new UmsMenuMarkVO(0L, "无父级", new ArrayList<>());
+        List<UmsMenu> list = this.list();
+        setChildren(top, list);
+        System.out.println(top.getChildren());
+        return top.getChildren();
     }
 
-    @Override
-    public List<UmsMenuMarkVO> listSonMark(Long id) {
-        return this.listSon(id).stream().map(TransformUtil::transform).collect(Collectors.toList());
+    /**
+     * 递归设置子节点
+     * @param father 父节点
+     * @param list 剩余节点列表
+     */
+    private void setChildren(UmsMenuMarkVO father, List<UmsMenu> list) {
+        if (list.size() == 0) {
+            return;
+        }
+        // 获取所有的子节点
+        List<UmsMenu> children = list
+                .stream()
+                .filter(o -> Objects.equals(father.getId(), o.getParentId()))
+                .collect(Collectors.toList());
+        // 将子节点转换为VO并放入
+        children.forEach(o -> {
+            UmsMenuMarkVO childrenVO = TransformUtil.transform(o);
+            if (father.getChildren() == null) {
+                father.setChildren(new ArrayList<>());
+            }
+            father.getChildren().add(childrenVO);
+        });
+        // 删除子节点
+        list.removeAll(children);
+        // 递归设置子节点的子节点
+        if (father.getChildren() != null) {
+            father.getChildren().forEach(o -> {
+                setChildren(o, list);
+            });
+        }
     }
 
     /**

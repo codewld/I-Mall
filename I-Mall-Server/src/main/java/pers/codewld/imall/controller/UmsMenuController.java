@@ -61,10 +61,10 @@ public class UmsMenuController {
         return umsMenuService.listSon(id);
     }
 
-    @GetMapping("/list/mark/root")
-    @ApiOperation("批量查询位于根结点的菜单标记")
-    List<UmsMenuMarkVO> listRootMark() {
-        return umsMenuService.listRootMark();
+    @GetMapping("/list/mark")
+    @ApiOperation("批量查询菜单标记列表，树形结构")
+    List<UmsMenuMarkVO> listMark() {
+        return umsMenuService.listMark();
     }
 
     @GetMapping("/list/mark/{id}")
