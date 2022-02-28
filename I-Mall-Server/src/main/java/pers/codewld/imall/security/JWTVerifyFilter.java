@@ -38,7 +38,7 @@ public class JWTVerifyFilter extends GenericFilterBean {
                 chain.doFilter(request, response);
                 return;
             }
-            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         chain.doFilter(request, response);

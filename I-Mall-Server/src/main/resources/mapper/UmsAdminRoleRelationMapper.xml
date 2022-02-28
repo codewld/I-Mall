@@ -23,7 +23,7 @@
     </delete>
 
     <select id="selectRoleMarkListByAdminId" resultType="pers.codewld.imall.model.vo.UmsRoleMarkVO">
-        SELECT ums_role.id, ums_role.name
+        SELECT ums_role.id, ums_role.name, ums_role.code
         FROM ums_role,
              ums_admin_role_relation
         WHERE ums_role.id = ums_admin_role_relation.role_id

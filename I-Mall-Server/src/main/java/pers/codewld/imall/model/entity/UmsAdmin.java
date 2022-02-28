@@ -67,10 +67,8 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     @ApiModelProperty("最后登录时间")
     private LocalDateTime loginTime;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+    @TableField(exist = false)
+    private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public boolean isEnabled() {
