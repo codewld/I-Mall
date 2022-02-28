@@ -4,6 +4,7 @@ declare namespace Role {
    */
   interface role {
     id: number,
+    code: string,
     name: string,
     note: string,
     createTime: string,
@@ -15,6 +16,7 @@ declare namespace Role {
    */
   interface roleMark {
     id: number,
+    code: string,
     name: string
   }
 
@@ -22,7 +24,9 @@ declare namespace Role {
    * Role参数
    */
   interface roleParam {
-    name?: string
+    code?: string,
+    name?: string,
+    note?: string
   }
 
 }
