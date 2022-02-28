@@ -124,12 +124,11 @@ const handleUpdateRole = () => {
     </template>
 
     <!--扩展对角色的操作-->
-    <template v-slot:table-column-i-rear>
-      <el-table-column fixed="right" label="角色" align="center" width="60">
-        <template v-slot:default="scope">
-          <el-button type="text" size="small" @click="handleRoleDialog(scope.row.id)">分配</el-button>
-        </template>
-      </el-table-column>
+    <template v-slot:table-button-i-rear="scope">
+      <el-button color="#8e44ad" class="text-white"
+                 @click="handleRoleDialog(scope.currentRow.id)" :disabled="!scope.currentRow">
+        角色
+      </el-button>
     </template>
   </i-curd>
 

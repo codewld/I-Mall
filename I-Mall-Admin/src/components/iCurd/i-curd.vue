@@ -108,7 +108,7 @@ const {
         <div class="flex justify-between items-center">
           <p>数据区</p>
           <el-button-group>
-            <slot name="table-button-i-front"/>
+            <slot name="table-button-i-front" :currentRow="currentRow"/>
             <el-button type="primary" @click="beforeAdd">添加</el-button>
             <el-popconfirm title="是否要进行删除？" @confirm="doDel">
               <template #reference>
@@ -117,7 +117,7 @@ const {
             </el-popconfirm>
             <el-button type="warning" @click="beforeUpdate" :disabled="!currentRow">修改</el-button>
             <el-button type="success" @click="beforeSee" :disabled="!currentRow">查看</el-button>
-            <slot name="table-button-i-rear"/>
+            <slot name="table-button-i-rear" :currentRow="currentRow"/>
           </el-button-group>
         </div>
       </template>
@@ -148,7 +148,7 @@ const {
   </i-container>
 
   <!--增、改、查 对话框-->
-  <el-dialog v-model="dialogVisible" title="Tips" width="50%">
+  <el-dialog v-model="dialogVisible" width="50%">
     <el-form :model="formData" inline label-position="top" class="justify-between">
       <slot name="form-item-i-front"/>
       <template v-for="(field, key) in fieldList" :key="key">

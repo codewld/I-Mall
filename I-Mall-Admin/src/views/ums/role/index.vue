@@ -38,9 +38,9 @@ const menuIdList: Ref<number[]> = ref([])
 const originMenuIdList: Ref<number[]> = ref([])
 
 /**
- * 处理角色对话框
+ * 处理菜单对话框
  */
-const handleRoleDialog = (id: number) => {
+const handleMenuDialog = (id: number) => {
   rListMenuId(id).then(res => {
     roleId.value = id
     menuIdList.value = res
@@ -52,9 +52,9 @@ const handleRoleDialog = (id: number) => {
 }
 
 /**
- * 处理用户对应角色的修改
+ * 处理角色对应菜单的修改
  */
-const handleUpdateRole = () => {
+const handleUpdateMenu = () => {
   if (isSame(originMenuIdList.value, menuIdList.value)) {
     ElMessage.warning('请修改')
     return
@@ -87,12 +87,11 @@ const handleUpdateRole = () => {
     </template>
 
     <!--扩展对菜单的操作-->
-    <template v-slot:table-column-i-rear>
-      <el-table-column fixed="right" label="菜单" align="center" width="60">
-        <template v-slot:default="scope">
-          <el-button type="text" size="small" @click="handleRoleDialog(scope.row.id)">分配</el-button>
-        </template>
-      </el-table-column>
+    <template v-slot:table-button-i-rear="scope">
+      <el-button color="#8e44ad" class="text-white"
+                 @click="handleMenuDialog(scope.currentRow.id)" :disabled="!scope.currentRow">
+        菜单
+      </el-button>
     </template>
   </i-curd>
 
@@ -102,7 +101,7 @@ const handleUpdateRole = () => {
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="menuDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleUpdateRole">确定</el-button>
+        <el-button type="primary" @click="handleUpdateMenu">确定</el-button>
       </span>
     </template>
   </el-dialog>
