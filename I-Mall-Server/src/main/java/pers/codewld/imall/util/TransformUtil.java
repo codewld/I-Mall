@@ -57,6 +57,7 @@ public class TransformUtil {
 
     public static UmsRole transform(UmsRoleParam umsRoleParam) {
         UmsRole umsRole = new UmsRole();
+        umsRole.setCode(umsRoleParam.getCode());
         umsRole.setName(umsRoleParam.getName());
         umsRole.setNote(umsRoleParam.getNote());
         return umsRole;
@@ -65,6 +66,7 @@ public class TransformUtil {
     public static UmsRoleMarkVO transform(UmsRole umsRole) {
         UmsRoleMarkVO umsRoleMarkVO = new UmsRoleMarkVO();
         umsRoleMarkVO.setId(umsRole.getId());
+        umsRoleMarkVO.setCode(umsRole.getCode());
         umsRoleMarkVO.setName(umsRole.getName());
         return umsRoleMarkVO;
     }

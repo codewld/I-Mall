@@ -23,6 +23,9 @@ public class UmsRoleMarkVO {
     @ApiModelProperty("id")
     private Long id;
 
+    @ApiModelProperty("编码")
+    private String code;
+
     @ApiModelProperty("名称")
     private String name;
 

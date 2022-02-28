@@ -24,6 +24,11 @@ import javax.validation.constraints.Size;
 @ApiModel(value = "UmsRoleParam对象", description = "UmsRole参数类")
 public class UmsRoleParam {
 
+    @NotBlank(groups = ValidatorConfig.Group.add.class, message = "编码不能为空")
+    @Size(min = 4, max = 20, message = "编码长度应在4-20之间")
+    @ApiModelProperty("编码")
+    private String code;
+
     @NotBlank(groups = ValidatorConfig.Group.add.class, message = "名称不能为空")
     @Size(min = 4, max = 20, message = "用户名长度应在4-20之间")
     @ApiModelProperty("名称")
