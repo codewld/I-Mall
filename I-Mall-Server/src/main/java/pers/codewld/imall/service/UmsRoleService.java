@@ -38,8 +38,9 @@ public interface UmsRoleService extends IService<UmsRole> {
      * @param pageNum 页数
      * @param pageSize 每页条数
      * @param name 名称
+     * @param code 编码
      */
-    PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name);
+    PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name, String code);
 
     /**
      * 批量查询角色标记

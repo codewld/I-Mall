@@ -42,6 +42,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     @Override
     public boolean add(UmsRoleParam umsRoleParam) {
         UmsRole umsRole = TransformUtil.transform(umsRoleParam);
+        this.checkCodeDuplicate(umsRole);
         return this.save(umsRole);
     }
 
@@ -56,14 +57,16 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     public boolean update(Long id, UmsRoleParam umsRoleParam) {
         UmsRole umsRole = TransformUtil.transform(umsRoleParam);
         umsRole.setId(id);
+        this.checkCodeDuplicate(umsRole);
         return this.updateById(umsRole);
     }
 
     @Override
-    public PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name) {
+    public PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name, String code) {
         QueryWrapper<UmsRole> queryWrapper = new QueryWrapper<>();
         queryWrapper
-                .like(name != null, "name", name);
+                .like(name != null, "name", name)
+                .like(code != null, "code", code);
         Page<UmsRole> page = this.page(new Page<>(pageNum, pageSize), queryWrapper);
         long total = page.getTotal();
         List<UmsRole> list = page.getRecords();
@@ -93,5 +96,21 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     @Override
     public List<Long> listMenuId(Long id) {
         return umsRoleMenuRelationMapper.selectMenuIdListByRoleId(id);
+    }
+
+    /**
+     * 检查编码是否重复
+     */
+    private void checkCodeDuplicate(UmsRole umsRole) {
+        String code = umsRole.getCode();
+        if (code == null) {
+            return;
+        }
+        QueryWrapper<UmsRole> queryWrapper = new QueryWrapper<UmsRole>()
+                .eq("code", code);
+        long count = this.count(queryWrapper);
+        if (count > 0) {
+            throw new CustomException(ResultCode.VALIDATE_FAILED, "编码重复");
+        }
     }
 }

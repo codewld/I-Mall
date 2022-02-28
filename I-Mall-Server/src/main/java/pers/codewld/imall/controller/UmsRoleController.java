@@ -54,8 +54,9 @@ public class UmsRoleController {
     @ApiOperation("分页查询角色列表，可搜索")
     public PageVO<UmsRole> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
                                 @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize,
-                                @RequestParam(value = "name", required = false) @Size(min = 4, max = 20, message = "用户名长度应在4-20之间") @ApiParam("名称") String name) {
-        return umsRoleService.page(pageNum, pageSize, name);
+                                @RequestParam(value = "name", required = false) @Size(min = 4, max = 20, message = "用户名长度应在4-20之间") @ApiParam("名称") String name,
+                                @RequestParam(value = "code", required = false) @Size(min = 4, max = 20, message = "编码长度应在4-20之间") @ApiParam("编码") String code) {
+        return umsRoleService.page(pageNum, pageSize, name, code);
     }
 
     @GetMapping("/list/mark")
