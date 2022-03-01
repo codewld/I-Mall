@@ -7,9 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.GenericFilterBean;
 import pers.codewld.imall.model.entity.UmsMenu;
-import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.service.UmsAdminService;
-import pers.codewld.imall.service.UmsMenuService;
 import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.BeanUtil;
 
@@ -75,23 +73,19 @@ public class JWTVerifyFilter extends GenericFilterBean {
      */
     List<SimpleGrantedAuthority> getAuthorities(MyUserDetails user) {
         UmsRoleService umsRoleService = BeanUtil.getBean(UmsRoleService.class);
-        UmsMenuService umsMenuService = BeanUtil.getBean(UmsMenuService.class);
-        // 获取角色列表
-        List<UmsRole> roleList = umsRoleService.listByCodeList(user.getRoleCodeList());
-        if (CollectionUtils.isEmpty(roleList)) {
+        // 获取所有菜单
+        List<String> roleCodeList = user.getRoleCodeList();
+        if (CollectionUtils.isEmpty(roleCodeList)) {
             return null;
         }
-        // 获取菜单ID列表
-        List<Long> menuIdList = new ArrayList<>();
-        for (UmsRole umsRole : roleList) {
-            menuIdList.addAll(umsRoleService.listMenuId(umsRole.getId()));
+        List<UmsMenu> menuList = new ArrayList<>();
+        for (String roleCode : roleCodeList) {
+            menuList.addAll(umsRoleService.listMenu(roleCode));
         }
-        menuIdList = menuIdList
+        menuList = menuList
                 .stream()
                 .distinct()
                 .collect(Collectors.toList());
-        // 获取菜单列表
-        List<UmsMenu> menuList = umsMenuService.listByIds(menuIdList);
         // 将菜单列表转换为Authority列表
         return menuList
                 .stream()

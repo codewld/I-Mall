@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -11,11 +12,13 @@ import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsAdminRoleRelationMapper;
 import pers.codewld.imall.mapper.UmsRoleMapper;
 import pers.codewld.imall.mapper.UmsRoleMenuRelationMapper;
+import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.PageVO;
 import pers.codewld.imall.model.vo.UmsRoleMarkVO;
+import pers.codewld.imall.service.UmsMenuService;
 import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.TransformUtil;
 
@@ -32,6 +35,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> implements UmsRoleService {
+
+    @Autowired
+    UmsMenuService umsMenuService;
 
     @Autowired
     UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
@@ -74,16 +80,6 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
-    public List<UmsRole> listByCodeList(List<String> codeList) {
-        if (CollectionUtils.isEmpty(codeList)) {
-            return null;
-        }
-        QueryWrapper<UmsRole> queryWrapper = new QueryWrapper<UmsRole>()
-                .in("code", codeList);
-        return this.list(queryWrapper);
-    }
-
-    @Override
     public List<UmsRoleMarkVO> listMark() {
         List<UmsRole> roleList = this.list();
         return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());
@@ -106,6 +102,13 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     @Override
     public List<Long> listMenuId(Long id) {
         return umsRoleMenuRelationMapper.selectMenuIdByRoleId(id);
+    }
+
+    @Override
+    public List<UmsMenu> listMenu(String roleCode) {
+        System.out.println("coming");
+        List<Long> menuIdList = umsRoleMenuRelationMapper.selectMenuIdByRoleCode(roleCode);
+        return umsMenuService.listByIds(menuIdList);
     }
 
     /**

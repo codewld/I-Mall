@@ -1,6 +1,7 @@
 package pers.codewld.imall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsRoleParam;
 import pers.codewld.imall.model.vo.PageVO;
@@ -44,11 +45,6 @@ public interface UmsRoleService extends IService<UmsRole> {
     PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name, String code);
 
     /**
-     * 根据编码批量查询角色
-     */
-    List<UmsRole> listByCodeList(List<String> codeList);
-
-    /**
      * 查询角色 [标记列表]
      */
     List<UmsRoleMarkVO> listMark();
@@ -69,4 +65,10 @@ public interface UmsRoleService extends IService<UmsRole> {
      * @return 菜单ID
      */
     List<Long> listMenuId(Long id);
+
+    /**
+     * 根据角色角色编码查询角色对应的菜单
+     * @param roleCode 角色编码
+     */
+    List<UmsMenu> listMenu(String roleCode);
 }
