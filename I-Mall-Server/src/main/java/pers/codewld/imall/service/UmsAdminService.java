@@ -40,7 +40,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     UmsAdmin getByUsername(String username);
 
     /**
-     * 分页查询用户，可搜索
+     * 分页查询，可搜索
      *
      * @param pageNum  页数
      * @param pageSize 每页条数
@@ -61,7 +61,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     boolean updateRole(Long id, List<Long> roleIdList);
 
     /**
-     * 批量查询用户拥有的角色 [ID列表]
+     * 查询用户拥有的角色 [ID列表]
      *
      * @param id 用户id
      * @return 角色ID列表
@@ -69,7 +69,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     List<Long> listRoleId(Long id);
 
     /**
-     * 批量查询用户拥有的角色 [标记列表]
+     * 查询用户拥有的角色 [标记列表]
      *
      * @param id 用户id
      * @return 角色标记列表

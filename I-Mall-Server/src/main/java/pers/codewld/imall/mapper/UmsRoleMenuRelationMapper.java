@@ -31,7 +31,7 @@ public interface UmsRoleMenuRelationMapper {
     int deleteByMenuId(Long menuId);
 
     /**
-     * 根据角色ID查询角色拥有的菜单ID
+     * 根据角色ID菜单ID
      */
     List<Long> selectMenuIdByRoleId(Long roleId);
 

@@ -34,7 +34,7 @@ public interface UmsRoleService extends IService<UmsRole> {
     boolean update(Long id, UmsRoleParam umsRoleParam);
 
     /**
-     * 分页查询角色，可搜索
+     * 分页查询，可搜索
      *
      * @param pageNum  页数
      * @param pageSize 每页条数
@@ -49,7 +49,7 @@ public interface UmsRoleService extends IService<UmsRole> {
     List<UmsRole> listByCodeList(List<String> codeList);
 
     /**
-     * 批量查询角色 [标记列表]
+     * 查询角色 [标记列表]
      */
     List<UmsRoleMarkVO> listMark();
 
@@ -63,7 +63,7 @@ public interface UmsRoleService extends IService<UmsRole> {
     boolean updateMenu(Long id, List<Long> menuIdList);
 
     /**
-     * 批量查询角色拥有的菜单 [ID列表]
+     * 查询角色拥有的菜单 [ID列表]
      *
      * @param id 角色id
      * @return 菜单ID

@@ -33,12 +33,12 @@ public interface UmsMenuService extends IService<UmsMenu> {
     boolean update(Long id, UmsMenuParam umsMenuParam);
 
     /**
-     * 批量查询父节点下的子菜单
+     * 查询父节点下的子菜单
      */
     List<UmsMenu> listSon(Long id);
 
     /**
-     * 批量查询菜单 [标记形式、树形结构]
+     * 查询菜单 [标记形式、树形结构]
      */
     List<UmsMenuMarkVO> listMark();
 

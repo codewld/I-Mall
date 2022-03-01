@@ -50,7 +50,7 @@ public class UmsAdminController {
     }
 
     @GetMapping("/page")
-    @ApiOperation("分页查询用户，可搜索")
+    @ApiOperation("分页查询，可搜索")
     public PageVO<UmsAdminVO> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
                                    @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize,
                                    @RequestParam(value = "username", required = false) @ApiParam("用户名") String username,
@@ -68,7 +68,7 @@ public class UmsAdminController {
     }
 
     @GetMapping("/role/mark/{id}")
-    @ApiOperation("批量查询用户拥有的角色 [标记列表]")
+    @ApiOperation("查询用户拥有的角色 [标记列表]")
     public List<UmsRoleMarkVO> listRoleMark(@PathVariable @ApiParam("用户id") Long id) {
         return umsAdminService.listRoleMark(id);
     }
