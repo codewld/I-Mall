@@ -49,16 +49,19 @@ public class JWTUtil {
      */
     public boolean isInvalid(String token) {
         try {
+            if (token == null) {
+                return true;
+            }
             DecodedJWT decodedJWT = JWTVerifier.verify(token);
             // 检查过期时间
             if (decodedJWT.getExpiresAt().before(new Date())) {
                 return true;
             }
-            return false;
         } catch (JWTVerificationException e) {
             e.printStackTrace();
             return true;
         }
+        return false;
     }
 
     /**

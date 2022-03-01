@@ -35,12 +35,18 @@ public interface UmsRoleService extends IService<UmsRole> {
 
     /**
      * 分页查询角色，可搜索
-     * @param pageNum 页数
+     *
+     * @param pageNum  页数
      * @param pageSize 每页条数
-     * @param name 名称
-     * @param code 编码
+     * @param name     名称
+     * @param code     编码
      */
     PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name, String code);
+
+    /**
+     * 根据编码批量查询角色
+     */
+    List<UmsRole> listByCodeList(List<String> codeList);
 
     /**
      * 批量查询角色 [标记列表]
@@ -49,16 +55,18 @@ public interface UmsRoleService extends IService<UmsRole> {
 
     /**
      * 修改角色拥有的菜单
-     * @param id 角色id
+     *
+     * @param id         角色id
      * @param menuIdList 菜单id列表
      * @return 修改结果
      */
-    boolean updateMenu(Long id,List<Long> menuIdList);
+    boolean updateMenu(Long id, List<Long> menuIdList);
 
     /**
      * 批量查询角色拥有的菜单 [ID列表]
+     *
      * @param id 角色id
      * @return 菜单ID
      */
-    List<Long>  listMenuId(Long id);
+    List<Long> listMenuId(Long id);
 }

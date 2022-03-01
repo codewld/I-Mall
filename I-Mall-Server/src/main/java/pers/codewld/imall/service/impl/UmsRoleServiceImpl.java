@@ -74,6 +74,16 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
+    public List<UmsRole> listByCodeList(List<String> codeList) {
+        if (CollectionUtils.isEmpty(codeList)) {
+            return null;
+        }
+        QueryWrapper<UmsRole> queryWrapper = new QueryWrapper<UmsRole>()
+                .in("code", codeList);
+        return this.list(queryWrapper);
+    }
+
+    @Override
     public List<UmsRoleMarkVO> listMark() {
         List<UmsRole> roleList = this.list();
         return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());

@@ -2,9 +2,14 @@ package pers.codewld.imall.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import pers.codewld.imall.model.entity.UmsMenu;
+import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.service.UmsAdminService;
+import pers.codewld.imall.service.UmsMenuService;
+import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.BeanUtil;
 
 import javax.servlet.FilterChain;
@@ -13,6 +18,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -32,16 +40,25 @@ public class JWTVerifyFilter extends GenericFilterBean {
         JWTUtil jwtUtil = BeanUtil.getBean(JWTUtil.class);
         HttpServletRequest req = (HttpServletRequest) request;
         String jwtToken = req.getHeader("authorization");
-        if (!req.getServletPath().contains("login") && jwtToken != null && !jwtUtil.isInvalid(jwtToken)) {
-            MyUserDetails user = jwtUtil.decode(jwtToken);
-            if (isDisabled(user)) {
-                chain.doFilter(request, response);
-                return;
-            }
-            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (req.getServletPath().contains("login")) {
+            chain.doFilter(request, response);
+            return;
         }
-        chain.doFilter(request, response);
+        if (jwtUtil.isInvalid(jwtToken)) {
+            chain.doFilter(request, response);
+            return;
+        }
+        MyUserDetails user = jwtUtil.decode(jwtToken);
+        // 判断用户是否被禁用
+        if (isDisabled(user)) {
+            chain.doFilter(request, response);
+            return;
+        }
+        // 获取用户拥有的角色对应的权限
+        List<SimpleGrantedAuthority> authorities = this.getAuthorities(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
+        System.out.println(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     /**
@@ -52,4 +69,29 @@ public class JWTVerifyFilter extends GenericFilterBean {
         return umsAdminService.isInBlacklist(user.getId());
     }
 
+    /**
+     * 获取用户拥有的角色对应的权限
+     */
+    List<SimpleGrantedAuthority> getAuthorities(MyUserDetails user) {
+        UmsRoleService umsRoleService = BeanUtil.getBean(UmsRoleService.class);
+        UmsMenuService umsMenuService = BeanUtil.getBean(UmsMenuService.class);
+        // 获取角色列表
+        List<UmsRole> roleList = umsRoleService.listByCodeList(user.getRoleCodeList());
+        // 获取菜单ID列表
+        List<Long> menuIdList = new ArrayList<>();
+        for (UmsRole umsRole : roleList) {
+            menuIdList.addAll(umsRoleService.listMenuId(umsRole.getId()));
+        }
+        menuIdList = menuIdList
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+        // 获取菜单列表
+        List<UmsMenu> menuList = umsMenuService.listByIds(menuIdList);
+        // 将菜单列表转换为Authority列表
+        return menuList
+                .stream()
+                .map(o -> new SimpleGrantedAuthority(o.getCode()))
+                .collect(Collectors.toList());
+    }
 }
