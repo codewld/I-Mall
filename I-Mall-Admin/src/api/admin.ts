@@ -2,7 +2,7 @@ import request from '@/api/request';
 import { CURD } from '@/@types/curd';
 import { unref } from 'vue';
 
-const PREFIX = '/ums-admin'
+const PREFIX = '/ums/admin'
 
 /**
  * 添加
@@ -33,15 +33,15 @@ export const rPage: CURD.pageFunction<Admin.admin> = (pageParam, searchParam) =>
 }
 
 /**
- * 修改用户的角色
+ * 修改用户拥有的角色
  */
 export const rUpdateRole = (id: number, roleIdList: number[]): Promise<string> => {
   return request(`${ PREFIX }/role/${ id }`, 'put', roleIdList)
 }
 
 /**
- * 批量查询用户的角色标记
+ * 批量查询用户拥有的角色 [标记列表]
  */
 export const rListRoleMark = (id: number): Promise<Role.roleMark[]> => {
-  return request(`${ PREFIX }/role/${ id }`, 'get')
+  return request(`${ PREFIX }/role/mark/${ id }`, 'get')
 }

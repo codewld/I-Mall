@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { Document, Folder } from '@element-plus/icons-vue';
 import IContainer from '@/components/iContainer';
-import { rAdd, rDel, rUpdate, rListRoot, rListSon } from '@/api/menu';
+import { rAdd, rDel, rUpdate, rListSon } from '@/api/menu';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 import { getChange } from '@/utils/objUtil';
@@ -27,7 +27,7 @@ const dataList: Ref<Menu.menu[]> = ref([])
  */
 const listRoot = () => {
   isLoading.value = true
-  rListRoot().then(res => {
+  rListSon(0).then(res => {
     dataList.value = res
   }).catch(err => {
     ElMessage.warning(err)

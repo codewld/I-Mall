@@ -1,7 +1,7 @@
 import request from '@/api/request';
 import { CURD } from '@/@types/curd';
 
-const PREFIX = '/ums-menu'
+const PREFIX = '/ums/menu'
 
 /**
  * 添加
@@ -25,21 +25,14 @@ export const rUpdate: CURD.updateFunction<Menu.menuParam> = (id, data) => {
 }
 
 /**
- * 批量查询位于根结点的菜单
- */
-export const rListRoot = (): Promise<Menu.menu[]> => {
-  return request(`${ PREFIX }/list/root`, 'get')
-}
-
-/**
- * 批量查询父结点下的子菜单
+ * 批量查询父节点下的子菜单
  */
 export const rListSon = (id: number): Promise<Menu.menu[]> => {
   return request(`${ PREFIX }/list/${ id }`, 'get')
 }
 
 /**
- * 批量查询菜单标记列表
+ * 批量查询菜单 [标记形式、树形结构]
  */
 export const rListMark = (): Promise<Menu.menuMark[]> => {
   return request(`${ PREFIX }/list/mark`, 'get')

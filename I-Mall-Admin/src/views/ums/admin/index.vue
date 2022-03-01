@@ -57,7 +57,7 @@ const handleRoleDialog = (id: number) => {
       .then(res => {
         allRoleList.value = res[0]
         adminId.value = id
-        roleIdList.value = Array.from(res[1], item => item.id)
+        roleIdList.value = res[1] ? Array.from(res[1], item => item.id) : []
         originRoleIdList.value = [...roleIdList.value]
         roleDialogVisible.value = true
       })

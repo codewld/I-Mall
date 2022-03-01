@@ -2,7 +2,7 @@ import request from '@/api/request';
 import { CURD } from '@/@types/curd';
 import { Ref, unref } from 'vue';
 
-const PREFIX = '/ums-role'
+const PREFIX = '/ums/role'
 
 /**
  * 添加
@@ -33,22 +33,22 @@ export const rPage: CURD.pageFunction<Role.role> = (pageParam, searchParam) => {
 }
 
 /**
- * 批量查询角色标记
+ * 批量查询角色 [标记列表]
  */
 export const rListMark = (): Promise<Role.roleMark[]> => {
   return request(`${ PREFIX }/list/mark`, 'get')
 }
 
 /**
- * 修改角色的菜单
+ * 修改角色拥有的菜单
  */
 export const rUpdateMenu = (id: number, menuIdList: Ref<number[]>): Promise<string> => {
   return request(`${ PREFIX }/menu/${ id }`, 'put', menuIdList)
 }
 
 /**
- * 批量查询角色的菜单ID列表
+ * 批量查询角色拥有的菜单 [ID列表]
  */
 export const rListMenuId = (id: number): Promise<number[]> => {
-  return request(`${ PREFIX }/menu/${ id }`, 'get')
+  return request(`${ PREFIX }/menu/id/${ id }`, 'get')
 }
