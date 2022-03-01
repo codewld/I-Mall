@@ -1,5 +1,6 @@
 package pers.codewld.imall.controller.advice;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.BindException;
@@ -49,6 +50,14 @@ public class ExceptionAdvice {
             msg = ((ConstraintViolation<?>) (ex.getConstraintViolations().toArray()[0])).getMessage();
         }
         return ResultVO.error(ResultCode.VALIDATE_FAILED, msg);
+    }
+
+    /**
+     * 未授权异常
+     */
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResultVO accessDeniedException(Exception e) {
+        return ResultVO.error(ResultCode.FORBIDDEN);
     }
 
     /**

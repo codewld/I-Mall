@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,6 +26,7 @@ import java.io.PrintWriter;
  * @author codewld
  * @since 2022-02-06
  */
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -54,11 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> returnResult(response, ResultVO.error(ResultCode.UNAUTHORIZED)));
-
-        // 未授权异常
-        http
-                .exceptionHandling()
-                .accessDeniedHandler((request, response, accessDeniedException) -> returnResult(response, ResultVO.error(ResultCode.FORBIDDEN)));
 
         // 禁用跨站请求保护
         http

@@ -78,11 +78,11 @@ public class JWTVerifyFilter extends GenericFilterBean {
         UmsMenuService umsMenuService = BeanUtil.getBean(UmsMenuService.class);
         // 获取角色列表
         List<UmsRole> roleList = umsRoleService.listByCodeList(user.getRoleCodeList());
-        // 获取菜单ID列表
-        List<Long> menuIdList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(menuIdList)) {
+        if (CollectionUtils.isEmpty(roleList)) {
             return null;
         }
+        // 获取菜单ID列表
+        List<Long> menuIdList = new ArrayList<>();
         for (UmsRole umsRole : roleList) {
             menuIdList.addAll(umsRoleService.listMenuId(umsRole.getId()));
         }
