@@ -4,6 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.GenericFilterBean;
 import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.model.entity.UmsRole;
@@ -57,8 +58,8 @@ public class JWTVerifyFilter extends GenericFilterBean {
         // 获取用户拥有的角色对应的权限
         List<SimpleGrantedAuthority> authorities = this.getAuthorities(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
-        System.out.println(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        chain.doFilter(request, response);
     }
 
     /**
@@ -79,6 +80,9 @@ public class JWTVerifyFilter extends GenericFilterBean {
         List<UmsRole> roleList = umsRoleService.listByCodeList(user.getRoleCodeList());
         // 获取菜单ID列表
         List<Long> menuIdList = new ArrayList<>();
+        if (CollectionUtils.isEmpty(menuIdList)) {
+            return null;
+        }
         for (UmsRole umsRole : roleList) {
             menuIdList.addAll(umsRoleService.listMenuId(umsRole.getId()));
         }

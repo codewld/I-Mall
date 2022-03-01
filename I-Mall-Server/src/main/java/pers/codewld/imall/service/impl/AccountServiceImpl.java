@@ -6,6 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.LoginParam;
@@ -54,8 +55,11 @@ public class AccountServiceImpl implements AccountService {
         }
         // 查询用户对应的角色信息
         List<Long> roleIdList = umsAdminService.listRoleId(umsAdmin.getId());
-        List<UmsRole> roleList = umsRoleService.listByIds(roleIdList);
-        List<String> roleCodeList = roleList.stream().map(UmsRole::getCode).collect(Collectors.toList());
+        List<String> roleCodeList = null;
+        if (!CollectionUtils.isEmpty(roleIdList)) {
+            List<UmsRole> roleList = umsRoleService.listByIds(roleIdList);
+            roleCodeList = roleList.stream().map(UmsRole::getCode).collect(Collectors.toList());
+        }
         umsAdmin.setRoleCodeList(roleCodeList);
         // 保存登录记录
         UpdateWrapper<UmsAdmin> updateWrapper = new UpdateWrapper<UmsAdmin>()
