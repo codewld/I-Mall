@@ -106,6 +106,11 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
+    public List<Long> listRoleId(Long id) {
+        return umsAdminRoleRelationMapper.selectRoleIdByAdminId(id);
+    }
+
+    @Override
     public List<UmsRoleMarkVO> listRoleMark(Long id) {
         List<Long> roleIdList = umsAdminRoleRelationMapper.selectRoleIdByAdminId(id);
         if (CollectionUtils.isEmpty(roleIdList)) {

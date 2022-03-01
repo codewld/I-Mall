@@ -8,12 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import pers.codewld.imall.security.MyUserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>
@@ -68,7 +67,8 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     private LocalDateTime loginTime;
 
     @TableField(exist = false)
-    private Collection<? extends GrantedAuthority> authorities;
+    @ApiModelProperty("角色编码列表")
+    private List<String> roleCodeList;
 
     @Override
     public boolean isEnabled() {

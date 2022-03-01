@@ -4,21 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pers.codewld.imall.model.entity.UmsAdmin;
+import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.LoginParam;
-import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.JWTUtil;
 import pers.codewld.imall.service.AccountService;
 import pers.codewld.imall.service.UmsAdminService;
-import pers.codewld.imall.util.TransformUtil;
+import pers.codewld.imall.service.UmsRoleService;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +31,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     UmsAdminService umsAdminService;
+
+    @Autowired
+    UmsRoleService umsRoleService;
 
     @Autowired
     PasswordEncoder MD5PasswordEncoder;
@@ -52,13 +52,11 @@ public class AccountServiceImpl implements AccountService {
         if (!umsAdmin.getStatus()) {
             throw new DisabledException("账号被禁用");
         }
-        // 查询角色信息
-        List<UmsRoleMarkVO> umsRoleMarkVOList = umsAdminService.listRoleMark(umsAdmin.getId());
-        List<GrantedAuthority> authorityList = umsRoleMarkVOList
-                .stream()
-                .map(o -> new SimpleGrantedAuthority(o.getCode().toUpperCase()))
-                .collect(Collectors.toList());
-        umsAdmin.setAuthorities(authorityList);
+        // 查询用户对应的角色信息
+        List<Long> roleIdList = umsAdminService.listRoleId(umsAdmin.getId());
+        List<UmsRole> roleList = umsRoleService.listByIds(roleIdList);
+        List<String> roleCodeList = roleList.stream().map(UmsRole::getCode).collect(Collectors.toList());
+        umsAdmin.setRoleCodeList(roleCodeList);
         // 保存登录记录
         UpdateWrapper<UmsAdmin> updateWrapper = new UpdateWrapper<UmsAdmin>()
                 .eq("id", umsAdmin.getId()).set("login_time", LocalDateTime.now());

@@ -61,6 +61,14 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     boolean updateRole(Long id, List<Long> roleIdList);
 
     /**
+     * 批量查询用户拥有的角色 [ID列表]
+     *
+     * @param id 用户id
+     * @return 角色ID列表
+     */
+    List<Long> listRoleId(Long id);
+
+    /**
      * 批量查询用户拥有的角色 [标记列表]
      *
      * @param id 用户id
