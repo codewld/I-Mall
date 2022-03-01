@@ -26,7 +26,7 @@ import java.util.List;
  * @since 2022-02-04
  */
 @RestController
-@RequestMapping("/ums-role")
+@RequestMapping("/ums/role")
 public class UmsRoleController {
 
     @Autowired
@@ -51,7 +51,7 @@ public class UmsRoleController {
     }
 
     @GetMapping("/page")
-    @ApiOperation("分页查询角色列表，可搜索")
+    @ApiOperation("分页查询角色，可搜索")
     public PageVO<UmsRole> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
                                 @RequestParam(value = "pageSize", defaultValue = "5") @Min(value = 1, message = "每页条数最小为1") @ApiParam("每页条数") Integer pageSize,
                                 @RequestParam(value = "name", required = false) @Size(min = 4, max = 20, message = "用户名长度应在4-20之间") @ApiParam("名称") String name,
@@ -60,20 +60,20 @@ public class UmsRoleController {
     }
 
     @GetMapping("/list/mark")
-    @ApiOperation("批量查询角色标记列表")
+    @ApiOperation("批量查询角色 [标记列表]")
     public List<UmsRoleMarkVO> listMark() {
         return umsRoleService.listMark();
     }
 
     @PutMapping("/menu/{id}")
-    @ApiOperation("修改角色的菜单")
+    @ApiOperation("修改角色拥有的菜单")
     public boolean updateMenu(@PathVariable @ApiParam("角色id") Long id,
                               @RequestBody(required = false) @ApiParam("菜单id列表") List<Long> menuIdList) {
         return umsRoleService.updateMenu(id, menuIdList);
     }
 
-    @GetMapping("/menu/{id}")
-    @ApiOperation("批量查询角色的菜单ID列表")
+    @GetMapping("/menu/id/{id}")
+    @ApiOperation("批量查询角色拥有的菜单 [ID列表]")
     public List<Long> listMenuId(@PathVariable @ApiParam("角色id") Long id) {
         return umsRoleService.listMenuId(id);
     }

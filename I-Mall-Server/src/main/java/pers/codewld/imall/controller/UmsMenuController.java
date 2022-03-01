@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Validated
 @RestController
-@RequestMapping("/ums-menu")
+@RequestMapping("/ums/menu")
 public class UmsMenuController {
 
     @Autowired
@@ -49,20 +49,14 @@ public class UmsMenuController {
         return umsMenuService.update(id, umsMenuParam);
     }
 
-    @GetMapping("/list/root")
-    @ApiOperation("批量查询位于根结点的菜单列表")
-    List<UmsMenu> listRoot() {
-        return umsMenuService.listRoot();
-    }
-
     @GetMapping("/list/{id}")
-    @ApiOperation("批量查询父结点下的子菜单列表")
+    @ApiOperation("批量查询父节点下的子菜单")
     List<UmsMenu> listSon(@PathVariable @ApiParam("菜单ID") Long id) {
         return umsMenuService.listSon(id);
     }
 
     @GetMapping("/list/mark")
-    @ApiOperation("批量查询菜单标记列表，树形结构")
+    @ApiOperation("批量查询菜单 [标记形式、树形结构]")
     List<UmsMenuMarkVO> listMark() {
         return umsMenuService.listMark();
     }

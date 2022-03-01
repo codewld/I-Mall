@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <p>
- * 后台用户角色表 服务类
+ * 后台角色 服务类
  * </p>
  *
  * @author codewld
@@ -34,7 +34,7 @@ public interface UmsRoleService extends IService<UmsRole> {
     boolean update(Long id, UmsRoleParam umsRoleParam);
 
     /**
-     * 分页查询角色列表，可搜索
+     * 分页查询角色，可搜索
      * @param pageNum 页数
      * @param pageSize 每页条数
      * @param name 名称
@@ -43,12 +43,12 @@ public interface UmsRoleService extends IService<UmsRole> {
     PageVO<UmsRole> page(Integer pageNum, Integer pageSize, String name, String code);
 
     /**
-     * 批量查询角色标记
+     * 批量查询角色 [标记列表]
      */
     List<UmsRoleMarkVO> listMark();
 
     /**
-     * 修改角色的菜单
+     * 修改角色拥有的菜单
      * @param id 角色id
      * @param menuIdList 菜单id列表
      * @return 修改结果
@@ -56,7 +56,7 @@ public interface UmsRoleService extends IService<UmsRole> {
     boolean updateMenu(Long id,List<Long> menuIdList);
 
     /**
-     * 批量查询角色的菜单ID
+     * 批量查询角色拥有的菜单 [ID列表]
      * @param id 角色id
      * @return 菜单ID
      */

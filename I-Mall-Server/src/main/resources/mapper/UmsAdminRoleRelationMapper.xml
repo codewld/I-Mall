@@ -22,11 +22,9 @@
         WHERE role_id = #{roleId}
     </delete>
 
-    <select id="selectRoleMarkListByAdminId" resultType="pers.codewld.imall.model.vo.UmsRoleMarkVO">
-        SELECT ums_role.id, ums_role.name, ums_role.code
-        FROM ums_role,
-             ums_admin_role_relation
-        WHERE ums_role.id = ums_admin_role_relation.role_id
-          AND ums_admin_role_relation.admin_id = #{adminId}
+    <select id="selectRoleIdByAdminId" resultType="java.lang.Long">
+        SELECT role_id
+        FROM ums_admin_role_relation
+        WHERE ums_admin_role_relation.admin_id = #{adminId}
     </select>
 </mapper>

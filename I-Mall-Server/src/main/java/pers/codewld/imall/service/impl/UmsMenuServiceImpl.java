@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 后台菜单表 服务实现类
+ * 后台菜单 服务实现类
  * </p>
  *
  * @author codewld
@@ -51,13 +51,6 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
-    public List<UmsMenu> listRoot() {
-        QueryWrapper<UmsMenu> queryWrapper = new QueryWrapper<UmsMenu>()
-                .eq("parent_id", 0);
-        return this.list(queryWrapper);
-    }
-
-    @Override
     public List<UmsMenu> listSon(Long id) {
         QueryWrapper<UmsMenu> queryWrapper = new QueryWrapper<UmsMenu>()
                 .eq("parent_id", id);
@@ -69,7 +62,6 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         UmsMenuMarkVO top = new UmsMenuMarkVO(0L, "无父级", new ArrayList<>());
         List<UmsMenu> list = this.list();
         setChildren(top, list);
-        System.out.println(top.getChildren());
         return top.getChildren();
     }
 

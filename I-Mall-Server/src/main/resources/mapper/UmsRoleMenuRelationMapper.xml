@@ -23,7 +23,7 @@
         WHERE menu_id = #{menuId}
     </delete>
 
-    <select id="selectMenuIdListByRoleId" resultType="java.lang.Long">
+    <select id="selectMenuIdByRoleId" resultType="java.lang.Long">
         SELECT ums_menu.id
         FROM ums_menu,
              ums_role_menu_relation

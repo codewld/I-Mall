@@ -32,8 +32,8 @@ public interface UmsAdminRoleRelationMapper {
     int deleteByRoleId(Long roleId);
 
     /**
-     * 根据用户ID查询角色标记列表
+     * 根据用户ID查询用户拥有的角色ID
      */
-    List<UmsRoleMarkVO> selectRoleMarkListByAdminId(Long adminId);
+    List<Long> selectRoleIdByAdminId(Long adminId);
 
 }

@@ -13,6 +13,7 @@ import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsAdminMapper;
 import pers.codewld.imall.mapper.UmsAdminRoleRelationMapper;
 import pers.codewld.imall.model.entity.UmsAdmin;
+import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.vo.PageVO;
@@ -20,6 +21,7 @@ import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
 import pers.codewld.imall.service.UmsAdminService;
+import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.BeanUtil;
 import pers.codewld.imall.util.TransformUtil;
 
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 后台用户表 服务实现类
+ * 后台用户 服务实现类
  * </p>
  *
  * @author codewld
@@ -39,6 +41,9 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Autowired
     MD5PasswordEncoder md5PasswordEncoder;
+
+    @Autowired
+    UmsRoleService umsRoleService;
 
     @Autowired
     UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
@@ -86,20 +91,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return new PageVO<>(total, list);
     }
 
-    @Cacheable(value = "blacklist")
-    @Override
-    public List<Long> getBlacklist() {
-        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
-                .select("id").eq("status", 0);
-        return this.listObjs(queryWrapper, o -> (long) o);
-    }
-
-    @Override
-    public boolean isInBlacklist(Long id) {
-        List<Long> blacklist = getBean().getBlacklist();
-        return blacklist.contains(id);
-    }
-
     @Transactional
     @Override
     public boolean updateRole(Long id, List<Long> roleIdList) {
@@ -116,9 +107,28 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Override
     public List<UmsRoleMarkVO> listRoleMark(Long id) {
-        return umsAdminRoleRelationMapper.selectRoleMarkListByAdminId(id);
+        List<Long> roleIdList = umsAdminRoleRelationMapper.selectRoleIdByAdminId(id);
+        if (CollectionUtils.isEmpty(roleIdList)) {
+            return null;
+        }
+        QueryWrapper<UmsRole> queryWrapper = new QueryWrapper<UmsRole>()
+                .in("id", roleIdList);
+        return umsRoleService.list(queryWrapper).stream().map(TransformUtil::transform).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "blacklist")
+    @Override
+    public List<Long> getBlacklist() {
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
+                .select("id").eq("status", 0);
+        return this.listObjs(queryWrapper, o -> (long) o);
+    }
+
+    @Override
+    public boolean isInBlacklist(Long id) {
+        List<Long> blacklist = getBean().getBlacklist();
+        return blacklist.contains(id);
+    }
 
     /**
      * 获取自身的Bean，以避免直接调用自身时AOP的失效

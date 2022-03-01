@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- * 后台菜单表 服务类
+ * 后台菜单 服务类
  * </p>
  *
  * @author codewld
@@ -33,17 +33,12 @@ public interface UmsMenuService extends IService<UmsMenu> {
     boolean update(Long id, UmsMenuParam umsMenuParam);
 
     /**
-     * 批量查询位于根结点的菜单
-     */
-    List<UmsMenu> listRoot();
-
-    /**
-     * 批量查询父结点下的子菜单
+     * 批量查询父节点下的子菜单
      */
     List<UmsMenu> listSon(Long id);
 
     /**
-     * 批量查询菜单标记列表，树形结构
+     * 批量查询菜单 [标记形式、树形结构]
      */
     List<UmsMenuMarkVO> listMark();
 

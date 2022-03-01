@@ -95,7 +95,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
 
     @Override
     public List<Long> listMenuId(Long id) {
-        return umsRoleMenuRelationMapper.selectMenuIdListByRoleId(id);
+        return umsRoleMenuRelationMapper.selectMenuIdByRoleId(id);
     }
 
     /**

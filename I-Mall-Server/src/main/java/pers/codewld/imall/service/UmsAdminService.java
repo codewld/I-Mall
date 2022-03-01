@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- * 后台用户表 服务类
+ * 后台用户 服务类
  * </p>
  *
  * @author codewld
@@ -40,7 +40,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     UmsAdmin getByUsername(String username);
 
     /**
-     * 分页查询用户列表，可搜索
+     * 分页查询用户，可搜索
      *
      * @param pageNum  页数
      * @param pageSize 每页条数
@@ -52,17 +52,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     PageVO<UmsAdminVO> page(Integer pageNum, Integer pageSize, String username, Boolean status, String nickName, String email);
 
     /**
-     * 获取黑名单 [黑名单为所有被禁用的用户]
-     */
-    List<Long> getBlacklist();
-
-    /**
-     * 判断用户是否在黑名单中
-     */
-    boolean isInBlacklist(Long id);
-
-    /**
-     * 修改用户的角色
+     * 修改用户拥有的角色
      *
      * @param id         用户id
      * @param roleIdList 角色id列表
@@ -71,10 +61,20 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     boolean updateRole(Long id, List<Long> roleIdList);
 
     /**
-     * 查询用户的角色标记列表
+     * 批量查询用户拥有的角色 [标记列表]
      *
      * @param id 用户id
      * @return 角色标记列表
      */
     List<UmsRoleMarkVO> listRoleMark(Long id);
+
+    /**
+     * 获取黑名单 [黑名单为所有被禁用的用户]
+     */
+    List<Long> getBlacklist();
+
+    /**
+     * 判断用户是否在黑名单中
+     */
+    boolean isInBlacklist(Long id);
 }
