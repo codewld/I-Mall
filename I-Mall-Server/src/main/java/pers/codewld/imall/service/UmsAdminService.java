@@ -77,12 +77,7 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     List<UmsRoleMarkVO> listRoleMark(Long id);
 
     /**
-     * 获取黑名单 [黑名单为所有被禁用的用户]
+     * 查询禁用用户
      */
-    List<Long> getBlacklist();
-
-    /**
-     * 判断用户是否在黑名单中
-     */
-    boolean isInBlacklist(Long id);
+    List<Long> listDisabled();
 }

@@ -65,7 +65,7 @@ public class JWTVerifyFilter extends GenericFilterBean {
      */
     boolean isDisabled(MyUserDetails user) {
         UmsAdminService umsAdminService = BeanUtil.getBean(UmsAdminService.class);
-        return umsAdminService.isInBlacklist(user.getId());
+        return umsAdminService.listDisabled().contains(user.getId());
     }
 
     /**

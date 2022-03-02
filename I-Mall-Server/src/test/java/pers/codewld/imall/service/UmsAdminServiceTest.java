@@ -8,21 +8,4 @@ import java.util.List;
 
 @SpringBootTest
 public class UmsAdminServiceTest {
-
-    @Autowired
-    UmsAdminService umsAdminService;
-
-    @Test
-    public void testGetBlacklist() {
-        List<Long> list = umsAdminService.getBlacklist();
-        for (Long aLong : list) {
-            System.out.println(aLong);
-        }
-    }
-
-    @Test
-    public void testIsInBlacklist() {
-        System.out.println(umsAdminService.isInBlacklist(3L));
-        System.out.println(umsAdminService.isInBlacklist(5L));
-    }
 }

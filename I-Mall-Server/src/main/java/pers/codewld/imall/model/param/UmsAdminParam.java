@@ -7,6 +7,7 @@ import pers.codewld.imall.config.ValidatorConfig;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -38,6 +39,7 @@ public class UmsAdminParam {
     @ApiModelProperty("邮箱")
     private String email;
 
+    @NotNull(groups = ValidatorConfig.Group.add.class, message = "启用状态不能为空")
     @ApiModelProperty("启用状态")
     private Boolean status;
 

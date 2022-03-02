@@ -22,7 +22,6 @@ import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
 import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.service.UmsRoleService;
-import pers.codewld.imall.util.BeanUtil;
 import pers.codewld.imall.util.TransformUtil;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Autowired
     UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
 
-    @CacheEvict(value = "blacklist", allEntries = true)
+    @CacheEvict(value = "DisabledAdmin", condition = "#umsAdminParam.status == false ", allEntries = true)
     @Override
     public boolean add(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
@@ -56,13 +55,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return this.save(umsAdmin);
     }
 
-    @CacheEvict(value = "blacklist", allEntries = true)
     @Override
     public boolean del(Long id) {
         return this.removeById(id);
     }
 
-    @CacheEvict(value = "blacklist", allEntries = true)
+    @CacheEvict(value = "DisabledAdmin", condition = "#umsAdminParam.status == false ", allEntries = true)
     @Override
     public boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
@@ -121,25 +119,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return umsRoleService.list(queryWrapper).stream().map(TransformUtil::transform).collect(Collectors.toList());
     }
 
-    @Cacheable(value = "blacklist")
+    @Cacheable(value = "DisabledAdmin")
     @Override
-    public List<Long> getBlacklist() {
+    public List<Long> listDisabled() {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
                 .select("id").eq("status", 0);
         return this.listObjs(queryWrapper, o -> (long) o);
-    }
-
-    @Override
-    public boolean isInBlacklist(Long id) {
-        List<Long> blacklist = getBean().getBlacklist();
-        return blacklist.contains(id);
-    }
-
-    /**
-     * 获取自身的Bean，以避免直接调用自身时AOP的失效
-     */
-    private UmsAdminService getBean() {
-        return BeanUtil.getBean(UmsAdminService.class);
     }
 
     /**
