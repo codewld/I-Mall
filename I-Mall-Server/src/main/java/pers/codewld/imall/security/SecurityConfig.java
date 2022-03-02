@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.model.vo.ResultVO;
 import pers.codewld.imall.service.UmsAdminService;
 
@@ -52,11 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/api-docs/**").permitAll()
                 .anyRequest().authenticated();
 
-        // 未登录异常
-        http
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> returnResult(response, ResultVO.error(ResultCode.UNAUTHORIZED)));
-
         // 禁用跨站请求保护
         http
                 .csrf().disable();
@@ -83,17 +77,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 登录状态读取器
         http
                 .addFilterBefore(new JWTVerifyFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
-
-    /**
-     * 向前端返回结果
-     */
-    private void returnResult(HttpServletResponse response, ResultVO resultVO) throws IOException {
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-        PrintWriter writer = response.getWriter();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        writer.println(mapper.writeValueAsString(resultVO));
     }
 }

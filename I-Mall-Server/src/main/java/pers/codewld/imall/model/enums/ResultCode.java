@@ -23,6 +23,8 @@ public enum ResultCode {
 
     UNAUTHORIZED(9100, "未登录"),
 
+    DISABLED(9110, "账号被禁用"),
+
     FORBIDDEN(9200, "未授权");
 
     /**

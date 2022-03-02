@@ -6,6 +6,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import pers.codewld.imall.exception.CustomException;
+import pers.codewld.imall.model.enums.ResultCode;
 import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.BeanUtil;
@@ -42,14 +44,17 @@ public class JWTVerifyFilter extends GenericFilterBean {
             chain.doFilter(request, response);
             return;
         }
-        if (jwtUtil.isInvalid(jwtToken)) {
-            chain.doFilter(request, response);
+        // 若没有JWT或JWT不合法
+        if (jwtUtil().isIllegal(jwtToken)) {
+            request.setAttribute("exception", new CustomException(ResultCode.UNAUTHORIZED));
+            request.getRequestDispatcher("/err").forward(request, response);
             return;
         }
-        MyUserDetails user = jwtUtil.decode(jwtToken);
         // 判断用户是否被禁用
+        MyUserDetails user = jwtUtil().decode(jwtToken);
         if (isDisabled(user)) {
-            chain.doFilter(request, response);
+            request.setAttribute("exception", new CustomException(ResultCode.DISABLED));
+            request.getRequestDispatcher("/err").forward(request, response);
             return;
         }
         // 获取用户拥有的角色对应的权限
