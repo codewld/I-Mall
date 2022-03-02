@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
 import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.service.UmsRoleService;
+import pers.codewld.imall.util.RedisUtil;
 import pers.codewld.imall.util.TransformUtil;
 
 import java.util.List;
@@ -47,6 +49,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Autowired
     UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
 
+    @Autowired
+    RedisUtil redisUtil;
+
+    @Value("${jwt.expiration}")
+    private Long expiration; // 过期时长，以秒为单位
+
     @CacheEvict(value = "DisabledAdmin", condition = "#umsAdminParam.status == false ", allEntries = true)
     @Override
     public boolean add(UmsAdminParam umsAdminParam) {
@@ -57,6 +65,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Override
     public boolean del(Long id) {
+        invalidateIssuedJWT(id);
         return this.removeById(id);
     }
 
@@ -66,6 +75,9 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
         umsAdmin.setId(id);
         this.checkUsernameDuplicate(umsAdmin);
+        if (umsAdminParam.getPassword() != null) {
+            invalidateIssuedJWT(id);
+        }
         return this.updateById(umsAdmin);
     }
 
@@ -100,6 +112,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         if (res != roleIdList.size()) {
             throw new CustomException(ResultCode.FAILED);
         }
+        invalidateIssuedJWT(id);
         return true;
     }
 
@@ -125,6 +138,25 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<UmsAdmin>()
                 .select("id").eq("status", 0);
         return this.listObjs(queryWrapper, o -> (long) o);
+    }
+
+    @Override
+    public void invalidateIssuedJWT(Long id) {
+        redisUtil.set("invalidateIssuedJWT::" + id, System.currentTimeMillis(), expiration);
+    }
+
+    @Override
+    public boolean isJWTInvalidated(Long id, Long time) {
+        Object o = redisUtil.get("invalidateIssuedJWT::" + id);
+        // 如果未设置失效
+        if (o == null) {
+            return false;
+        }
+        // 如果签发时间晚于最早有效时间
+        if ((Long) o <= time) {
+            return false;
+        }
+        return true;
     }
 
     /**

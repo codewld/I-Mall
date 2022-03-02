@@ -80,4 +80,21 @@ public interface UmsAdminService extends IService<UmsAdmin> {
      * 查询禁用用户
      */
     List<Long> listDisabled();
+
+    /**
+     * 使该用户的已颁发的JWT失效
+     * <br/>
+     * 会向Redis中存入用户ID及最早有效时间（当前时间），使对应用户ID且签发时间早于最早有效时间的JWT失效
+     *
+     * @param id 用户ID
+     */
+    void invalidateIssuedJWT(Long id);
+
+    /**
+     * 根据用户ID和签发时间，判断JWT是否失效
+     *
+     * @param id   用户ID
+     * @param time 签发时间
+     */
+    boolean isJWTInvalidated(Long id, Long time);
 }

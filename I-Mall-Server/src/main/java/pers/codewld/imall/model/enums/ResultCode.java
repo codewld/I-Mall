@@ -25,6 +25,10 @@ public enum ResultCode {
 
     DISABLED(9110, "账号被禁用"),
 
+    TOKEN_WRONG(9120, "TOKEN 错误"),
+
+    TOKEN_INVALIDATED(9130, "TOKEN 失效"),
+
     FORBIDDEN(9200, "未授权");
 
     /**

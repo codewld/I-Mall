@@ -40,18 +40,21 @@ public class JWTUtil {
         return JWT.create()
                 .withAudience(myUserDetails.getId().toString(), myUserDetails.getUsername())
                 .withClaim("roles", myUserDetails.getRoleIdList())
+                .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiration * 1000))
                 .sign(algorithm());
     }
 
     /**
-     * 判断JWT是否无效
+     * 判断JWT是否不合法
      */
-    public boolean isInvalid(String token) {
+    public boolean isIllegal(String token) {
         try {
+            // 检查JWT是否存在
             if (token == null) {
                 return true;
             }
+            // 检查是否通过校验
             DecodedJWT decodedJWT = JWTVerifier.verify(token);
             // 检查过期时间
             if (decodedJWT.getExpiresAt().before(new Date())) {
@@ -68,20 +71,29 @@ public class JWTUtil {
      * 解密
      */
     public MyUserDetails decode(String token) {
-        if (isInvalid(token)) {
+        try {
+            // 提取信息
+            DecodedJWT decodedJWT = JWT.decode(token);
+            Long id = Long.valueOf(decodedJWT.getAudience().get(0));
+            String username = decodedJWT.getAudience().get(1);
+            List<Long> roleIdList = decodedJWT.getClaim("roles").asList(Long.class);
+            // 重新组合为对象
+            MyUserDetails myUserDetails = new MyUserDetails();
+            myUserDetails.setId(id);
+            myUserDetails.setUsername(username);
+            myUserDetails.setRoleIdList(roleIdList);
+            return myUserDetails;
+        } catch (Exception e) {
             return null;
         }
-        // 提取信息
-        DecodedJWT decodedJWT = JWT.decode(token);
-        Long id = Long.valueOf(decodedJWT.getAudience().get(0));
-        String username = decodedJWT.getAudience().get(1);
-        List<Long> roleIdList = decodedJWT.getClaim("roles").asList(Long.class);
-        // 重新组合为对象
-        MyUserDetails myUserDetails = new MyUserDetails();
-        myUserDetails.setId(id);
-        myUserDetails.setUsername(username);
-        myUserDetails.setRoleIdList(roleIdList);
-        return myUserDetails;
+    }
+
+    /**
+     * 获取签发时间
+     */
+    public Long getIssueTime(String token) {
+        DecodedJWT decodedJWT = JWTVerifier.verify(token);
+        return decodedJWT.getIssuedAt().getTime();
     }
 
     /**

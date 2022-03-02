@@ -37,7 +37,6 @@ public class JWTVerifyFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        JWTUtil jwtUtil = BeanUtil.getBean(JWTUtil.class);
         HttpServletRequest req = (HttpServletRequest) request;
         String jwtToken = req.getHeader("authorization");
         if (req.getServletPath().contains("login")) {
@@ -46,15 +45,23 @@ public class JWTVerifyFilter extends GenericFilterBean {
         }
         // 若没有JWT或JWT不合法
         if (jwtUtil().isIllegal(jwtToken)) {
-            request.setAttribute("exception", new CustomException(ResultCode.UNAUTHORIZED));
-            request.getRequestDispatcher("/err").forward(request, response);
+            forward2Error(request, response, ResultCode.UNAUTHORIZED);
+            return;
+        }
+        // 判断JWT是否能正确解密
+        MyUserDetails user = jwtUtil().decode(jwtToken);
+        if (user == null) {
+            forward2Error(request, response, ResultCode.TOKEN_WRONG);
+            return;
+        }
+        // 判断JWT是否失效
+        if (isInvalidated(user, jwtToken)) {
+            forward2Error(request, response, ResultCode.TOKEN_INVALIDATED);
             return;
         }
         // 判断用户是否被禁用
-        MyUserDetails user = jwtUtil().decode(jwtToken);
         if (isDisabled(user)) {
-            request.setAttribute("exception", new CustomException(ResultCode.DISABLED));
-            request.getRequestDispatcher("/err").forward(request, response);
+            forward2Error(request, response, ResultCode.DISABLED);
             return;
         }
         // 获取用户拥有的角色对应的权限
@@ -69,15 +76,22 @@ public class JWTVerifyFilter extends GenericFilterBean {
      * 判断该用户是否被禁用
      */
     boolean isDisabled(MyUserDetails user) {
-        UmsAdminService umsAdminService = BeanUtil.getBean(UmsAdminService.class);
-        return umsAdminService.listDisabled().contains(user.getId());
+        return umsAdminService().listDisabled().contains(user.getId());
+    }
+
+    /**
+     * 判断JWT是否失效
+     */
+    boolean isInvalidated( MyUserDetails user, String jwtToken) {
+        Long id = user.getId();
+        Long issueTime = jwtUtil().getIssueTime(jwtToken);
+        return umsAdminService().isJWTInvalidated(id, issueTime);
     }
 
     /**
      * 获取用户拥有的角色对应的权限
      */
     List<SimpleGrantedAuthority> getAuthorities(MyUserDetails user) {
-        UmsRoleService umsRoleService = BeanUtil.getBean(UmsRoleService.class);
         // 获取所有角色ID
         List<Long> roleIdList = user.getRoleIdList();
         if (CollectionUtils.isEmpty(roleIdList)) {
@@ -86,7 +100,7 @@ public class JWTVerifyFilter extends GenericFilterBean {
         // 获取所有菜单编码
         List<String> menuCodeList = new ArrayList<>();
         for (Long roleId : roleIdList) {
-            menuCodeList.addAll(umsRoleService.listMenuCode(roleId));
+            menuCodeList.addAll(umsRoleService().listMenuCode(roleId));
         }
         menuCodeList = menuCodeList
                 .stream()
@@ -98,4 +112,22 @@ public class JWTVerifyFilter extends GenericFilterBean {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
+    void forward2Error(ServletRequest request, ServletResponse response, ResultCode resultCode) throws ServletException, IOException {
+        request.setAttribute("exception", new CustomException(resultCode));
+        request.getRequestDispatcher("/err").forward(request, response);
+    }
+
+    JWTUtil jwtUtil() {
+        return BeanUtil.getBean(JWTUtil.class);
+    }
+
+    UmsAdminService umsAdminService() {
+        return BeanUtil.getBean(UmsAdminService.class);
+    }
+
+    UmsRoleService umsRoleService() {
+        return BeanUtil.getBean(UmsRoleService.class);
+    }
+
 }
