@@ -2,7 +2,7 @@ import axios, { Method } from 'axios';
 import router from '@/router';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
-import { baseURL, statusCode } from '@/config';
+import { baseURL } from '@/config';
 import { Ref, unref } from 'vue';
 import { useJWTStore } from '@/store';
 import { removeNull } from '@/utils/objUtil'
@@ -29,12 +29,12 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   res => {
     // 成功
-    if (res.data.code === statusCode.SUCCESS) {
+    if (res.data.code === 0) {
       return res.data.data
     }
-    // 未登录
-    if (res.data.code == statusCode.UNAUTHORIZED) {
-      ElMessage.error('身份验证失败，跳转至登录页')
+    // 身份验证错误
+    if (res.data.code >= 9100 && res.data.code < 9200) {
+      ElMessage.error(`${ res.data.msg }，跳转至登录页`)
       JWTStore.reset()
       return new Promise((resolve, reject) => {
         router.replace('login').then(() => {
@@ -43,7 +43,7 @@ instance.interceptors.response.use(
       })
     }
     // 未授权
-    if (res.data.code == statusCode.FORBIDDEN) {
+    if (res.data.code >= 9200 && res.data.code < 9300) {
 
       // todo 刷新权限
 
