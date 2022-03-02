@@ -61,6 +61,7 @@ declare namespace CURD {
    */
   interface formConf {
     add?: boolean,
+    addDefault?: any,
     update?: boolean,
     see?: boolean
   }

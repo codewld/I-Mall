@@ -7,12 +7,13 @@ import { getChange } from '@/utils/objUtil';
 /**
  * 表单CURD
  * @param loadTrigger 加载扳机 [用于在组合式函数中调用加载方法]
+ * @param fieldList 字段列表
  * @param originData 原始数据
  * @param addFunction 新增方法
  * @param delFunction 删除方法
  * @param updateFunction 修改方法
  */
-export default function useFormCurd(loadTrigger: Ref<number>, originData: Ref, addFunction: CURD.addFunction<unknown>, delFunction: CURD.delFunction, updateFunction: CURD.updateFunction<unknown>) {
+export default function useFormCurd(loadTrigger: Ref<number>, fieldList: CURD.field[], originData: Ref, addFunction: CURD.addFunction<unknown>, delFunction: CURD.delFunction, updateFunction: CURD.updateFunction<unknown>) {
   /**
    * dialog是否可见
    */
@@ -33,6 +34,12 @@ export default function useFormCurd(loadTrigger: Ref<number>, originData: Ref, a
    */
   const beforeAdd = () => {
     formData.value = {}
+    // 设置默认值
+    fieldList.forEach(i => {
+      if (i?.formConf?.addDefault !== undefined) {
+        formData.value[i.code] = i.formConf.addDefault
+      }
+    })
     actionType.value = 'add'
     dialogVisible.value = true
   }

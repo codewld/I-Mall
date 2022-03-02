@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, ref, Ref} from 'vue';
+import { PropType, ref, Ref } from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd';
 import useSearch from '@/composables/curd/useSearch';
@@ -75,7 +75,7 @@ const {
   beforeUpdate,
   doUpdate,
   beforeSee
-} = useFormCurd(loadTrigger, currentRow, props.addFunction, props.delFunction, props.updateFunction)
+} = useFormCurd(loadTrigger, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
 
 </script>
 
