@@ -60,7 +60,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return this.removeById(id);
     }
 
-    @CacheEvict(value = "DisabledAdmin", condition = "#umsAdminParam.status == false ", allEntries = true)
+    @CacheEvict(value = "DisabledAdmin", condition = "#umsAdminParam.status != null ", allEntries = true)
     @Override
     public boolean update(Long id, UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = TransformUtil.transform(umsAdminParam);
