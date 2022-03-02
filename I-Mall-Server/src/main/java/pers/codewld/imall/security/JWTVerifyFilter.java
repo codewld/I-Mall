@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.GenericFilterBean;
-import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.service.UmsAdminService;
 import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.BeanUtil;
@@ -79,19 +78,19 @@ public class JWTVerifyFilter extends GenericFilterBean {
         if (CollectionUtils.isEmpty(roleIdList)) {
             return null;
         }
-        // 获取所有菜单
-        List<UmsMenu> menuList = new ArrayList<>();
+        // 获取所有菜单编码
+        List<String> menuCodeList = new ArrayList<>();
         for (Long roleId : roleIdList) {
-            menuList.addAll(umsRoleService.listMenu(roleId));
+            menuCodeList.addAll(umsRoleService.listMenuCode(roleId));
         }
-        menuList = menuList
+        menuCodeList = menuCodeList
                 .stream()
                 .distinct()
                 .collect(Collectors.toList());
-        // 将菜单列表转换为Authority列表
-        return menuList
+        // 将菜单编码列表转换为Authority列表
+        return menuCodeList
                 .stream()
-                .map(o -> new SimpleGrantedAuthority(o.getCode()))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 }

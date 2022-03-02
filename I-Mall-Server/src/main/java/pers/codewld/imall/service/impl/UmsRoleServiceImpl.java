@@ -104,9 +104,12 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
-    public List<UmsMenu> listMenu(Long id) {
+    public List<String> listMenuCode(Long id) {
         List<Long> menuIdList = this.listMenuId(id);
-        return umsMenuService.listByIds(menuIdList);
+        return umsMenuService.listByIds(menuIdList)
+                .stream()
+                .map(UmsMenu::getCode)
+                .collect(Collectors.toList());
     }
 
     /**
