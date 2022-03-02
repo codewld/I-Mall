@@ -2,6 +2,7 @@ package pers.codewld.imall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsMenuMapper;
@@ -36,11 +37,15 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         return this.save(umsMenu);
     }
 
+    // 删除菜单，则清空角色对应的菜单的缓存
+    @CacheEvict(value = "MenuOfRole", allEntries = true)
     @Override
     public boolean del(Long id) {
         return this.removeById(id);
     }
 
+    // 更新菜单，则清空角色对应的菜单的缓存
+    @CacheEvict(value = "MenuOfRole", allEntries = true)
     @Override
     public boolean update(Long id, UmsMenuParam umsMenuParam) {
         UmsMenu umsMenu = TransformUtil.transform(umsMenuParam);

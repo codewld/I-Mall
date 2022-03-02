@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -84,6 +86,8 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
         return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());
     }
 
+    // 修改角色对应的菜单，则清空角色对应的菜单的缓存
+    @CacheEvict(value = "MenuOfRole", key = "#id")
     @Transactional
     @Override
     public boolean updateMenu(Long id, List<Long> menuIdList) {
@@ -103,6 +107,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
         return umsRoleMenuRelationMapper.selectMenuIdByRoleId(id);
     }
 
+    @Cacheable(value = "MenuOfRole", key = "#id")
     @Override
     public List<String> listMenuCode(Long id) {
         List<Long> menuIdList = this.listMenuId(id);
