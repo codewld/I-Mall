@@ -28,12 +28,4 @@
         FROM ums_role_menu_relation
         WHERE role_id = #{roleId}
     </select>
-
-    <select id="selectMenuIdByRoleCode" resultType="java.lang.Long">
-        SELECT ums_role_menu_relation.menu_id
-        FROM ums_role,
-             ums_role_menu_relation
-        WHERE ums_role.id = ums_role_menu_relation.role_id
-          AND ums_role.`code` = #{roleCode}
-    </select>
 </mapper>

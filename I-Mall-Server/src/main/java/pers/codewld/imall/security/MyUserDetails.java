@@ -27,7 +27,7 @@ public class MyUserDetails implements UserDetails {
 
     private String password;
 
-    private List<String> roleCodeList;
+    private List<Long> roleIdList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -67,8 +67,8 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
     private LocalDateTime loginTime;
 
     @TableField(exist = false)
-    @ApiModelProperty("角色编码列表")
-    private List<String> roleCodeList;
+    @ApiModelProperty("角色ID列表")
+    private List<Long> roleIdList;
 
     @Override
     public boolean isEnabled() {

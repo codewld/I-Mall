@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
- import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -105,9 +104,8 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     }
 
     @Override
-    public List<UmsMenu> listMenu(String roleCode) {
-        System.out.println("coming");
-        List<Long> menuIdList = umsRoleMenuRelationMapper.selectMenuIdByRoleCode(roleCode);
+    public List<UmsMenu> listMenu(Long id) {
+        List<Long> menuIdList = this.listMenuId(id);
         return umsMenuService.listByIds(menuIdList);
     }
 

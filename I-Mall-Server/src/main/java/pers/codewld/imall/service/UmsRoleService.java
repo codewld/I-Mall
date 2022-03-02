@@ -62,13 +62,15 @@ public interface UmsRoleService extends IService<UmsRole> {
      * 查询角色拥有的菜单 [ID列表]
      *
      * @param id 角色id
-     * @return 菜单ID
+     * @return 菜单ID列表
      */
     List<Long> listMenuId(Long id);
 
     /**
-     * 根据角色角色编码查询角色对应的菜单
-     * @param roleCode 角色编码
+     * 根据角色编码查询角色对应的菜单
+     *
+     * @param id 角色id
+     * @return 菜单列表
      */
-    List<UmsMenu> listMenu(String roleCode);
+    List<UmsMenu> listMenu(Long id);
 }

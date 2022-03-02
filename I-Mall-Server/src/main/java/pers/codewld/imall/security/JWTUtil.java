@@ -39,7 +39,7 @@ public class JWTUtil {
     public String sign(MyUserDetails myUserDetails) {
         return JWT.create()
                 .withAudience(myUserDetails.getId().toString(), myUserDetails.getUsername())
-                .withClaim("roles", myUserDetails.getRoleCodeList())
+                .withClaim("roles", myUserDetails.getRoleIdList())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiration * 1000))
                 .sign(algorithm());
     }
@@ -75,12 +75,12 @@ public class JWTUtil {
         DecodedJWT decodedJWT = JWT.decode(token);
         Long id = Long.valueOf(decodedJWT.getAudience().get(0));
         String username = decodedJWT.getAudience().get(1);
-        List<String> roleCodeList = decodedJWT.getClaim("roles").asList(String.class);
+        List<Long> roleIdList = decodedJWT.getClaim("roles").asList(Long.class);
         // 重新组合为对象
         MyUserDetails myUserDetails = new MyUserDetails();
         myUserDetails.setId(id);
         myUserDetails.setUsername(username);
-        myUserDetails.setRoleCodeList(roleCodeList);
+        myUserDetails.setRoleIdList(roleIdList);
         return myUserDetails;
     }
 

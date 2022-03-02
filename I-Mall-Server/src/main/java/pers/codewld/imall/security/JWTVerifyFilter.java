@@ -55,6 +55,7 @@ public class JWTVerifyFilter extends GenericFilterBean {
         }
         // 获取用户拥有的角色对应的权限
         List<SimpleGrantedAuthority> authorities = this.getAuthorities(user);
+        // 放置Authentication
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
@@ -73,14 +74,15 @@ public class JWTVerifyFilter extends GenericFilterBean {
      */
     List<SimpleGrantedAuthority> getAuthorities(MyUserDetails user) {
         UmsRoleService umsRoleService = BeanUtil.getBean(UmsRoleService.class);
-        // 获取所有菜单
-        List<String> roleCodeList = user.getRoleCodeList();
-        if (CollectionUtils.isEmpty(roleCodeList)) {
+        // 获取所有角色ID
+        List<Long> roleIdList = user.getRoleIdList();
+        if (CollectionUtils.isEmpty(roleIdList)) {
             return null;
         }
+        // 获取所有菜单
         List<UmsMenu> menuList = new ArrayList<>();
-        for (String roleCode : roleCodeList) {
-            menuList.addAll(umsRoleService.listMenu(roleCode));
+        for (Long roleId : roleIdList) {
+            menuList.addAll(umsRoleService.listMenu(roleId));
         }
         menuList = menuList
                 .stream()
