@@ -23,6 +23,7 @@ import pers.codewld.imall.service.UmsMenuService;
 import pers.codewld.imall.service.UmsRoleService;
 import pers.codewld.imall.util.TransformUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,6 +112,9 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     @Override
     public List<String> listMenuCode(Long id) {
         List<Long> menuIdList = this.listMenuId(id);
+        if (CollectionUtils.isEmpty(menuIdList)) {
+            return new ArrayList<>();
+        }
         return umsMenuService.listByIds(menuIdList)
                 .stream()
                 .map(UmsMenu::getCode)
