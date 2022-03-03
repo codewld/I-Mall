@@ -63,19 +63,34 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
-    public List<UmsMenuMarkVO> listMark() {
-        UmsMenuMarkVO top = new UmsMenuMarkVO(0L, "无父级", new ArrayList<>());
-        List<UmsMenu> list = this.list();
+    public List<UmsMenu> getTree() {
+        return this.generateTree(this.list());
+    }
+
+    @Override
+    public List<UmsMenuMarkVO> getMarkTree() {
+        return this.getTree()
+                .stream()
+                .map(TransformUtil::transform2Mark)
+                .collect(Collectors.toList());
+    }
+
+    public List<UmsMenu> generateTree(List<UmsMenu> list) {
+        // 实例化虚拟的父结点
+        UmsMenu top = new UmsMenu();
+        top.setId(0L);
+        // 组合为树形
         setChildren(top, list);
         return top.getChildren();
     }
 
     /**
      * 递归设置子节点
+     *
      * @param father 父节点
-     * @param list 剩余节点列表
+     * @param list   剩余节点列表
      */
-    private void setChildren(UmsMenuMarkVO father, List<UmsMenu> list) {
+    private void setChildren(UmsMenu father, List<UmsMenu> list) {
         if (list.size() == 0) {
             return;
         }
@@ -84,13 +99,12 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
                 .stream()
                 .filter(o -> Objects.equals(father.getId(), o.getParentId()))
                 .collect(Collectors.toList());
-        // 将子节点转换为VO并放入
+        // 将子节点放入
         children.forEach(o -> {
-            UmsMenuMarkVO childrenVO = TransformUtil.transform(o);
             if (father.getChildren() == null) {
                 father.setChildren(new ArrayList<>());
             }
-            father.getChildren().add(childrenVO);
+            father.getChildren().add(o);
         });
         // 删除子节点
         list.removeAll(children);

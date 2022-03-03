@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -54,6 +55,10 @@ public class UmsMenu implements Serializable {
 
     @ApiModelProperty("备注")
     private String note;
+
+    @TableField(exist = false)
+    @ApiModelProperty("子菜单列表")
+    private List<UmsMenu> children;
 
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty("创建时间")

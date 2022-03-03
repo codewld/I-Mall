@@ -38,8 +38,18 @@ public interface UmsMenuService extends IService<UmsMenu> {
     List<UmsMenu> listSon(Long id);
 
     /**
+     * 生成树形结构
+     */
+    List<UmsMenu> generateTree(List<UmsMenu> list);
+
+    /**
+     * 查询菜单 [树形结构]
+     */
+    List<UmsMenu> getTree();
+
+    /**
      * 查询菜单 [标记形式、树形结构]
      */
-    List<UmsMenuMarkVO> listMark();
+    List<UmsMenuMarkVO> getMarkTree();
 
 }

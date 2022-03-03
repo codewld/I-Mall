@@ -1,5 +1,6 @@
 package pers.codewld.imall.util;
 
+import org.springframework.util.CollectionUtils;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.model.entity.UmsRole;
@@ -10,6 +11,8 @@ import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.model.vo.UmsMenuMarkVO;
 import pers.codewld.imall.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.security.MD5PasswordEncoder;
+
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -84,10 +87,17 @@ public class TransformUtil {
         return umsMenu;
     }
 
-    public static UmsMenuMarkVO transform(UmsMenu umsMenu) {
+    public static UmsMenuMarkVO transform2Mark(UmsMenu umsMenu) {
         UmsMenuMarkVO umsMenuMarkVO = new UmsMenuMarkVO();
         umsMenuMarkVO.setId(umsMenu.getId());
         umsMenuMarkVO.setName(umsMenu.getName());
+        if (!CollectionUtils.isEmpty(umsMenu.getChildren())) {
+            umsMenuMarkVO.setChildren(
+                    umsMenu.getChildren()
+                            .stream()
+                            .map(TransformUtil::transform2Mark)
+                            .collect(Collectors.toList()));
+        }
         return umsMenuMarkVO;
     }
 
