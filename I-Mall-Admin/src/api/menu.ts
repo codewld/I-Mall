@@ -35,5 +35,5 @@ export const rListSon = (id: number): Promise<Menu.menu[]> => {
  * 批量查询菜单 [标记形式、树形结构]
  */
 export const rListMark = (): Promise<Menu.menuMark[]> => {
-  return request(`${ PREFIX }/list/mark`, 'get')
+  return request(`${ PREFIX }/tree/mark`, 'get')
 }

@@ -218,7 +218,7 @@ const handelNonLeafChoose = (nonLeaf: boolean) => {
         <el-table-column prop="code" label="编码" :width="200" align="center"></el-table-column>
         <el-table-column prop="component" label="组件" :width="200" align="center">
           <template v-slot:default="scope">
-            <template v-if="scope.row.path">
+            <template v-if="scope.row.component">
               <span class="text-gray-300">@/views/</span>
               {{ scope.row.component }}
             </template>
