@@ -3,12 +3,12 @@ package pers.codewld.imall.controller;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pers.codewld.imall.model.param.LoginParam;
+import pers.codewld.imall.model.vo.RouterVO;
 import pers.codewld.imall.service.AccountService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -31,4 +31,9 @@ public class AccountController {
         return accountService.login(loginParam);
     }
 
+    @GetMapping("/router")
+    @ApiOperation("获取前端路由")
+    public List<RouterVO> router() {
+        return accountService.router();
+    }
 }

@@ -33,6 +33,11 @@ public interface UmsMenuService extends IService<UmsMenu> {
     boolean update(Long id, UmsMenuParam umsMenuParam);
 
     /**
+     * 根据编码查询
+     */
+    UmsMenu getByCode(String code);
+
+    /**
      * 查询父节点下的子菜单
      */
     List<UmsMenu> listSon(Long id);

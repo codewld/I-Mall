@@ -56,6 +56,13 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
+    public UmsMenu getByCode(String code) {
+        QueryWrapper<UmsMenu> queryWrapper = new QueryWrapper<UmsMenu>()
+                .eq("code", code);
+        return this.getOne(queryWrapper);
+    }
+
+    @Override
     public List<UmsMenu> listSon(Long id) {
         QueryWrapper<UmsMenu> queryWrapper = new QueryWrapper<UmsMenu>()
                 .eq("parent_id", id);

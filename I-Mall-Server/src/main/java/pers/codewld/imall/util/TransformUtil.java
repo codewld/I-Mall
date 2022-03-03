@@ -7,6 +7,7 @@ import pers.codewld.imall.model.entity.UmsRole;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.param.UmsMenuParam;
 import pers.codewld.imall.model.param.UmsRoleParam;
+import pers.codewld.imall.model.vo.RouterVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.model.vo.UmsMenuMarkVO;
 import pers.codewld.imall.model.vo.UmsRoleMarkVO;
@@ -99,6 +100,22 @@ public class TransformUtil {
                             .collect(Collectors.toList()));
         }
         return umsMenuMarkVO;
+    }
+
+    public static RouterVO transform2Router(UmsMenu umsMenu) {
+        RouterVO routerVO = new RouterVO();
+        routerVO.setCode(umsMenu.getCode());
+        routerVO.setName(umsMenu.getName());
+        routerVO.setComponent(umsMenu.getComponent());
+        routerVO.setPath(umsMenu.getPath());
+        if (!CollectionUtils.isEmpty(umsMenu.getChildren())) {
+            routerVO.setChildren(
+                    umsMenu.getChildren()
+                            .stream()
+                            .map(TransformUtil::transform2Router)
+                            .collect(Collectors.toList()));
+        }
+        return routerVO;
     }
 
 }
