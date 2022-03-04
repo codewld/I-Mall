@@ -1,6 +1,7 @@
 import { createPinia } from 'pinia';
 import piniaPluginPersist from 'pinia-plugin-persist'
-import {useJWTStore} from './modules/jwt';
+import { useJWTStore } from './modules/jwt';
+import { useRouterStore } from './modules/router';
 
 const store = createPinia()
 
@@ -10,5 +11,6 @@ store.use(piniaPluginPersist)
 export default store
 
 export {
-  useJWTStore
+  useJWTStore,
+  useRouterStore
 }

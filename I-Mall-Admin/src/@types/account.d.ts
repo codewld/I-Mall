@@ -7,4 +7,15 @@ declare namespace Account {
     password: string
   }
 
+  /**
+   * Router实体
+   */
+  interface router {
+    code: string,
+    name: string,
+    component?: string,
+    path?: string,
+    children?: router[]
+  }
+
 }

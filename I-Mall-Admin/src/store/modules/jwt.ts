@@ -1,25 +1,25 @@
 import { defineStore } from 'pinia';
 
-interface jwt {
+interface JWTState {
   value: string | undefined
 }
 
 export const useJWTStore = defineStore({
   id: 'JWT',
-  state: (): jwt => {
+  state: (): JWTState => {
     return {
       value: undefined
     }
   },
   actions: {
     /**
-     * 设置JWT值
+     * 设值
      */
     set(value: string) {
       this.value = value
     },
     /**
-     * 清空JWT值
+     * 清空
      */
     reset() {
       this.value = undefined
