@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { useJWTStore, useRouterStore } from '@/store';
 import { rGetRouter } from '@/api/account';
 import { ElMessage } from 'element-plus';
@@ -8,9 +8,6 @@ import useAccount from '@/composables/useAccount'
 const managementLayout = () => import('@/layouts/management/index.vue')
 const login = () => import('@/views/login/index.vue')
 const home = () => import('@/views/home/index.vue')
-const admin = () => import('@/views/ums/admin/index.vue')
-const role = () => import('@/views/ums/role/index.vue')
-const menu = () => import('@/views/ums/menu/index.vue')
 
 const { reset } = useAccount()
 
@@ -36,43 +33,25 @@ const router = createRouter({
           component: home
         }
       ]
-    },
-    {
-      path: '/ums',
-      component: managementLayout,
-      redirect: '/ums/admin',
-      children: [
-        {
-          path: 'admin',
-          name: 'admin',
-          component: admin
-        },
-        {
-          path: 'role',
-          name: 'role',
-          component: role
-        },
-        {
-          path: 'menu',
-          name: 'menu',
-          component: menu
-        }
-      ]
     }
   ]
 })
 
+/**
+ * 刷新页面后该变量会归零，用于判断是否添加了路由
+ */
+let loadFlag = 0
+
 // 路由导航守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const JWTStore = useJWTStore()
   const JWT = JWTStore.value
   // 未登录
   if (!JWT) {
     if (to.name !== 'login') {
-      reset().then(() => {
-        ElMessage.warning('请登录')
-      })
-      return
+      await reset()
+      ElMessage.warning('请登录')
+      return next()
     } else {
       return next()
     }
@@ -84,25 +63,39 @@ router.beforeEach((to, from, next) => {
     return next({ name: 'home' })
   }
   // 如果登录，应该获取路由
-  const routerStore = useRouterStore();
-  const router = routerStore.value
-  if (!router) {
-    rGetRouter().then(res => {
-      let router = [...res]
-      router.unshift({
-        name: '首页',
-        component: 'home',
-        path: '/home'
-      })
-      routerStore.set(router)
-    }).catch(() => {
+  const routerStore = useRouterStore()
+  if (!routerStore.value) {
+    try {
+      let res = await rGetRouter()
+      routerStore.set(res)
+    } catch (e) {
       ElMessage.warning('路由获取失败')
-    }).finally(() => {
-      return next()
-    })
-  } else {
+    }
     return next()
   }
+  if (loadFlag === 0) {
+    loadFlag++
+    if (routerStore.value.length !== 0) {
+      routerStore.value.forEach(i => {
+        router.addRoute(transformRouter(i))
+      })
+    }
+    next({ ...to, replace: true })
+  } else {
+    next()
+  }
 })
+
+/**
+ * 将自定义Router转换为Vue Router所需的格式
+ */
+const transformRouter = (myRouter: Account.router): RouteRecordRaw => {
+  return {
+    path: myRouter.path,
+    name: myRouter.name,
+    component: () => import(myRouter.component),
+    children: myRouter.children?.map(o => transformRouter(o))
+  }
+}
 
 export default router
