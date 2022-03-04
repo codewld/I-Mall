@@ -17,12 +17,6 @@ export const useRouterStore = defineStore({
      */
     set(list: Account.router[]) {
       this.value = list
-    },
-    /**
-     * 清空
-     */
-    reset() {
-      this.value = []
     }
   },
   persist: {

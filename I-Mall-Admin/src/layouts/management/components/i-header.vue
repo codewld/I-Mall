@@ -32,7 +32,7 @@ const handleLogout = () => {
  */
 const logout = () => {
   const JWTStore = useJWTStore()
-  JWTStore.reset()
+  JWTStore.$reset()
   ElMessage.success('退出成功')
   router.replace({ name: 'login' })
 }

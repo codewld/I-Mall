@@ -17,12 +17,6 @@ export const useJWTStore = defineStore({
      */
     set(value: string) {
       this.value = value
-    },
-    /**
-     * 清空
-     */
-    reset() {
-      this.value = undefined
     }
   },
   persist: {
