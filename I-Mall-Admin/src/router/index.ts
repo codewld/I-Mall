@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { useJWTStore } from '@/store';
+import { useJWTStore, useRouterStore } from '@/store';
+import { rGetRouter } from '@/api/account';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import useAccount from '@/composables/useAccount'
@@ -82,7 +83,27 @@ router.beforeEach((to, from, next) => {
     ElMessage.warning('您已登录')
     return next({ name: 'home' })
   }
-  next()
+  // 如果登录，应该获取路由
+  const routerStore = useRouterStore();
+  const router = routerStore.value
+  if (!router) {
+    rGetRouter().then(res => {
+      let router = [...res]
+      router.unshift({
+        code: 'home',
+        name: '首页',
+        component: 'home',
+        path: '/home'
+      })
+      routerStore.set(router)
+    }).catch(() => {
+      ElMessage.warning('路由获取失败')
+    }).finally(() => {
+      return next()
+    })
+  } else {
+    return next()
+  }
 })
 
 export default router
