@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia';
 
 interface RouterState {
-  value: Account.router[]
+  value: Account.router[] | undefined
 }
 
 export const useRouterStore = defineStore({
   id: 'router',
   state: (): RouterState => {
     return {
-      value: []
+      value: undefined
     }
   },
   actions: {

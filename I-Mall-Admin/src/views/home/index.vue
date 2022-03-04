@@ -19,5 +19,4 @@ const hello = () => {
     <p class="text-9xl font-bold tracking-wider italic select-none hover:text-blue-400">{{ msg }}</p>
     <el-button @click="hello" class="m-20">发个请求试试</el-button>
   </div>
-
 </template>
