@@ -86,6 +86,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         // 实例化虚拟的父结点
         UmsMenu top = new UmsMenu();
         top.setId(0L);
+        top.setChildren(new ArrayList<>());
         // 组合为树形
         setChildren(top, list);
         return top.getChildren();
