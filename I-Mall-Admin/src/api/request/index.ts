@@ -7,8 +7,6 @@ import { Ref, unref } from 'vue';
 import { useJWTStore } from '@/store';
 import { removeNull } from '@/utils/objUtil'
 
-const JWTStore = useJWTStore()
-
 const instance = axios.create({
   baseURL: baseURL,
   timeout: 5000
@@ -17,6 +15,7 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config: any) => {
+    const JWTStore = useJWTStore()
     config.headers.Authorization = JWTStore.value
     return config
   }, () => {
@@ -35,6 +34,7 @@ instance.interceptors.response.use(
     // 身份验证错误
     if (res.data.code >= 9100 && res.data.code < 9200) {
       ElMessage.error(`${ res.data.msg }，跳转至登录页`)
+      const JWTStore = useJWTStore()
       JWTStore.reset()
       return new Promise((resolve, reject) => {
         router.replace('login').then(() => {
