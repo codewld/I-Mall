@@ -1,11 +1,13 @@
 import axios, { Method } from 'axios';
-import router from '@/router';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { baseURL } from '@/config';
 import { Ref, unref } from 'vue';
 import { useJWTStore } from '@/store';
 import { removeNull } from '@/utils/objUtil'
+import useAccount from '@/composables/useAccount';
+
+const { reset } = useAccount()
 
 const instance = axios.create({
   baseURL: baseURL,
@@ -33,13 +35,8 @@ instance.interceptors.response.use(
     }
     // 身份验证错误
     if (res.data.code >= 9100 && res.data.code < 9200) {
-      ElMessage.error(`${ res.data.msg }，跳转至登录页`)
-      const JWTStore = useJWTStore()
-      JWTStore.reset()
-      return new Promise((resolve, reject) => {
-        router.replace('login').then(() => {
-          reject('请重新登录')
-        })
+      reset().then(() => {
+        ElMessage.error("身份验证错误，请重新登录")
       })
     }
     // 未授权

@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { useJWTStore } from '@/store';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import 'element-plus/es/components/message-box/style/css';
 import { useRouter } from 'vue-router';
+import useAccount from '@/composables/useAccount';
 
 const router = useRouter();
+
+const { reset } = useAccount();
 
 /**
  * 退出登录确认
@@ -21,20 +23,12 @@ const handleLogout = () => {
       }
   )
       .then(() => {
-        logout()
+        reset().then(() => {
+          ElMessage.success('退出成功')
+        })
       })
       .catch(() => {
       })
-}
-
-/**
- * 退出登录
- */
-const logout = () => {
-  const JWTStore = useJWTStore()
-  JWTStore.$reset()
-  ElMessage.success('退出成功')
-  router.replace({ name: 'login' })
 }
 </script>
 

@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { useJWTStore } from '@/store';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
+import useAccount from '@/composables/useAccount'
 
 const managementLayout = () => import('@/layouts/management/index.vue')
 const login = () => import('@/views/login/index.vue')
@@ -9,6 +10,8 @@ const home = () => import('@/views/home/index.vue')
 const admin = () => import('@/views/ums/admin/index.vue')
 const role = () => import('@/views/ums/role/index.vue')
 const menu = () => import('@/views/ums/menu/index.vue')
+
+const { reset } = useAccount()
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -65,8 +68,10 @@ router.beforeEach((to, from, next) => {
   // 未登录
   if (!JWT) {
     if (to.name !== 'login') {
-      ElMessage.warning('请登录')
-      return next({ name: 'login' })
+      reset().then(() => {
+        ElMessage.warning('请登录')
+      })
+      return
     } else {
       return next()
     }
