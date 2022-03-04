@@ -13,6 +13,7 @@ const routerStore = useRouterStore();
 
 <template>
   <el-menu router :default-active="activeRoute" class="h-full select-none">
+    <el-menu-item index="/home">首页</el-menu-item>
     <template v-for="(item, key) in routerStore.value" :key="key">
       <i-side-item :data="item"></i-side-item>
     </template>

@@ -13,7 +13,7 @@ declare namespace Account {
   interface router {
     path: string,
     name: string,
-    component?: string,
+    component: string,
     children?: router[]
   }
 
