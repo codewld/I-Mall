@@ -90,7 +90,6 @@ router.beforeEach((to, from, next) => {
     rGetRouter().then(res => {
       let router = [...res]
       router.unshift({
-        code: 'home',
         name: '首页',
         component: 'home',
         path: '/home'

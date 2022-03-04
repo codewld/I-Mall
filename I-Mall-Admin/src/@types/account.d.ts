@@ -11,10 +11,9 @@ declare namespace Account {
    * Router实体
    */
   interface router {
-    code: string,
+    path: string,
     name: string,
     component?: string,
-    path?: string,
     children?: router[]
   }
 

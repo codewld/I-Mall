@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, Ref } from 'vue';
+import { onMounted, ref, Ref, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { Document, Folder } from '@element-plus/icons-vue';
@@ -173,12 +173,20 @@ const beforeSee = () => {
 /**
  * 处理是否为非叶结点的选择
  */
-const handelNonLeafChoose = (nonLeaf: boolean) => {
-  if (nonLeaf) {
-    formData.value.component = null
-    formData.value.path = null
-  }
-}
+watch(
+    formData,
+    (val) => {
+      if (actionType.value === 'add' || actionType.value === 'update') {
+        if (val.nonLeaf === true) {
+          val.component = '@/layouts/management/index.vue'
+        } else if (val.nonLeaf === false && val.component === '@/layouts/management/index.vue') {
+          val.component = null
+        }
+      }
+    },
+    {
+      deep: true
+    })
 </script>
 
 <template>
@@ -215,23 +223,16 @@ const handelNonLeafChoose = (nonLeaf: boolean) => {
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="code" label="编码" :width="200" align="center"></el-table-column>
-        <el-table-column prop="component" label="组件" :width="200" align="center">
-          <template v-slot:default="scope">
-            <template v-if="scope.row.component">
-              <span class="text-gray-300">@/views/</span>
-              {{ scope.row.component }}
-            </template>
-          </template>
-        </el-table-column>
-        <el-table-column prop="path" label="路径" :width="200" align="center">
+        <el-table-column prop="code" label="编码" :width="150" align="center"></el-table-column>
+        <el-table-column prop="path" label="路径" :width="400" align="center">
           <template v-slot:default="scope">
             <template v-if="scope.row.path">
-              <span class="text-gray-300">IP:端口/#/</span>
+              <span class="-m-1 text-gray-300">XXXXX.com/#</span>
               {{ scope.row.path }}
             </template>
           </template>
         </el-table-column>
+        <el-table-column prop="component" label="组件" :width="400" align="center"></el-table-column>
         <el-table-column prop="note" label="备注" :min-width="200" align="center"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :width="200" align="center">
           <template v-slot:default="scope">
@@ -269,28 +270,21 @@ const handelNonLeafChoose = (nonLeaf: boolean) => {
         <el-input-number v-model="formData.sort" :disabled="actionType === 'see'" :min="0" :max="20"/>
       </el-form-item>
       <el-form-item label="类型：" class="w-full">
-        <el-radio-group v-model="formData.nonLeaf" :disabled="actionType === 'see'"
-                        @change="handelNonLeafChoose">
+        <el-radio-group v-model="formData.nonLeaf" :disabled="actionType === 'see'">
           <el-radio-button :label="true">菜单</el-radio-button>
           <el-radio-button :label="false">页面</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <template v-if="!formData.nonLeaf">
-        <el-form-item label="组件：" class="w-2/5 flex-grow">
-          <el-input v-model.trim="formData.component" :disabled="actionType === 'see'"
-                    :placeholder="actionType === 'see' ? '' : '请输入组件'">
-            <template v-slot:prepend>
-              @/views/
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="路径：" class="w-2/5 flex-grow">
-          <el-input v-model.trim="formData.path" :disabled="actionType === 'see'"
-                    :placeholder="actionType === 'see' ? '' : '请输入路径'">
-            <template v-slot:prepend>IP:端口/#/</template>
-          </el-input>
-        </el-form-item>
-      </template>
+      <el-form-item label="路径：" class="w-2/5 flex-grow">
+        <el-input v-model.trim="formData.path" :disabled="actionType === 'see'"
+                  :placeholder="actionType === 'see' ? '' : '请输入路径'">
+          <template v-slot:prepend>XXXXX.com/#</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="组件：" class="w-2/5 flex-grow">
+        <el-input v-model.trim="formData.component" :disabled="formData.nonLeaf || actionType === 'see'"
+                  :placeholder="actionType === 'see' ? '' : '请输入组件'"></el-input>
+      </el-form-item>
       <el-form-item label="备注：" class="w-full">
         <el-input v-model.trim="formData.note" :disabled="actionType === 'see'"
                   :placeholder="actionType === 'see' ? '' : '请输入备注'"/>
