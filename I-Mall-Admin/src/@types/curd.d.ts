@@ -20,7 +20,7 @@ declare namespace CURD {
   /**
    * 分页查询
    */
-  type pageFunction<T> = (pageParam: Ref<pageParam>, searchParam: Ref<object> | null) => Promise<pageData<T>>
+  type pageFunction<T> = (pageParam: Ref<pageParam>, searchParam: Ref<object> | undefined) => Promise<pageData<T>>
 
   /**
    * 分页参数

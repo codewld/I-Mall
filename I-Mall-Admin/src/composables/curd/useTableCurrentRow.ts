@@ -13,7 +13,7 @@ export default function useTableCurrentRow() {
   /**
    * 处理行的选中事件
    */
-  const handleCurrentChange = (val: undefined) => {
+  const handleCurrentChange = (val: any) => {
     currentRow.value = val
   }
 

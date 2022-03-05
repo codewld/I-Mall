@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { PropType } from 'vue';
+import { computed, PropType, Ref, ref } from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd';
 import useFormCurd from '@/composables/curd/useFormCurd';
-import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
-import usePage from '@/composables/curd/usePage';
+import ICurdSearchCard from '@/components/iCurdSearchCard/i-curd-search-card.vue';
+import ICurdTableCard from '@/components/iCurdTableCard/i-curd-table-card.vue';
 
 const props = defineProps({
   /**
@@ -45,22 +45,23 @@ const props = defineProps({
 })
 
 
-// -- 分页查询相关 --
-const {
-  searchParam,
-  resetSearch,
-  pageParam,
-  pageData,
-  isLoading,
-  doLoad
-} = usePage(props.pageFunction)
+// -- table相关 --
+/**
+ * table ref
+ */
+const table = ref()
 
+/**
+ * 表格选中行
+ */
+const currentRow = computed(() => table.value?.currentRow)
 
-// -- 表格选中行相关 --
-const {
-  currentRow,
-  handleCurrentChange
-} = useTableCurrentRow()
+/**
+ * 表格数据加载
+ */
+const load = (val?: Ref<object>) => {
+  table.value?.doLoad(val)
+}
 
 
 // -- 表单CURD相关 --
@@ -74,24 +75,15 @@ const {
   beforeUpdate,
   doUpdate,
   beforeSee
-} = useFormCurd(doLoad, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
+} = useFormCurd(load, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
 
 </script>
 
 <template>
   <i-container>
     <!--搜索区-->
-    <el-card shadow="never">
-      <template #header>
-        <div class="flex justify-between items-center">
-          <p>搜索区</p>
-          <el-button-group>
-            <el-button @click="resetSearch">重置</el-button>
-            <el-button type="primary" @click="doLoad">搜索</el-button>
-          </el-button-group>
-        </div>
-      </template>
-      <el-form :model="searchParam" inline>
+    <i-curd-search-card :field-list="fieldList" @load="load">
+      <template v-slot:default="{searchParam}">
         <template v-for="(field, key) in fieldList" :key="key">
           <el-form-item v-if="field?.searchConf?.display" :label="`${field.name}：`">
             <slot :name="`search-item-${field.code}`" :row="searchParam">
@@ -99,30 +91,24 @@ const {
             </slot>
           </el-form-item>
         </template>
-      </el-form>
-    </el-card>
-    <!--数据区-->
-    <el-card shadow="never">
-      <template #header>
-        <div class="flex justify-between items-center">
-          <p>数据区</p>
-          <el-button-group>
-            <slot name="table-button-i-front" :currentRow="currentRow"/>
-            <el-button type="primary" @click="beforeAdd">添加</el-button>
-            <el-popconfirm title="是否要进行删除？" @confirm="doDel">
-              <template #reference>
-                <el-button type="danger" :disabled="!currentRow">删除</el-button>
-              </template>
-            </el-popconfirm>
-            <el-button type="warning" @click="beforeUpdate" :disabled="!currentRow">修改</el-button>
-            <el-button type="success" @click="beforeSee" :disabled="!currentRow">查看</el-button>
-            <slot name="table-button-i-rear" :currentRow="currentRow"/>
-          </el-button-group>
-        </div>
       </template>
-      <!--表格-->
-      <el-table v-loading="isLoading" :data="pageData.list" stripe highlight-current-row
-                @current-change="handleCurrentChange">
+    </i-curd-search-card>
+
+    <!--数据区-->
+    <i-curd-table-card ref="table" :field-list="fieldList" :page-function="pageFunction">
+      <template v-slot:button>
+        <slot name="table-button-i-front" :currentRow="currentRow"/>
+        <el-button type="primary" @click="beforeAdd">添加</el-button>
+        <el-popconfirm title="是否要进行删除？" @confirm="doDel">
+          <template #reference>
+            <el-button type="danger" :disabled="!currentRow">删除</el-button>
+          </template>
+        </el-popconfirm>
+        <el-button type="warning" @click="beforeUpdate" :disabled="!currentRow">修改</el-button>
+        <el-button type="success" @click="beforeSee" :disabled="!currentRow">查看</el-button>
+        <slot name="table-button-i-rear" :currentRow="currentRow"/>
+      </template>
+      <template v-slot:table>
         <slot name="table-column-i-front"/>
         <template v-for="(field, key) in fieldList" :key="key">
           <el-table-column v-if="field.tableConf.display ?? true"
@@ -137,13 +123,8 @@ const {
           </el-table-column>
         </template>
         <slot name="table-column-i-rear"/>
-      </el-table>
-      <!--分页-->
-      <el-pagination :page-sizes="[2, 4, 8, 16]" layout="total, sizes, prev, pager, next, jumper" :total="pageData.total"
-                     v-model:current-page="pageParam.pageNum" v-model:page-size="pageParam.pageSize"
-                     class="justify-center mt-5">
-      </el-pagination>
-    </el-card>
+      </template>
+    </i-curd-table-card>
   </i-container>
 
   <!--增、改、查 对话框-->

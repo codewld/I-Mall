@@ -10,19 +10,6 @@ import { CURD } from '@/@types/curd';
 export default function usePage(pageFunction: CURD.pageFunction<unknown>) {
 
   /**
-   * 搜索参数
-   */
-  const searchParam: Ref = ref({})
-
-  /**
-   * 重置搜索
-   */
-  const resetSearch = () => {
-    searchParam.value = {}
-    doLoad()
-  }
-
-  /**
    * 分页参数
    */
   const pageParam: Ref<CURD.pageParam> = ref({
@@ -46,9 +33,9 @@ export default function usePage(pageFunction: CURD.pageFunction<unknown>) {
   /**
    * 加载数据
    */
-  const doLoad = () => {
+  const doLoad = (val?: Ref<object>) => {
     isLoading.value = true
-    pageFunction(pageParam, searchParam).then(res => {
+    pageFunction(pageParam, val).then(res => {
       pageData.value = res
     }).catch(err => {
       ElMessage.warning(err)
@@ -72,8 +59,6 @@ export default function usePage(pageFunction: CURD.pageFunction<unknown>) {
   )
 
   return {
-    searchParam,
-    resetSearch,
     pageParam,
     pageData,
     isLoading,
