@@ -178,8 +178,8 @@ watch(
     (val) => {
       if (actionType.value === 'add' || actionType.value === 'update') {
         if (val.nonLeaf === true) {
-          val.component = '@/layouts/management/index.vue'
-        } else if (val.nonLeaf === false && val.component === '@/layouts/management/index.vue') {
+          val.component = 'management'
+        } else if (val.nonLeaf === false && val.component === 'management') {
           val.component = null
         }
       }
@@ -226,13 +226,21 @@ watch(
         <el-table-column prop="code" label="编码" :width="150" align="center"></el-table-column>
         <el-table-column prop="path" label="路径" :width="400" align="center">
           <template v-slot:default="scope">
-            <template v-if="scope.row.path">
-              <span class="-m-1 text-gray-300">XXXXX.com/#</span>
-              {{ scope.row.path }}
+            <span class="-m-1 text-gray-300">XXXXX.com/#</span>
+            {{ scope.row.path }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="component" label="组件" :width="400" align="center">
+          <template v-slot:default="scope">
+            <template v-if="scope.row.nonLeaf">
+              <p v-if="scope.row.component === 'management'">管理界面布局组件</p>
+            </template>
+            <template v-else>
+              <span class="-m-1 text-gray-300">@/views</span>
+              {{ scope.row.component }}
             </template>
           </template>
         </el-table-column>
-        <el-table-column prop="component" label="组件" :width="400" align="center"></el-table-column>
         <el-table-column prop="note" label="备注" :min-width="200" align="center"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :width="200" align="center">
           <template v-slot:default="scope">
@@ -282,8 +290,12 @@ watch(
         </el-input>
       </el-form-item>
       <el-form-item label="组件：" class="w-2/5 flex-grow">
-        <el-input v-model.trim="formData.component" :disabled="formData.nonLeaf || actionType === 'see'"
-                  :placeholder="actionType === 'see' ? '' : '请输入组件'"></el-input>
+        <el-input v-if="formData.nonLeaf" model-value="管理界面布局组件"  :disabled="true">
+        </el-input>
+        <el-input v-else v-model.trim="formData.component" :disabled="formData.nonLeaf || actionType === 'see'"
+                  :placeholder="actionType === 'see' ? '' : '请输入组件'">
+          <template v-slot:prepend>@/views</template>
+        </el-input>
       </el-form-item>
       <el-form-item label="备注：" class="w-full">
         <el-input v-model.trim="formData.note" :disabled="actionType === 'see'"

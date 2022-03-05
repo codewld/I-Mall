@@ -17,7 +17,7 @@ const { reset } = useAccount()
  * 不使用直接"() => import()"，以避免相同的布局组件被视为不同，产生不必要的页面更新
  */
 const getLayoutByStr = (str: string): () => Promise<{}> => {
-  if (str === '@/layouts/management/index.vue') {
+  if (str === 'management') {
     return managementLayout
   }
   return managementLayout
@@ -37,7 +37,7 @@ const router = createRouter({
     },
     {
       path: '/home',
-      component: getLayoutByStr('@/layouts/management/index.vue'),
+      component: getLayoutByStr('management'),
       children: [
         {
           path: '',
@@ -105,7 +105,7 @@ const transformRouter = (myRouter: Account.router): RouteRecordRaw => {
   return {
     path: myRouter.path,
     name: myRouter.name,
-    component: myRouter.children ? getLayoutByStr(myRouter.component) : () => import(myRouter.component),
+    component: myRouter.children ? getLayoutByStr(myRouter.component) : () => import(`../views${myRouter.component}`),
     children: myRouter.children?.map(o => transformRouter(o))
   }
 }
