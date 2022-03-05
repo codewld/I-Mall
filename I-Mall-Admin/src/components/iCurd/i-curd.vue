@@ -4,7 +4,8 @@ import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd';
 import useFormCurd from '@/composables/curd/useFormCurd';
 import ICurdSearchCard from '@/components/iCurdSearchCard/i-curd-search-card.vue';
-import ICurdTableCard from '@/components/iCurdTableCard/i-curd-table-card.vue';
+import ICurdPageTableCard from '@/components/iCurdPageTableCard/i-curd-page-table-card.vue';
+import ICurdListTableCard from '@/components/iCurdListTableCard/i-curd-list-table-card.vue';
 
 const props = defineProps({
   /**
@@ -36,11 +37,27 @@ const props = defineProps({
     required: true
   },
   /**
+   * 是否分页
+   */
+  isPage: {
+    type: Boolean,
+    default: true
+  },
+  /**
    * 分页查询方法
    */
   pageFunction: {
-    type: Function as PropType<CURD.pageFunction<unknown>>,
-    required: true
+    type: Function as PropType<CURD.pageFunction<unknown>>
+  },
+  /**
+   * 批量查询方法
+   */
+  listFunction: {
+    type: Function as PropType<CURD.listFunction<unknown>>
+  },
+  hasSearch: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -82,7 +99,7 @@ const {
 <template>
   <i-container>
     <!--搜索区-->
-    <i-curd-search-card :field-list="fieldList" @load="load">
+    <i-curd-search-card v-if="hasSearch" :field-list="fieldList" @load="load">
       <template v-slot:default="{searchParam}">
         <template v-for="(field, key) in fieldList" :key="key">
           <el-form-item v-if="field?.searchConf?.display" :label="`${field.name}：`">
@@ -95,7 +112,8 @@ const {
     </i-curd-search-card>
 
     <!--数据区-->
-    <i-curd-table-card ref="table" :field-list="fieldList" :page-function="pageFunction">
+    <component :is="isPage ? ICurdPageTableCard : ICurdListTableCard"
+               ref="table" :field-list="fieldList" :page-function="pageFunction" :list-function="listFunction">
       <template v-slot:button>
         <slot name="table-button-i-front" :currentRow="currentRow"/>
         <el-button type="primary" @click="beforeAdd">添加</el-button>
@@ -111,12 +129,12 @@ const {
       <template v-slot:table>
         <slot name="table-column-i-front"/>
         <template v-for="(field, key) in fieldList" :key="key">
-          <el-table-column v-if="field.tableConf.display ?? true"
+          <el-table-column v-if="field.tableConf?.display ?? true"
                            :prop="field.code" :label="field.name"
-                           :width="field.tableConf.width ?? undefined"
-                           :min-width="field.tableConf.minWidth ?? undefined"
-                           :fixed="field.tableConf.fixed ?? undefined"
-                           :align="field.tableConf.align ?? 'center'">
+                           :width="field.tableConf?.width ?? undefined"
+                           :min-width="field.tableConf?.minWidth ?? undefined"
+                           :fixed="field.tableConf?.fixed ?? undefined"
+                           :align="field.tableConf?.align ?? 'center'">
             <template v-if="$slots[`table-column-${field.code}`]" v-slot:default="scope">
               <slot :name="`table-column-${field.code}`" :row="scope.row"></slot>
             </template>
@@ -124,7 +142,7 @@ const {
         </template>
         <slot name="table-column-i-rear"/>
       </template>
-    </i-curd-table-card>
+    </component>
   </i-container>
 
   <!--增、改、查 对话框-->

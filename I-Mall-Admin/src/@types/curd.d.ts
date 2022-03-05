@@ -31,12 +31,22 @@ declare namespace CURD {
   }
 
   /**
-   * 数据列表
+   * 分页查询数据列表
    */
   interface pageData<T> {
     total: number,
     list: T[]
   }
+
+  /**
+   * 批量查询
+   */
+  type listFunction<T> = (searchParam: Ref<object> | undefined) => Promise<listData<T>>
+
+  /**
+   * 批量查询数据列表
+   */
+  type listData<T> = T[]
 
   /**
    * 搜索配置信息

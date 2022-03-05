@@ -18,7 +18,7 @@ export default function usePage(pageFunction: CURD.pageFunction<unknown>) {
   })
 
   /**
-   * 分页数据
+   * 分页查询数据列表
    */
   const pageData: Ref<CURD.pageData<unknown>> = ref({
     total: 0,
