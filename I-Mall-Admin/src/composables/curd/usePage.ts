@@ -4,12 +4,23 @@ import 'element-plus/es/components/message/style/css';
 import { CURD } from '@/@types/curd';
 
 /**
- * 分页查询数据
- * @param loadTrigger 加载扳机 [用于在组合式函数中调用加载方法]
+ * 分页查询
  * @param pageFunction 分页查询方法
- * @param searchParam 搜索参数
  */
-export default function usePage(loadTrigger: Ref<number>, pageFunction: CURD.pageFunction<unknown>, searchParam: Ref<object>) {
+export default function usePage(pageFunction: CURD.pageFunction<unknown>) {
+
+  /**
+   * 搜索参数
+   */
+  const searchParam: Ref = ref({})
+
+  /**
+   * 重置搜索
+   */
+  const resetSearch = () => {
+    searchParam.value = {}
+    doLoad()
+  }
 
   /**
    * 分页参数
@@ -22,7 +33,7 @@ export default function usePage(loadTrigger: Ref<number>, pageFunction: CURD.pag
   /**
    * 分页数据
    */
-  const dataList: Ref<CURD.dataList<unknown>> = ref({
+  const pageData: Ref<CURD.pageData<unknown>> = ref({
     total: 0,
     list: []
   })
@@ -33,12 +44,12 @@ export default function usePage(loadTrigger: Ref<number>, pageFunction: CURD.pag
   const isLoading = ref(false)
 
   /**
-   * 加载数据，分页查询
+   * 加载数据
    */
   const doLoad = () => {
     isLoading.value = true
     pageFunction(pageParam, searchParam).then(res => {
-      dataList.value = res
+      pageData.value = res
     }).catch(err => {
       ElMessage.warning(err)
     }).finally(() => {
@@ -50,17 +61,23 @@ export default function usePage(loadTrigger: Ref<number>, pageFunction: CURD.pag
    * 监听以查询
    */
   watch(
-    [pageParam, loadTrigger],
+    pageParam,
     () => {
       doLoad()
     },
-    { deep: true, immediate: true }
+    {
+      deep: true,
+      immediate: true
+    }
   )
 
   return {
+    searchParam,
+    resetSearch,
     pageParam,
-    dataList,
-    isLoading
+    pageData,
+    isLoading,
+    doLoad
   }
 
 }

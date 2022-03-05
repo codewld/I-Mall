@@ -6,14 +6,14 @@ import { getChange } from '@/utils/objUtil';
 
 /**
  * 表单CURD
- * @param loadTrigger 加载扳机 [用于在组合式函数中调用加载方法]
+ * @param doLoad 加载方法
  * @param fieldList 字段列表
  * @param originData 原始数据
  * @param addFunction 新增方法
  * @param delFunction 删除方法
  * @param updateFunction 修改方法
  */
-export default function useFormCurd(loadTrigger: Ref<number>, fieldList: CURD.field[], originData: Ref, addFunction: CURD.addFunction<unknown>, delFunction: CURD.delFunction, updateFunction: CURD.updateFunction<unknown>) {
+export default function useFormCurd(doLoad: () => void, fieldList: CURD.field[], originData: Ref, addFunction: CURD.addFunction<unknown>, delFunction: CURD.delFunction, updateFunction: CURD.updateFunction<unknown>) {
   /**
    * dialog是否可见
    */
@@ -51,7 +51,7 @@ export default function useFormCurd(loadTrigger: Ref<number>, fieldList: CURD.fi
     addFunction(formData).then(() => {
       ElMessage.success('操作成功')
       dialogVisible.value = false
-      loadTrigger.value++
+      doLoad()
     }).catch(err => {
       ElMessage.warning(err)
     })
@@ -63,7 +63,7 @@ export default function useFormCurd(loadTrigger: Ref<number>, fieldList: CURD.fi
   const doDel = () => {
     delFunction(originData.value.id).then(() => {
       ElMessage.success('操作成功')
-      loadTrigger.value++
+      doLoad()
     }).catch(err => {
       ElMessage.warning(err)
     })
@@ -90,7 +90,7 @@ export default function useFormCurd(loadTrigger: Ref<number>, fieldList: CURD.fi
     updateFunction(originData.value.id, data).then(() => {
       ElMessage.success('操作成功')
       dialogVisible.value = false
-      loadTrigger.value++
+      doLoad()
     }).catch(err => {
       ElMessage.warning(err)
     })
@@ -106,6 +106,14 @@ export default function useFormCurd(loadTrigger: Ref<number>, fieldList: CURD.fi
   }
 
   return {
-    dialogVisible, formData, actionType, beforeAdd, doAdd, doDel, beforeUpdate, doUpdate, beforeSee
+    dialogVisible,
+    formData,
+    actionType,
+    beforeAdd,
+    doAdd,
+    doDel,
+    beforeUpdate,
+    doUpdate,
+    beforeSee
   }
 }

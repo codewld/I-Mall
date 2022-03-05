@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { PropType, ref, Ref } from 'vue';
+import { PropType } from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd';
-import useSearch from '@/composables/curd/useSearch';
 import useFormCurd from '@/composables/curd/useFormCurd';
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 import usePage from '@/composables/curd/usePage';
@@ -46,22 +45,22 @@ const props = defineProps({
 })
 
 
-/**
- * 加载扳机 [用于在组合式函数中调用加载方法]
- */
-const loadTrigger: Ref<number> = ref(0)
-
-
-// -- 搜索相关 --
-const { searchParam, doSearch, resetSearch } = useSearch(loadTrigger)
-
-
 // -- 分页查询相关 --
-const { pageParam, dataList, isLoading } = usePage(loadTrigger, props.pageFunction, searchParam)
+const {
+  searchParam,
+  resetSearch,
+  pageParam,
+  pageData,
+  isLoading,
+  doLoad
+} = usePage(props.pageFunction)
 
 
 // -- 表格选中行相关 --
-const { currentRow, handleCurrentChange } = useTableCurrentRow()
+const {
+  currentRow,
+  handleCurrentChange
+} = useTableCurrentRow()
 
 
 // -- 表单CURD相关 --
@@ -75,7 +74,7 @@ const {
   beforeUpdate,
   doUpdate,
   beforeSee
-} = useFormCurd(loadTrigger, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
+} = useFormCurd(doLoad, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
 
 </script>
 
@@ -88,7 +87,7 @@ const {
           <p>搜索区</p>
           <el-button-group>
             <el-button @click="resetSearch">重置</el-button>
-            <el-button type="primary" @click="doSearch">搜索</el-button>
+            <el-button type="primary" @click="doLoad">搜索</el-button>
           </el-button-group>
         </div>
       </template>
@@ -122,7 +121,7 @@ const {
         </div>
       </template>
       <!--表格-->
-      <el-table v-loading="isLoading" :data="dataList.list" stripe highlight-current-row
+      <el-table v-loading="isLoading" :data="pageData.list" stripe highlight-current-row
                 @current-change="handleCurrentChange">
         <slot name="table-column-i-front"/>
         <template v-for="(field, key) in fieldList" :key="key">
@@ -140,7 +139,7 @@ const {
         <slot name="table-column-i-rear"/>
       </el-table>
       <!--分页-->
-      <el-pagination :page-sizes="[4, 8, 16]" layout="total, sizes, prev, pager, next, jumper" :total="dataList.total"
+      <el-pagination :page-sizes="[2, 4, 8, 16]" layout="total, sizes, prev, pager, next, jumper" :total="pageData.total"
                      v-model:current-page="pageParam.pageNum" v-model:page-size="pageParam.pageSize"
                      class="justify-center mt-5">
       </el-pagination>
