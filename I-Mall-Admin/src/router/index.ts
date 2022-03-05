@@ -11,6 +11,18 @@ const home = () => import('@/views/home/index.vue')
 
 const { reset } = useAccount()
 
+/**
+ * 根据布局组件路径信息获取布局组件
+ *
+ * 不使用直接"() => import()"，以避免相同的布局组件被视为不同，产生不必要的页面更新
+ */
+const getLayoutByStr = (str: string): () => Promise<{}> => {
+  if (str === '@/layouts/management/index.vue') {
+    return managementLayout
+  }
+  return managementLayout
+}
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -25,7 +37,7 @@ const router = createRouter({
     },
     {
       path: '/home',
-      component: managementLayout,
+      component: getLayoutByStr('@/layouts/management/index.vue'),
       children: [
         {
           path: '',
@@ -93,7 +105,7 @@ const transformRouter = (myRouter: Account.router): RouteRecordRaw => {
   return {
     path: myRouter.path,
     name: myRouter.name,
-    component: () => import(myRouter.component),
+    component: myRouter.children ? getLayoutByStr(myRouter.component) : () => import(myRouter.component),
     children: myRouter.children?.map(o => transformRouter(o))
   }
 }
