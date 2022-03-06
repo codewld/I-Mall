@@ -73,7 +73,8 @@ declare namespace CURD {
     add?: boolean,
     addDefault?: any,
     update?: boolean,
-    see?: boolean
+    see?: boolean,
+    oneRow?: boolean
   }
 
   /**

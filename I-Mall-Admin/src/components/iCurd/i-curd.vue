@@ -150,7 +150,8 @@ const {
     <el-form :model="formData" inline label-position="top" class="justify-between">
       <slot name="form-item-i-front"/>
       <template v-for="(field, key) in fieldList" :key="key">
-        <el-form-item v-if="field?.formConf?.[actionType] ?? true" :label="`${field.name}：`" class="w-2/5 flex-grow">
+        <el-form-item v-if="field?.formConf?.[actionType] ?? true" :label="`${field.name}：`" class="flex-grow"
+                      :class="{'w-full': field?.formConf?.oneRow, 'w-2/5': !field?.formConf?.oneRow}">
           <slot :name="`form-item-${field.code}`" :row="formData" :disabled="actionType === 'see'">
             <el-input v-model.trim="formData[field.code]"
                       :disabled="actionType === 'see'"

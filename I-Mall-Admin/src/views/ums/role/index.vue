@@ -12,7 +12,7 @@ const fieldList: CURD.field[] = [
   { code: 'id', name: 'id', tableConf: { display: false }, formConf: { add: false, update: false } },
   { code: 'code', name: '编码', tableConf: { width: 200 }, searchConf: { display: true } },
   { code: 'name', name: '名称', tableConf: { width: 200 }, searchConf: { display: true } },
-  { code: 'note', name: '备注', tableConf: { minWidth: 200 } },
+  { code: 'note', name: '备注', tableConf: { minWidth: 200 }, formConf: { oneRow: true } },
   { code: 'createTime', name: '创建时间', tableConf: { width: 200 }, formConf: { add: false, update: false } },
   { code: 'updateTime', name: '更新时间', tableConf: { width: 200 }, formConf: { add: false, update: false } }
 ]

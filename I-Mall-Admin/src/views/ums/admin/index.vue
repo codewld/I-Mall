@@ -16,8 +16,14 @@ const fieldList: CURD.field[] = [
   { code: 'password', name: '密码', tableConf: { display: false }, formConf: { see: false } },
   { code: 'nickName', name: '昵称', tableConf: { width: 200 }, searchConf: { display: true } },
   { code: 'email', name: '邮箱', tableConf: { width: 200 }, searchConf: { display: true } },
-  { code: 'status', name: '启用状态', tableConf: { width: 80 }, formConf: {addDefault: false}, searchConf: { display: true } },
-  { code: 'note', name: '备注', tableConf: { minWidth: 200 } },
+  {
+    code: 'status',
+    name: '启用状态',
+    tableConf: { width: 80 },
+    formConf: { addDefault: false },
+    searchConf: { display: true }
+  },
+  { code: 'note', name: '备注', tableConf: { minWidth: 200 }, formConf: { oneRow: true } },
   { code: 'createTime', name: '创建时间', tableConf: { width: 200 }, formConf: { add: false, update: false } },
   { code: 'updateTime', name: '更新时间', tableConf: { width: 200 }, formConf: { add: false, update: false } },
   { code: 'loginTime', name: '最后登录时间', tableConf: { width: 200 }, formConf: { add: false, update: false } }
