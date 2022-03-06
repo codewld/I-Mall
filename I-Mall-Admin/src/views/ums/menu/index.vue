@@ -92,5 +92,11 @@ const handleNonLeafChoose = (val: boolean, row: any) => {
         <template v-slot:prepend>@/views</template>
       </el-input>
     </template>
+    <template v-slot:form-item-createTime="scope">
+      <el-date-picker v-model="scope.row.createTime" type="datetime" :disabled="scope.disabled" placeholder="暂无"/>
+    </template>
+    <template v-slot:form-item-updateTime="scope">
+      <el-date-picker v-model="scope.row.updateTime" type="datetime" :disabled="scope.disabled" placeholder="暂无"/>
+    </template>
   </i-curd>
 </template>

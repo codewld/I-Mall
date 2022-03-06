@@ -146,7 +146,7 @@ const {
   </i-container>
 
   <!--增、改、查 对话框-->
-  <el-dialog v-model="dialogVisible" width="50%">
+  <el-dialog v-model="dialogVisible" width="50%" destroy-on-close>
     <el-form :model="formData" inline label-position="top" class="justify-between">
       <slot name="form-item-i-front"/>
       <template v-for="(field, key) in fieldList" :key="key">
