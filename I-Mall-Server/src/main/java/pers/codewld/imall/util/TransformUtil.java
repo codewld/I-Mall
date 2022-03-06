@@ -92,7 +92,7 @@ public class TransformUtil {
         UmsMenuMarkVO umsMenuMarkVO = new UmsMenuMarkVO();
         umsMenuMarkVO.setId(umsMenu.getId());
         umsMenuMarkVO.setName(umsMenu.getName());
-        if (!CollectionUtils.isEmpty(umsMenu.getChildren())) {
+        if (umsMenu.getChildren() != null) {
             umsMenuMarkVO.setChildren(
                     umsMenu.getChildren()
                             .stream()

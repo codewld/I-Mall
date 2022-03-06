@@ -86,6 +86,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         // 实例化虚拟的父结点
         UmsMenu top = new UmsMenu();
         top.setId(0L);
+        top.setNonLeaf(true);
         top.setChildren(new ArrayList<>());
         // 组合为树形
         setChildren(top, list);
@@ -102,6 +103,14 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         if (list.size() == 0) {
             return;
         }
+        // 如果父结点不是非叶节点
+        if (!father.getNonLeaf()) {
+            return;
+        }
+        // 确保创建children属性
+        if (father.getChildren() == null) {
+            father.setChildren(new ArrayList<>());
+        }
         // 获取所有的子节点
         List<UmsMenu> children = list
                 .stream()
@@ -109,9 +118,6 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
                 .collect(Collectors.toList());
         // 将子节点放入
         children.forEach(o -> {
-            if (father.getChildren() == null) {
-                father.setChildren(new ArrayList<>());
-            }
             father.getChildren().add(o);
         });
         // 删除子节点
