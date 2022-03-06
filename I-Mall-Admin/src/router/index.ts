@@ -27,6 +27,16 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
+      path: '/redirect',
+      component: getLayoutByStr('management'),
+      children: [
+        {
+          path: '/redirect/:path(.*)',
+          component: () => import('@/views/redirect/index.vue')
+        }
+      ]
+    },
+    {
       path: '/',
       redirect: '/home'
     },
@@ -54,7 +64,9 @@ const router = createRouter({
  */
 let loadFlag = 0
 
-// 路由导航守卫
+/**
+ * 路由导航守卫
+ */
 router.beforeEach(async (to, from, next) => {
   const JWTStore = useJWTStore()
   const JWT = JWTStore.value
@@ -80,23 +92,34 @@ router.beforeEach(async (to, from, next) => {
     try {
       let res = await rGetRouter()
       routerStore.set(res)
+      loadFlag++
+      addRouter(routerStore.value)
+      next({ ...to, replace: true })
     } catch (e) {
       ElMessage.warning('路由获取失败')
     }
-    return next()
-  }
-  if (loadFlag === 0) {
-    loadFlag++
-    if (routerStore.value.length !== 0) {
-      routerStore.value.forEach(i => {
-        router.addRoute(transformRouter(i))
-      })
-    }
-    next({ ...to, replace: true })
   } else {
-    next()
+    if (loadFlag === 0) {
+      loadFlag++
+      addRouter(routerStore.value)
+      next({ ...to, replace: true })
+    } else {
+      next()
+    }
   }
 })
+
+/**
+ * 添加路由
+ * @param myRouters
+ */
+const addRouter = (myRouters: Account.router[] | undefined) => {
+  if (myRouters && myRouters.length !== 0) {
+    myRouters.forEach(i => {
+      router.addRoute(transformRouter(i))
+    })
+  }
+}
 
 /**
  * 将自定义Router转换为Vue Router所需的格式
@@ -105,7 +128,7 @@ const transformRouter = (myRouter: Account.router): RouteRecordRaw => {
   return {
     path: myRouter.path,
     name: myRouter.name,
-    component: myRouter.children ? getLayoutByStr(myRouter.component) : () => import(`../views${myRouter.component}`),
+    component: myRouter.children ? getLayoutByStr(myRouter.component) : () => import(`../views${ myRouter.component }`),
     children: myRouter.children?.map(o => transformRouter(o))
   }
 }
