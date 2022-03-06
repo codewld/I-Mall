@@ -78,12 +78,12 @@ public class AccountServiceImpl implements AccountService {
         List<UmsMenu> menuList = new ArrayList<>();
         for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
             // 获取权限对应的菜单对象，添加
-            UmsMenu umsMenu = umsMenuService.getByCode(authority.getAuthority());
+            UmsMenu umsMenu = umsMenuService.get(authority.getAuthority());
             menuList.add(umsMenu);
             // 递归添加父结点
             Long parentId = umsMenu.getParentId();
             while (parentId != 0) {
-                UmsMenu parentUmsMenu = umsMenuService.getById(parentId);
+                UmsMenu parentUmsMenu = umsMenuService.get(parentId);
                 menuList.add(parentUmsMenu);
                 parentId = parentUmsMenu.getParentId();
             }

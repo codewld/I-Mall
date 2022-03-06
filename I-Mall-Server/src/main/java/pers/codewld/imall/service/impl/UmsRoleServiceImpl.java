@@ -87,8 +87,8 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
         return roleList.stream().map(TransformUtil::transform).collect(Collectors.toList());
     }
 
-    // 修改角色对应的菜单，则清空角色对应的菜单的缓存
-    @CacheEvict(value = "MenuOfRole", key = "#id")
+    // 修改角色对应的菜单，则清空"角色对应的菜单编码列表"的缓存
+    @CacheEvict(value = "MenuCodeListOfRole", key = "#id")
     @Transactional
     @Override
     public boolean updateMenu(Long id, List<Long> menuIdList) {
@@ -108,7 +108,8 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
         return umsRoleMenuRelationMapper.selectMenuIdByRoleId(id);
     }
 
-    @Cacheable(value = "MenuOfRole", key = "#id")
+    // 缓存"角色对应的菜单编码列表"
+    @Cacheable(value = "MenuCodeListOfRole", key = "#id")
     @Override
     public List<String> listMenuCode(Long id) {
         List<Long> menuIdList = this.listMenuId(id);

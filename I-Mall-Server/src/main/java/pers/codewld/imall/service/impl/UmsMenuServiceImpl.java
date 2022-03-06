@@ -3,6 +3,8 @@ package pers.codewld.imall.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import pers.codewld.imall.exception.CustomException;
 import pers.codewld.imall.mapper.UmsMenuMapper;
@@ -37,15 +39,23 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         return this.save(umsMenu);
     }
 
-    // 删除菜单，则清空角色对应的菜单的缓存
-    @CacheEvict(value = "MenuOfRole", allEntries = true)
+    // 删除菜单，则清空所有"角色对应的菜单编码列表"的缓存
+    // 删除菜单，无需改变"由编码获取的菜单"
+    // 删除菜单，无需改变"由ID获取的菜单"
+    @CacheEvict(value = "MenuCodeListOfRole", allEntries = true)
     @Override
     public boolean del(Long id) {
         return this.removeById(id);
     }
 
-    // 更新菜单，则清空角色对应的菜单的缓存
-    @CacheEvict(value = "MenuOfRole", allEntries = true)
+    // 更新菜单的编码，则清空所有"角色对应的菜单编码列表"的缓存
+    // 更新菜单，清空"由编码获取的菜单"的缓存
+    // 更新菜单，清空"由编码获取的菜单"的缓存
+    @Caching(evict = {
+            @CacheEvict(value = "MenuCodeListOfRole", allEntries = true, condition = "#umsMenuParam.code != null"),
+            @CacheEvict(value = "MenuGetByCode", allEntries = true),
+            @CacheEvict(value = "MenuGetById", key = "#id")
+    })
     @Override
     public boolean update(Long id, UmsMenuParam umsMenuParam) {
         UmsMenu umsMenu = TransformUtil.transform(umsMenuParam);
@@ -55,11 +65,32 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         return this.updateById(umsMenu);
     }
 
+    // 缓存"由ID获取的菜单"
+    @Cacheable(value = "MenuGetById", key = "#id")
     @Override
-    public UmsMenu getByCode(String code) {
+    public UmsMenu get(Long id) {
+        return this.getById(id);
+    }
+
+    // 缓存"由编码获取的菜单"
+    @Cacheable(value = "MenuGetByCode", key = "#code")
+    @Override
+    public UmsMenu get(String code) {
         QueryWrapper<UmsMenu> queryWrapper = new QueryWrapper<UmsMenu>()
                 .eq("code", code);
         return this.getOne(queryWrapper);
+    }
+
+    @Override
+    public List<UmsMenu> generateTree(List<UmsMenu> list) {
+        // 实例化虚拟的父结点
+        UmsMenu top = new UmsMenu();
+        top.setId(0L);
+        top.setNonLeaf(true);
+        top.setChildren(new ArrayList<>());
+        // 组合为树形
+        setChildren(top, list);
+        return top.getChildren();
     }
 
     @Override
@@ -80,17 +111,6 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
                 .stream()
                 .map(TransformUtil::transform2Mark)
                 .collect(Collectors.toList());
-    }
-
-    public List<UmsMenu> generateTree(List<UmsMenu> list) {
-        // 实例化虚拟的父结点
-        UmsMenu top = new UmsMenu();
-        top.setId(0L);
-        top.setNonLeaf(true);
-        top.setChildren(new ArrayList<>());
-        // 组合为树形
-        setChildren(top, list);
-        return top.getChildren();
     }
 
     /**
@@ -140,7 +160,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         if (parentId == 0) {
             return;
         }
-        UmsMenu parent = this.getById(parentId);
+        UmsMenu parent = this.get(parentId);
         if (parent == null || !parent.getNonLeaf()) {
             throw new CustomException(ResultCode.VALIDATE_FAILED, "父级ID错误");
         }
