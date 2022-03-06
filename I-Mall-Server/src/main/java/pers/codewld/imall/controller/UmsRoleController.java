@@ -61,6 +61,7 @@ public class UmsRoleController {
         return umsRoleService.page(pageNum, pageSize, name, code);
     }
 
+    @PreAuthorize("hasAnyAuthority('ums-role', 'ums-admin')")
     @GetMapping("/list/mark")
     @ApiOperation("查询角色 [标记列表]")
     public List<UmsRoleMarkVO> listMark() {

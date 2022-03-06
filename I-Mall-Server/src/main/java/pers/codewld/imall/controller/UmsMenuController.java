@@ -63,6 +63,7 @@ public class UmsMenuController {
         return umsMenuService.getTree();
     }
 
+    @PreAuthorize("hasAnyAuthority('ums-menu', 'ums-role')")
     @GetMapping("/tree/mark")
     @ApiOperation("查询菜单 [标记形式、树形结构]")
     List<UmsMenuMarkVO> getMarkTree() {
