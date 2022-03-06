@@ -67,10 +67,6 @@ const router = createRouter({
           component: fourZeroFour
         }
       ]
-    },
-    {
-      path: '/:pathMatch(.*)',
-      redirect: '/error/404'
     }
   ]
 })
@@ -135,6 +131,11 @@ const addRouter = (myRouters: Account.router[] | undefined) => {
       router.addRoute(transformRouter(i))
     })
   }
+  router.addRoute(
+    {
+      path: '/:pathMatch(.*)',
+      redirect: '/error/404'
+    })
 }
 
 /**
