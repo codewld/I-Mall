@@ -8,6 +8,7 @@ import useAccount from '@/composables/useAccount'
 const managementLayout = () => import('@/layouts/management/index.vue')
 const login = () => import('@/views/login/index.vue')
 const home = () => import('@/views/home/index.vue')
+const fourZeroFour = () => import('@/views/error/404.vue')
 
 const { reset } = useAccount()
 
@@ -55,6 +56,21 @@ const router = createRouter({
           component: home
         }
       ]
+    },
+    {
+      path: '/error',
+      component: getLayoutByStr('management'),
+      children: [
+        {
+          path: '404',
+          name: '404',
+          component: fourZeroFour
+        }
+      ]
+    },
+    {
+      path: '/:pathMatch(.*)',
+      redirect: '/error/404'
     }
   ]
 })
@@ -133,4 +149,29 @@ const transformRouter = (myRouter: Account.router): RouteRecordRaw => {
   }
 }
 
+/**
+ * 重新加载路由
+ */
+const reloadRouter = () => {
+  // 原始地址
+  const originPath = router.currentRoute.value.path;
+  // 清除路由
+  const routerStore = useRouterStore()
+  routerStore.value?.forEach(i => {
+    router.removeRoute(i.name)
+  })
+  // 重置全局存储
+  routerStore.$reset()
+  // 利用redirect刷新页面，重新获取路由
+  router.replace({
+    path: '/redirect' + originPath
+  }).then(() => {
+    ElMessage.info('已自动为您重新加载路由')
+  })
+}
+
 export default router
+
+export {
+  reloadRouter
+}

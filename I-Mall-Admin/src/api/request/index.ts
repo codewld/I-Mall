@@ -6,6 +6,7 @@ import { Ref, unref } from 'vue';
 import { useJWTStore } from '@/store';
 import { removeNull } from '@/utils/objUtil'
 import useAccount from '@/composables/useAccount';
+import { reloadRouter } from '@/router';
 
 const { reset } = useAccount()
 
@@ -41,9 +42,7 @@ instance.interceptors.response.use(
     }
     // 未授权
     if (res.data.code >= 9200 && res.data.code < 9300) {
-
-      // todo 刷新权限
-
+      reloadRouter()
       return Promise.reject(res.data.msg)
     }
     // 其它错误
