@@ -55,7 +55,7 @@ defineExpose({
       </div>
     </template>
     <!--表格-->
-    <el-table v-loading="isLoading" :data="listData" stripe highlight-current-row
+    <el-table v-loading="isLoading" :data="listData" stripe highlight-current-row row-key="id"
               @current-change="handleCurrentChange">
       <slot name="table"></slot>
     </el-table>
