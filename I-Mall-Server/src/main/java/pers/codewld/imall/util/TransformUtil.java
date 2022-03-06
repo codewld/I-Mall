@@ -108,7 +108,7 @@ public class TransformUtil {
         routerVO.setName(umsMenu.getName());
         routerVO.setComponent(umsMenu.getComponent());
         routerVO.setPath(umsMenu.getPath());
-        if (!CollectionUtils.isEmpty(umsMenu.getChildren())) {
+        if (umsMenu.getChildren() != null) {
             routerVO.setChildren(
                     umsMenu.getChildren()
                             .stream()
