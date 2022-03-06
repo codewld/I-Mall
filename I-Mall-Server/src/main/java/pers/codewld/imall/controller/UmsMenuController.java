@@ -57,6 +57,12 @@ public class UmsMenuController {
         return umsMenuService.listSon(id);
     }
 
+    @GetMapping("/tree")
+    @ApiOperation("查询菜单 [树形结构]")
+    List<UmsMenu> getTree() {
+        return umsMenuService.getTree();
+    }
+
     @GetMapping("/tree/mark")
     @ApiOperation("查询菜单 [标记形式、树形结构]")
     List<UmsMenuMarkVO> getMarkTree() {
