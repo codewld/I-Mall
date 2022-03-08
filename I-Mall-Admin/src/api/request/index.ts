@@ -1,4 +1,6 @@
 import axios, { Method } from 'axios';
+import { ElLoading } from 'element-plus'
+import 'element-plus/es/components/loading/style/css'
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { baseURL } from '@/config';
@@ -10,12 +12,19 @@ import { reloadRouter } from '@/router';
 
 const { reset } = useAccount()
 
+
+/**
+ * axios实例
+ */
 const instance = axios.create({
   baseURL: baseURL,
   timeout: 5000
 })
 
-// 请求拦截器
+
+/**
+ * 请求拦截器
+ */
 instance.interceptors.request.use(
   (config: any) => {
     const JWTStore = useJWTStore()
@@ -27,7 +36,10 @@ instance.interceptors.request.use(
   }
 )
 
-// 响应拦截器
+
+/**
+ * 响应拦截器
+ */
 instance.interceptors.response.use(
   res => {
     // 成功
@@ -37,7 +49,7 @@ instance.interceptors.response.use(
     // 身份验证错误
     if (res.data.code >= 9100 && res.data.code < 9200) {
       reset().then(() => {
-        ElMessage.error("身份验证错误，请重新登录")
+        ElMessage.error('身份验证错误，请重新登录')
       })
     }
     // 未授权
@@ -53,26 +65,63 @@ instance.interceptors.response.use(
   }
 )
 
+
+/**
+ * 加载动画实例
+ */
+let loadingInstance: any
+
+
+/**
+ * 开始加载动画
+ * @param text 全局加载动画的提示文字
+ */
+const startLoading = (text: string) => {
+  let loadingConfig = {
+    text: text
+  }
+  loadingInstance = ElLoading.service(loadingConfig)
+}
+
+
+/**
+ * 停止加载动画
+ */
+const endLoading = () => {
+  loadingInstance.close()
+}
+
+
 /**
  * 发送网络请求
  * @param path 请求地址后缀
  * @param method HTTP 方法
  * @param data 传递的数据
+ * @param isLoading 是否展示全局加载动画
+ * @param loadingText 全局加载动画的提示文字
  * @return Promise
  */
-function request<T>(path: string, method: Method = 'get', data ?: Ref<object> | object): Promise<T> {
+function request<T>(path: string, method: Method = 'get', data ?: Ref<object> | object,
+                    isLoading: boolean = false, loadingText: string = '加载中'): Promise<T> {
   let removeNullData = removeNull(unref(data))
-  if (method === 'get' || method === 'GET') {
-    return instance.request({
-      url: path,
-      method: method,
-      params: removeNullData
-    })
-  }
-  return instance.request({
+  let requestConfig = {
     url: path,
     method: method,
-    data: removeNullData
+    params: method === 'get' || method === 'GET' ? removeNullData : undefined,
+    data: method === 'get' || method === 'GET' ? undefined : removeNullData
+  }
+  return new Promise((resolve, reject) => {
+    isLoading && startLoading(loadingText)
+    instance.request<any, T>(requestConfig)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+      .finally(() => {
+        isLoading && endLoading()
+      })
   })
 }
 

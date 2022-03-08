@@ -14,5 +14,5 @@ export function rLogin(data: Ref<Account.loginParam>): Promise<string> {
  * 获取路由
  */
 export const rGetRouter = (): Promise<Account.router[]> => {
-  return request(PREFIX + '/router', 'get')
+  return request(PREFIX + '/router', 'get', undefined, true, '加载界面中')
 }
