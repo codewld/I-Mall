@@ -104,20 +104,17 @@ router.beforeEach(async (to, from, next) => {
     try {
       let res = await rGetRouter()
       routerStore.set(res)
-      loadFlag++
-      addRouter(routerStore.value)
-      next({ ...to, replace: true })
     } catch (e) {
       ElMessage.warning('路由获取失败')
     }
+  }
+  // 如果未加载路由，应加载
+  if (loadFlag === 0 && routerStore.value) {
+    loadFlag++
+    addRouter(routerStore.value)
+    next({ ...to, replace: true })
   } else {
-    if (loadFlag === 0) {
-      loadFlag++
-      addRouter(routerStore.value)
-      next({ ...to, replace: true })
-    } else {
-      next()
-    }
+    next()
   }
 })
 
