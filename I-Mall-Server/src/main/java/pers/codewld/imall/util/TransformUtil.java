@@ -1,9 +1,10 @@
 package pers.codewld.imall.util;
 
-import org.springframework.util.CollectionUtils;
+import pers.codewld.imall.model.entity.SmsDict;
 import pers.codewld.imall.model.entity.UmsAdmin;
 import pers.codewld.imall.model.entity.UmsMenu;
 import pers.codewld.imall.model.entity.UmsRole;
+import pers.codewld.imall.model.param.SmsDictParam;
 import pers.codewld.imall.model.param.UmsAdminParam;
 import pers.codewld.imall.model.param.UmsMenuParam;
 import pers.codewld.imall.model.param.UmsRoleParam;
@@ -118,4 +119,11 @@ public class TransformUtil {
         return routerVO;
     }
 
+    public static SmsDict transform(SmsDictParam smsDictParam) {
+        SmsDict smsDict = new SmsDict();
+        smsDict.setCode(smsDictParam.getCode());
+        smsDict.setName(smsDictParam.getName());
+        smsDict.setNote(smsDictParam.getNote());
+        return smsDict;
+    }
 }
