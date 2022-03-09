@@ -48,9 +48,9 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         return this.removeById(id);
     }
 
-    // 更新菜单的编码，则清空所有"角色对应的菜单编码列表"的缓存
-    // 更新菜单，清空"由编码获取的菜单"的缓存
-    // 更新菜单，清空"由编码获取的菜单"的缓存
+    // 更新菜单的编码，清空所有"角色对应的菜单编码列表"的缓存
+    // 更新菜单，清空所有"由编码获取的菜单"的缓存
+    // 更新菜单，清空"由ID获取的菜单"的缓存
     @Caching(evict = {
             @CacheEvict(value = "MenuCodeListOfRole", allEntries = true, condition = "#umsMenuParam.code != null"),
             @CacheEvict(value = "MenuGetByCode", allEntries = true),
