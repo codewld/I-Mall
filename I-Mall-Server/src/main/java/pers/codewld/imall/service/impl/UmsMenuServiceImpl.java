@@ -127,7 +127,6 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         if (!father.getNonLeaf()) {
             return;
         }
-        // 确保创建children属性
         if (father.getChildren() == null) {
             father.setChildren(new ArrayList<>());
         }
@@ -138,6 +137,10 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
                 .collect(Collectors.toList());
         // 将子节点放入
         children.forEach(o -> {
+            // 确保创建children属性
+            if (o.getNonLeaf() && o.getChildren() == null) {
+                o.setChildren(new ArrayList<>());
+            }
             father.getChildren().add(o);
         });
         // 删除子节点
