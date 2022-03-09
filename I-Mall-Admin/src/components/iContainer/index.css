@@ -1,0 +1,12 @@
+.scrollbar-container > .el-scrollbar > .el-scrollbar__wrap {
+    padding: 0 var(--el-main-padding);
+    box-sizing: border-box;
+}
+
+.scrollbar-container > .el-scrollbar > .el-scrollbar__wrap > .el-scrollbar__view > .el-space {
+    width: 100%;
+}
+
+.scrollbar-container > .el-scrollbar > .el-scrollbar__wrap > .el-scrollbar__view > .el-space > .el-space__item {
+    width: 100%;
+}
