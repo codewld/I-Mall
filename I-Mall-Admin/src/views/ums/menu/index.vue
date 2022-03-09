@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { rAdd, rDel, rUpdate, rList } from '@/api/menu';
+import { rAdd, rDel, rUpdate, rList } from '@/api/ums/menu';
 import ICurd from '@/components/iCurd';
 import { CURD } from '@/@types/curd';
 import { Document, Folder } from '@element-plus/icons-vue';

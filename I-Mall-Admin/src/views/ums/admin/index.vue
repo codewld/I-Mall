@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { rAdd, rDel, rUpdate, rPage, rUpdateRole, rListRoleMark } from '@/api/admin';
-import { rListMark } from '@/api/role';
+import { rAdd, rDel, rUpdate, rPage, rUpdateRole, rListRoleMark } from '@/api/ums/admin';
+import { rListMark } from '@/api/ums/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import ICurd from '@/components/iCurd';
 import IStatusIcon from '@/components/iStatusIcon';
