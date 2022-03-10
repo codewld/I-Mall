@@ -4,7 +4,7 @@ import 'element-plus/es/components/loading/style/css'
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { baseURL } from '@/config';
-import { Ref, unref } from 'vue';
+import { unref } from 'vue';
 import { useJWTStore } from '@/store';
 import { removeNull } from '@/utils/objUtil'
 import useAccount from '@/composables/useAccount';
@@ -101,8 +101,8 @@ const endLoading = () => {
  * @param loadingText 全局加载动画的提示文字
  * @return Promise
  */
-function request<T>(path: string, method: Method = 'get', data ?: Ref<object> | object,
-                    isLoading: boolean = false, loadingText: string = '加载中'): Promise<T> {
+function request<P, R>(path: string, method: Method = 'get', data ?: P,
+                    isLoading: boolean = false, loadingText: string = '加载中'): Promise<R> {
   let removeNullData = removeNull(unref(data))
   let requestConfig = {
     url: path,
@@ -112,7 +112,7 @@ function request<T>(path: string, method: Method = 'get', data ?: Ref<object> | 
   }
   return new Promise((resolve, reject) => {
     isLoading && startLoading(loadingText)
-    instance.request<any, T>(requestConfig)
+    instance.request<any, R>(requestConfig)
       .then(res => {
         resolve(res)
       })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { rListMark } from '@/api/ums/menu';
+import { rTreeMark } from '@/api/ums/menu';
 import { ElMessage } from 'element-plus/es';
 import 'element-plus/es/components/message/style/css';
 import { House, Document, Folder } from '@element-plus/icons-vue';
@@ -64,7 +64,7 @@ const emits = defineEmits(['update:value']);
 const data = ref()
 
 onMounted(() => {
-  rListMark().then(res => {
+  rTreeMark().then(res => {
     const nodes = transform(res)
     if (props.addRoot) {
       nodes.unshift({

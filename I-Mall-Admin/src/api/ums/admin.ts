@@ -1,36 +1,9 @@
 import request from '@/api/request';
-import { CURD } from '@/@types/curd';
-import { unref } from 'vue';
+import useCurdApi from '@/composables/curd/useCurdApi';
 
 const PREFIX = '/ums/admin'
 
-/**
- * 添加
- */
-export const rAdd: CURD.addFunction<Admin.adminParam> = (data) => {
-  return request(PREFIX, 'post', data)
-}
-
-/**
- * 删除
- */
-export const rDel: CURD.delFunction = (id) => {
-  return request(`${ PREFIX }/${ id }`, 'delete')
-}
-
-/**
- * 修改
- */
-export const rUpdate: CURD.updateFunction<Admin.adminParam> = (id, data) => {
-  return request(`${ PREFIX }/${ id }`, 'put', data)
-}
-
-/**
- * 分页查询
- */
-export const rPage: CURD.pageFunction<Admin.admin> = (pageParam, searchParam) => {
-  return request(`${ PREFIX }/page`, 'get', { ...unref(pageParam), ...unref(searchParam) })
-}
+export const { rAdd, rDel, rUpdate, rPage } = useCurdApi<Admin.admin, Admin.adminParam>(PREFIX)
 
 /**
  * 修改用户拥有的角色

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { rAdd, rDel, rUpdate, rList } from '@/api/ums/menu';
+import { rAdd, rDel, rUpdate, rTree } from '@/api/ums/menu';
 import ICurd from '@/components/iCurd';
 import { CURD } from '@/@types/curd';
 import { Document, Folder } from '@element-plus/icons-vue';
@@ -33,7 +33,7 @@ const handleNonLeafChoose = (val: boolean, row: any) => {
 </script>
 
 <template>
-  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :is-page="false" :list-function="rList"
+  <i-curd :add-function="rAdd" :del-function="rDel" :update-function="rUpdate" :is-page="false" :list-function="rTree"
           :field-list="fieldList" :has-search="false">
     <!--自定义表格列-->
     <template v-slot:table-column-name="scope">
