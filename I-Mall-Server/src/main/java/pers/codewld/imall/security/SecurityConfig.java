@@ -3,6 +3,8 @@ package pers.codewld.imall.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,9 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     UmsAdminService umsAdminService;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 该语句的作用是：去除默认生成的密码
-        auth.inMemoryAuthentication();
+    protected void configure(AuthenticationManagerBuilder auth) {
     }
 
     @Override
@@ -95,6 +95,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 .antMatchers("/**/*.js").antMatchers("/**/*.css");
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        // 用于禁止生成临时用户
+        return super.authenticationManagerBean();
     }
 
     /**
