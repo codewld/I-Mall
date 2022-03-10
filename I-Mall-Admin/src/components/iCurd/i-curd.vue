@@ -47,20 +47,29 @@ const props = defineProps({
    * 分页查询方法
    */
   pageFunction: {
-    type: Function as PropType<CURD.pageFunction<unknown>>
+    type: Function as PropType<CURD.pageFunction<unknown, unknown>>
   },
   /**
    * 批量查询方法
    */
   listFunction: {
-    type: Function as PropType<CURD.listFunction<unknown>>
+    type: Function as PropType<CURD.listFunction<unknown, unknown>>
   },
+  /**
+   * 是否有搜索框
+   */
   hasSearch: {
     type: Boolean,
     default: true
+  },
+  /**
+   * 按钮列表
+   */
+  buttonList: {
+    type: Array as PropType<string[]>,
+    default: () => ['add', 'del', 'update', 'see']
   }
 })
-
 
 // -- table相关 --
 /**
@@ -94,6 +103,8 @@ const {
   beforeSee
 } = useFormCurd(load, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
 
+
+
 </script>
 
 <template>
@@ -116,14 +127,17 @@ const {
                ref="table" :field-list="fieldList" :page-function="pageFunction" :list-function="listFunction">
       <template v-slot:button>
         <slot name="table-button-i-front" :currentRow="currentRow"/>
-        <el-button type="primary" @click="beforeAdd">添加</el-button>
-        <el-popconfirm title="是否要进行删除？" @confirm="doDel">
+        <el-button v-if="buttonList.includes('add')" type="primary" @click="beforeAdd">添加</el-button>
+        <el-popconfirm v-if="buttonList.includes('del')" title="是否要进行删除？" @confirm="doDel">
           <template #reference>
             <el-button type="danger" :disabled="!currentRow">删除</el-button>
           </template>
         </el-popconfirm>
-        <el-button type="warning" @click="beforeUpdate" :disabled="!currentRow">修改</el-button>
-        <el-button type="success" @click="beforeSee" :disabled="!currentRow">查看</el-button>
+        <el-button v-if="buttonList.includes('update')" type="warning" @click="beforeUpdate" :disabled="!currentRow">
+          修改
+        </el-button>
+        <el-button v-if="buttonList.includes('see')" type="success" @click="beforeSee" :disabled="!currentRow">查看
+        </el-button>
         <slot name="table-button-i-rear" :currentRow="currentRow"/>
       </template>
       <template v-slot:table>

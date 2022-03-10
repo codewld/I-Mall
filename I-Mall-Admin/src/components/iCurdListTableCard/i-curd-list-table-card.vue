@@ -16,7 +16,7 @@ const props = defineProps({
    * 批量查询方法
    */
   listFunction: {
-    type: Function as PropType<CURD.listFunction<unknown>>,
+    type: Function as PropType<CURD.listFunction<unknown, unknown>>,
     required: true
   }
 })

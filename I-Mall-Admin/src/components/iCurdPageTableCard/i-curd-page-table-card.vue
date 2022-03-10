@@ -16,7 +16,7 @@ const props = defineProps({
    * 分页查询方法
    */
   pageFunction: {
-    type: Function as PropType<CURD.pageFunction<unknown>>,
+    type: Function as PropType<CURD.pageFunction<unknown, unknown>>,
     required: true
   }
 })

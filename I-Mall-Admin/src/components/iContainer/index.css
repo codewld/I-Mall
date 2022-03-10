@@ -1,3 +1,11 @@
+.scrollbar-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 .scrollbar-container > .el-scrollbar > .el-scrollbar__wrap {
     padding: 0 var(--el-main-padding);
     box-sizing: border-box;
