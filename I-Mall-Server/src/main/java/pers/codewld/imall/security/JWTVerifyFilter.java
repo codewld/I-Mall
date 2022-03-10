@@ -43,7 +43,12 @@ public class JWTVerifyFilter extends GenericFilterBean {
             chain.doFilter(request, response);
             return;
         }
-        // 若没有JWT或JWT不合法
+        // 若没有JWT
+        if (jwtToken == null) {
+            chain.doFilter(request, response);
+            return;
+        }
+        // 若JWT不合法
         if (jwtUtil().isIllegal(jwtToken)) {
             forward2Error(request, response, ResultCode.UNAUTHORIZED);
             return;

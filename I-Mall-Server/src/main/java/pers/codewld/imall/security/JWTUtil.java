@@ -50,10 +50,6 @@ public class JWTUtil {
      */
     public boolean isIllegal(String token) {
         try {
-            // 检查JWT是否存在
-            if (token == null) {
-                return true;
-            }
             // 检查是否通过校验
             DecodedJWT decodedJWT = JWTVerifier.verify(token);
             // 检查过期时间
