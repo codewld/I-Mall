@@ -94,20 +94,13 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
-    public List<UmsMenu> listSon(Long id) {
-        QueryWrapper<UmsMenu> queryWrapper = new QueryWrapper<UmsMenu>()
-                .eq("parent_id", id);
-        return this.list(queryWrapper);
-    }
-
-    @Override
-    public List<UmsMenu> getTree() {
+    public List<UmsMenu> tree() {
         return this.generateTree(this.list());
     }
 
     @Override
-    public List<UmsMenuMarkVO> getMarkTree() {
-        return this.getTree()
+    public List<UmsMenuMarkVO> treeMark() {
+        return this.tree()
                 .stream()
                 .map(TransformUtil::transform2Mark)
                 .collect(Collectors.toList());

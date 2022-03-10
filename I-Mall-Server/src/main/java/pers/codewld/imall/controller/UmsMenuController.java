@@ -51,22 +51,16 @@ public class UmsMenuController {
         return umsMenuService.update(id, umsMenuParam);
     }
 
-    @GetMapping("/list/{id}")
-    @ApiOperation("查询父节点下的子菜单")
-    List<UmsMenu> listSon(@PathVariable @ApiParam("菜单ID") Long id) {
-        return umsMenuService.listSon(id);
-    }
-
     @GetMapping("/tree")
-    @ApiOperation("查询菜单 [树形结构]")
-    List<UmsMenu> getTree() {
-        return umsMenuService.getTree();
+    @ApiOperation("查询树形结构的菜单")
+    List<UmsMenu> tree() {
+        return umsMenuService.tree();
     }
 
     @PreAuthorize("hasAnyAuthority('ums-menu', 'ums-role')")
     @GetMapping("/tree/mark")
-    @ApiOperation("查询菜单 [标记形式、树形结构]")
-    List<UmsMenuMarkVO> getMarkTree() {
-        return umsMenuService.getMarkTree();
+    @ApiOperation("查询树形结构的菜单 [标记形式]")
+    List<UmsMenuMarkVO> treeMark() {
+        return umsMenuService.treeMark();
     }
 }

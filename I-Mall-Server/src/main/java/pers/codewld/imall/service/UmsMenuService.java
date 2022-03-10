@@ -43,23 +43,18 @@ public interface UmsMenuService extends IService<UmsMenu> {
     UmsMenu get(String code);
 
     /**
-     * 查询父节点下的子菜单
-     */
-    List<UmsMenu> listSon(Long id);
-
-    /**
      * 生成树形结构
      */
     List<UmsMenu> generateTree(List<UmsMenu> list);
 
     /**
-     * 查询菜单 [树形结构]
+     * 查询树形结构的菜单
      */
-    List<UmsMenu> getTree();
+    List<UmsMenu> tree();
 
     /**
-     * 查询菜单 [标记形式、树形结构]
+     * 查询树形结构的菜单 [标记形式]
      */
-    List<UmsMenuMarkVO> getMarkTree();
+    List<UmsMenuMarkVO> treeMark();
 
 }
