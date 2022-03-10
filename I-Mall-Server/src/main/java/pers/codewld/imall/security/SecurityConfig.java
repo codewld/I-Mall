@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -50,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/swagger-ui/**").permitAll()
                 .antMatchers("/**/swagger-resources/**").permitAll()
                 .antMatchers("/**/api-docs/**").permitAll()
+                .antMatchers("/**/doc.html").permitAll()
                 .anyRequest().authenticated();
 
         // 未登录异常
@@ -86,6 +88,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 登录状态读取器
         http
                 .addFilterBefore(new JWTVerifyFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        web
+                .ignoring()
+                .antMatchers("/**/*.js").antMatchers("/**/*.css");
     }
 
     /**

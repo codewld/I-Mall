@@ -1,5 +1,6 @@
 package pers.codewld.imall.config;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @Configuration
 @EnableOpenApi
+@EnableKnife4j
 public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
@@ -56,7 +58,7 @@ public class SwaggerConfig {
         list.add(SecurityContext
                 .builder()
                 .securityReferences(defaultAuth())
-                .operationSelector(o -> o.requestMappingPattern().matches("/.*"))
+                .operationSelector(o -> o.requestMappingPattern().matches("^(?!.*login).*$"))
                 .build());
         return list;
     }
