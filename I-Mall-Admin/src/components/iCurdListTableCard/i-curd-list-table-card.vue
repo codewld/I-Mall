@@ -22,11 +22,21 @@ const props = defineProps({
 })
 
 
+const emits = defineEmits(['currentChange'])
+
+
 // -- 表格选中行相关 --
+/**
+ * 向上传递当前行的改变事件
+ */
+const emitCurrentChange = (val: unknown) => {
+  emits('currentChange', val)
+}
+
 const {
   currentRow,
   handleCurrentChange
-} = useTableCurrentRow()
+} = useTableCurrentRow(emitCurrentChange)
 
 
 // -- 批量查询相关 --

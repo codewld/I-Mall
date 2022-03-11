@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, PropType, Ref, ref } from 'vue';
+import { PropType, Ref, ref } from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd';
 import useFormCurd from '@/composables/curd/useFormCurd';
 import ICurdSearchCard from '@/components/iCurdSearchCard/i-curd-search-card.vue';
 import ICurdPageTableCard from '@/components/iCurdPageTableCard/i-curd-page-table-card.vue';
 import ICurdListTableCard from '@/components/iCurdListTableCard/i-curd-list-table-card.vue';
+import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 
 const props = defineProps({
   /**
@@ -71,6 +72,11 @@ const props = defineProps({
   }
 })
 
+
+
+const emits = defineEmits(['currentChange'])
+
+
 // -- table相关 --
 /**
  * table ref
@@ -78,16 +84,25 @@ const props = defineProps({
 const table = ref()
 
 /**
- * 表格选中行
- */
-const currentRow = computed(() => table.value?.currentRow)
-
-/**
  * 表格数据加载
  */
 const load = (val?: Ref<object>) => {
   table.value?.doLoad(val)
 }
+
+
+// -- table当前行相关 --
+/**
+ * 向上传递当前行的改变事件
+ */
+const emitCurrentChange = (val: unknown) => {
+  emits('currentChange', val)
+}
+
+const {
+  currentRow,
+  handleCurrentChange
+} = useTableCurrentRow(emitCurrentChange)
 
 
 // -- 表单CURD相关 --
@@ -102,9 +117,6 @@ const {
   doUpdate,
   beforeSee
 } = useFormCurd(load, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
-
-
-
 </script>
 
 <template>
@@ -124,7 +136,8 @@ const {
 
     <!--数据区-->
     <component :is="isPage ? ICurdPageTableCard : ICurdListTableCard"
-               ref="table" :field-list="fieldList" :page-function="pageFunction" :list-function="listFunction">
+               ref="table" :field-list="fieldList" :page-function="pageFunction" :list-function="listFunction"
+               @current-change="handleCurrentChange">
       <template v-slot:button>
         <slot name="table-button-i-front" :currentRow="currentRow"/>
         <el-button v-if="buttonList.includes('add')" type="primary" @click="beforeAdd">添加</el-button>
