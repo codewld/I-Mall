@@ -32,8 +32,8 @@ const resetSearch = () => {
   <el-card shadow="never">
     <!--标题及按钮-->
     <template #header>
-      <div class="flex justify-between items-center">
-        <p>搜索区</p>
+      <div class="h-10 flex justify-between items-center">
+        <p class="text-base">搜索区</p>
         <el-button-group>
           <el-button @click="resetSearch">重置</el-button>
           <el-button type="primary" @click="emit('load', searchParam)">搜索</el-button>
