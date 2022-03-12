@@ -18,6 +18,19 @@ const props = defineProps({
   pageFunction: {
     type: Function as PropType<CURD.pageFunction<unknown, unknown>>,
     required: true
+  },
+  /**
+   * 是否立即加载数据
+   */
+  isImmediate: {
+    type: Boolean,
+    default: true
+  },
+  /**
+   * 空数据显示文本
+   */
+  emptyText: {
+    type: String
   }
 })
 
@@ -46,7 +59,7 @@ const {
   pageData,
   isLoading,
   doLoad
-} = usePage(props.pageFunction)
+} = usePage(props.pageFunction, props.isImmediate)
 
 
 defineExpose({
@@ -68,7 +81,7 @@ defineExpose({
     </template>
     <!--表格-->
     <el-table v-loading="isLoading" :data="pageData.list" stripe highlight-current-row
-              @current-change="handleCurrentChange">
+              @current-change="handleCurrentChange" :empty-text="emptyText">
       <slot name="table"></slot>
     </el-table>
     <!--分页-->

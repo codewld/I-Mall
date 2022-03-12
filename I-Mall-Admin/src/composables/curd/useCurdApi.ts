@@ -39,7 +39,7 @@ export default function useCurdApi<T, P>(PREFIX: string) {
    * 批量查询
    */
   const rList: CURD.listFunction<T, P> = (searchParam) => {
-    return request(`${ PREFIX }/list`, 'get')
+    return request(`${ PREFIX }/list`, 'get', searchParam)
   }
 
   return {

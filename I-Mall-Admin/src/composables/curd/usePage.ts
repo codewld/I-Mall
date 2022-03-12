@@ -6,8 +6,9 @@ import { CURD } from '@/@types/curd';
 /**
  * 分页查询
  * @param pageFunction 分页查询方法
+ * @param isImmediate 是否立即加载数据
  */
-export default function usePage(pageFunction: CURD.pageFunction<unknown>) {
+export default function usePage(pageFunction: CURD.pageFunction<unknown, unknown>, isImmediate: boolean) {
 
   /**
    * 分页参数
@@ -54,7 +55,7 @@ export default function usePage(pageFunction: CURD.pageFunction<unknown>) {
     },
     {
       deep: true,
-      immediate: true
+      immediate: isImmediate
     }
   )
 

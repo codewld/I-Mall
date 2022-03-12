@@ -57,6 +57,13 @@ const props = defineProps({
     type: Function as PropType<CURD.listFunction<unknown, unknown>>
   },
   /**
+   * 是否立即加载数据
+   */
+  isImmediate: {
+    type: Boolean,
+    default: true
+  },
+  /**
    * 是否有搜索框
    */
   hasSearch: {
@@ -69,6 +76,12 @@ const props = defineProps({
   buttonList: {
     type: Array as PropType<string[]>,
     default: () => ['add', 'del', 'update', 'see']
+  },
+  /**
+   * 空数据显示文本
+   */
+  emptyText: {
+    type: String
   }
 })
 
@@ -116,6 +129,11 @@ const {
   doUpdate,
   beforeSee
 } = useFormCurd(load, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
+
+
+defineExpose({
+  load
+})
 </script>
 
 <template>
@@ -136,7 +154,7 @@ const {
     <!--数据区-->
     <component :is="isPage ? ICurdPageTableCard : ICurdListTableCard"
                ref="table" :field-list="fieldList" :page-function="pageFunction" :list-function="listFunction"
-               @current-change="handleCurrentChange">
+               @current-change="handleCurrentChange" :is-immediate="isImmediate" :empty-text="emptyText">
       <template v-slot:button>
         <slot name="table-button-i-front" :currentRow="currentRow"/>
         <el-button v-if="buttonList.includes('add')" type="primary" @click="beforeAdd">添加</el-button>

@@ -18,6 +18,19 @@ const props = defineProps({
   listFunction: {
     type: Function as PropType<CURD.listFunction<unknown, unknown>>,
     required: true
+  },
+  /**
+   * 是否立即加载数据
+   */
+  isImmediate: {
+    type: Boolean,
+    default: true
+  },
+  /**
+   * 空数据显示文本
+   */
+  emptyText: {
+    type: String
   }
 })
 
@@ -44,7 +57,7 @@ const {
   listData,
   isLoading,
   doLoad
-} = useList(props.listFunction);
+} = useList(props.listFunction, props.isImmediate);
 
 
 defineExpose({
@@ -66,7 +79,7 @@ defineExpose({
     </template>
     <!--表格-->
     <el-table v-loading="isLoading" :data="listData" stripe highlight-current-row row-key="id"
-              @current-change="handleCurrentChange">
+              @current-change="handleCurrentChange" :empty-text="emptyText">
       <slot name="table"></slot>
     </el-table>
   </el-card>
