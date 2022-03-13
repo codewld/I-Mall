@@ -67,7 +67,9 @@ const rProcessedListDetail: CURD.listFunction<Dict.dictDetail, Dict.dictDetailPa
  */
 watch(currentRow, (val) => {
   if (val) {
-    detailCurd.value?.load()
+    detailCurd.value?.doLoad()
+  } else {
+    detailCurd.value?.clearData()
   }
 })
 </script>
