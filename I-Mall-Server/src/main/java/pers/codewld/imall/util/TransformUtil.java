@@ -1,13 +1,7 @@
 package pers.codewld.imall.util;
 
-import pers.codewld.imall.model.entity.SmsDict;
-import pers.codewld.imall.model.entity.UmsAdmin;
-import pers.codewld.imall.model.entity.UmsMenu;
-import pers.codewld.imall.model.entity.UmsRole;
-import pers.codewld.imall.model.param.SmsDictParam;
-import pers.codewld.imall.model.param.UmsAdminParam;
-import pers.codewld.imall.model.param.UmsMenuParam;
-import pers.codewld.imall.model.param.UmsRoleParam;
+import pers.codewld.imall.model.entity.*;
+import pers.codewld.imall.model.param.*;
 import pers.codewld.imall.model.vo.RouterVO;
 import pers.codewld.imall.model.vo.UmsAdminVO;
 import pers.codewld.imall.model.vo.UmsMenuMarkVO;
@@ -125,5 +119,13 @@ public class TransformUtil {
         smsDict.setName(smsDictParam.getName());
         smsDict.setNote(smsDictParam.getNote());
         return smsDict;
+    }
+
+    public static SmsDictDetail transform(SmsDictDetailParam smsDictDetailParam) {
+        SmsDictDetail smsDictDetail = new SmsDictDetail();
+        smsDictDetail.setDictId(smsDictDetailParam.getDictId());
+        smsDictDetail.setValue(smsDictDetailParam.getValue());
+        smsDictDetail.setLabel(smsDictDetailParam.getLabel());
+        return smsDictDetail;
     }
 }
