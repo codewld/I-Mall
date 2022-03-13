@@ -59,11 +59,22 @@ export default function usePage(pageFunction: CURD.pageFunction<unknown, unknown
     }
   )
 
+  /**
+   * 清空数据
+   */
+  const clearData = () => {
+    pageData.value = {
+      total: 0,
+      list: []
+    }
+  }
+
   return {
     pageParam,
     pageData,
     isLoading,
-    doLoad
+    doLoad,
+    clearData
   }
 
 }

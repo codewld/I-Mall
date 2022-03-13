@@ -3,10 +3,7 @@ import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import { CURD } from '@/@types/curd';
 
-/**
- * 批量查询
- * @param listFunction 批量查询方法
- */
+
 /**
  * 批量查询
  * @param listFunction 批量查询方法
@@ -42,10 +39,18 @@ export default function useList(listFunction: CURD.listFunction<unknown, unknown
     isImmediate && doLoad()
   })
 
+  /**
+   * 清空数据
+   */
+  const clearData = () => {
+    listData.value = []
+  }
+
   return {
     listData,
     isLoading,
-    doLoad
+    doLoad,
+    clearData
   }
 
 }

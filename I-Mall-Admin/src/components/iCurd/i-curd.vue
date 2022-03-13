@@ -98,8 +98,15 @@ const table = ref()
 /**
  * 表格数据加载
  */
-const load = (val?: Ref<object>) => {
+const doLoad = (val?: Ref<object>) => {
   table.value?.doLoad(val)
+}
+
+/**
+ * 表格数据重置
+ */
+const clearData = () => {
+  table.value?.clearData()
 }
 
 
@@ -128,11 +135,12 @@ const {
   beforeUpdate,
   doUpdate,
   beforeSee
-} = useFormCurd(load, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
+} = useFormCurd(doLoad, props.fieldList, currentRow, props.addFunction, props.delFunction, props.updateFunction)
 
 
 defineExpose({
-  load
+  doLoad,
+  clearData
 })
 </script>
 

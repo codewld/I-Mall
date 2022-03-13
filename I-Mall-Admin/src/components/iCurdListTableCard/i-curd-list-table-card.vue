@@ -56,13 +56,15 @@ const {
 const {
   listData,
   isLoading,
-  doLoad
+  doLoad,
+  clearData
 } = useList(props.listFunction, props.isImmediate);
 
 
 defineExpose({
   currentRow,
-  doLoad
+  doLoad,
+  clearData
 })
 </script>
 

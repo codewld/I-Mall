@@ -52,19 +52,20 @@ const {
 } = useTableCurrentRow(emitCurrentChange)
 
 
-
 // -- 分页查询相关 --
 const {
   pageParam,
   pageData,
   isLoading,
-  doLoad
+  doLoad,
+  clearData
 } = usePage(props.pageFunction, props.isImmediate)
 
 
 defineExpose({
   currentRow,
-  doLoad
+  doLoad,
+  clearData
 })
 </script>
 
