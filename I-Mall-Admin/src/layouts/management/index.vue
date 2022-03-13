@@ -2,13 +2,21 @@
 import IHeader from './components/i-header.vue';
 import ISide from './components/i-side.vue';
 import { useLayoutStore } from '@/store/modules/layout';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 
 
 // -- 侧边栏相关 --
 const layoutStore = useLayoutStore()
 
-const aSideWidth = computed(() => layoutStore.isSideBarFold ? '64px' : '200px');
+const aSideWidth = computed(() => layoutStore.isSideBarFold ? '64px' : '200px')
+
+onMounted(() => {
+  // 记录初始宽度
+  let width = document.body.offsetWidth
+
+  // 根据初始宽度设置侧边栏是否收缩
+  layoutStore.setIsSideBarFold(width < 1000)
+})
 </script>
 
 <template>
