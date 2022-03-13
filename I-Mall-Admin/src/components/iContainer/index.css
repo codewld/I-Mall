@@ -7,7 +7,7 @@
 }
 
 .scrollbar-container > .el-scrollbar > .el-scrollbar__wrap {
-    padding: 0 var(--el-main-padding);
+    padding: var(--el-main-padding);
     box-sizing: border-box;
 }
 

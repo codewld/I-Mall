@@ -48,7 +48,7 @@ export default function useFormCurd(doLoad: () => void, fieldList: CURD.field[],
    * 执行添加
    */
   const doAdd = () => {
-    addFunction(formData).then(() => {
+    addFunction(formData.value).then(() => {
       ElMessage.success('操作成功')
       dialogVisible.value = false
       doLoad()

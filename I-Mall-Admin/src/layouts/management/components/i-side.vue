@@ -22,7 +22,7 @@ const layoutStore = useLayoutStore()
 <template>
   <el-menu router :default-active="activeRoute" class="h-full select-none" :collapse="layoutStore.isSideBarFold">
     <div class="h-8 flex justify-center items-center border-b">
-      <el-icon :size="18" class="cursor-pointer" @click="layoutStore.setIsSideBarFold()">
+      <el-icon :size="16" class="cursor-pointer" @click="layoutStore.setIsSideBarFold()">
         <Fold v-if="!layoutStore.isSideBarFold"></Fold>
         <Expand v-else></Expand>
       </el-icon>
