@@ -1,0 +1,9 @@
+url:
+username:
+password:
+#作者
+author:
+#父包名
+parent:
+#是否将生成结果单独放置
+isolated: true
