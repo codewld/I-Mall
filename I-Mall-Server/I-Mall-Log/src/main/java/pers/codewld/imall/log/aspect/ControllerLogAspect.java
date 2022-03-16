@@ -23,6 +23,8 @@ import pers.codewld.imall.log.model.entity.ControllerLog;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,9 +54,9 @@ public class ControllerLogAspect {
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 执行，并获取操作相关信息
-        long startTime = System.currentTimeMillis();
+        LocalDateTime startTime = LocalDateTime.now();
         Object result = joinPoint.proceed();
-        long endTime = System.currentTimeMillis();
+        LocalDateTime endTime = LocalDateTime.now();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         ControllerLog controllerLog = new ControllerLog();
@@ -63,8 +65,8 @@ public class ControllerLogAspect {
         controllerLog.setUsername(request.getRemoteUser());
         controllerLog.setIp(request.getRemoteAddr());
         controllerLog.setParameter(getParameter(method, joinPoint.getArgs()));
-        controllerLog.setStartTime(startTime);
-        controllerLog.setSpendTime(endTime - startTime);
+        controllerLog.setTime(startTime);
+        controllerLog.setSpendTime(Duration.between(startTime, endTime).toMillis());
         ApiOperation apiOperationAnnotation = method.getAnnotation(ApiOperation.class);
         if (apiOperationAnnotation != null) {
             controllerLog.setDescription(apiOperationAnnotation.value());

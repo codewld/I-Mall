@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * <p>
  * 接口日志实体类
@@ -43,9 +45,9 @@ public class ControllerLog {
     private String parameter;
 
     /**
-     * 操作时间
+     * 时间
      */
-    private Long startTime;
+    private LocalDateTime time;
 
     /**
      * 消耗时间
@@ -64,7 +66,7 @@ public class ControllerLog {
                 ", username='" + username + '\'' +
                 ", ip='" + ip + '\'' +
                 ", parameter=" + parameter +
-                ", startTime=" + startTime +
+                ", time=" + time +
                 ", spendTime=" + spendTime +
                 ", description='" + description + '\'';
     }
