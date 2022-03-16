@@ -9,33 +9,16 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>I-Mall-Admin</artifactId>
+    <artifactId>I-Mall-Log</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>I-Mall-Admin</name>
-    <description>I-Mall-Admin</description>
+    <name>I-Mall-Log</name>
+    <description>I-Mall-Log</description>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>pers.codewld</groupId>
-            <artifactId>I-Mall-Common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>pers.codewld</groupId>
-            <artifactId>I-Mall-Security</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>pers.codewld</groupId>
-            <artifactId>I-Mall-Log</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>

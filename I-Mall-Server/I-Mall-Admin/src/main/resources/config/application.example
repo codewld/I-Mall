@@ -6,3 +6,8 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
     default-property-inclusion: non_null
+
+# 配置日志
+logging:
+  file:
+    path: log
