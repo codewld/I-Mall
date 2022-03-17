@@ -12,6 +12,7 @@ import pers.codewld.imall.admin.model.param.SmsDictParam;
 import pers.codewld.imall.admin.service.SmsDictService;
 import pers.codewld.imall.common.config.ValidatorConfig;
 import pers.codewld.imall.common.model.vo.PageVO;
+import pers.codewld.imall.log.annotation.DisableLogDBStorage;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -51,6 +52,7 @@ public class SmsDictController {
         return smsDictService.update(id, smsDictParam);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/page")
     @ApiOperation("分页查询，可搜索")
     public PageVO<SmsDict> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
@@ -79,6 +81,7 @@ public class SmsDictController {
         return smsDictService.updateDetail(detailId, smsDictDetailParam);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/detail/list")
     @ApiOperation("批量查询字典细节")
     public List<SmsDictDetail> listDetail(@RequestParam(value = "id") @ApiParam("字典id") Long id) {

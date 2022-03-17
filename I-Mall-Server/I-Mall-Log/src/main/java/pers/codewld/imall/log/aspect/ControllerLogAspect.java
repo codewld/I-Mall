@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import pers.codewld.imall.log.model.entity.ControllerLog;
-import pers.codewld.imall.log.service.ControllerLogService;
+import pers.codewld.imall.log.annotation.DisableLogDBStorage;
+import pers.codewld.imall.log.model.entity.Log;
+import pers.codewld.imall.log.service.LogService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 接口日志切面类
+ * 接口日志 切面类
  * </p>
  *
  * @author codewld
@@ -41,7 +42,7 @@ import java.util.stream.Collectors;
 public class ControllerLogAspect {
 
     @Autowired
-    ControllerLogService controllerLogService;
+    LogService logService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -52,6 +53,9 @@ public class ControllerLogAspect {
 
     @Around("controllerLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        Class<?> aClass = joinPoint.getTarget().getClass();
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 
         // 执行，并获取操作相关信息
         LocalDateTime startTime = LocalDateTime.now();
@@ -64,28 +68,32 @@ public class ControllerLogAspect {
             throw e;
         } finally {
             LocalDateTime endTime = LocalDateTime.now();
-            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-            Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-            ControllerLog controllerLog = new ControllerLog();
+            Log log = new Log();
             ApiOperation apiOperationAnnotation = method.getAnnotation(ApiOperation.class);
             if (apiOperationAnnotation != null) {
-                controllerLog.setSummary(apiOperationAnnotation.value());
+                log.setSummary(apiOperationAnnotation.value());
             }
-            controllerLog.setUri(request.getRequestURI());
-            controllerLog.setMethod(request.getMethod());
-            controllerLog.setUsername(request.getRemoteUser());
-            controllerLog.setIp(request.getRemoteAddr());
-            controllerLog.setParameter(getParameter(method, joinPoint.getArgs()));
-            controllerLog.setTime(startTime);
-            controllerLog.setSpendTime(Duration.between(startTime, endTime).toMillis());
-            controllerLog.setStatus(status);
+            log.setUri(request.getRequestURI());
+            log.setMethod(request.getMethod());
+            log.setUsername(request.getRemoteUser());
+            log.setIp(request.getRemoteAddr());
+            log.setParameter(getParameter(method, joinPoint.getArgs()));
+            log.setTime(startTime);
+            log.setSpendTime(Duration.between(startTime, endTime).toMillis());
+            log.setStatus(status);
 
             // 通过logback保存
-            Logger log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
-            log.info(controllerLog.toString());
+            Logger logger = LoggerFactory.getLogger(aClass);
+            logger.info(log.toString());
 
             // 通过MongoDB保存
-            controllerLogService.add(controllerLog);
+            DisableLogDBStorage annotationInMethod = method.getAnnotation(DisableLogDBStorage.class);
+            DisableLogDBStorage annotationInClass = aClass.getAnnotation(DisableLogDBStorage.class);
+            if ((annotationInMethod == null && annotationInClass == null)
+                    || (!log.getStatus() && annotationInMethod != null && annotationInMethod.enableWhenError())
+                    || (!log.getStatus() && annotationInClass != null && annotationInClass.enableWhenError())) {
+                logService.add(log);
+            }
         }
         return result;
     }

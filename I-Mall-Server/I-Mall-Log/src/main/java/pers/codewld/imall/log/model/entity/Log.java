@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 接口日志实体类
+ * 日志 实体类
  * </p>
  *
  * @author codewld
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ControllerLog {
+public class Log {
 
     @ApiModelProperty("接口概述")
     private String summary;

@@ -12,6 +12,7 @@ import pers.codewld.imall.admin.model.vo.UmsAdminVO;
 import pers.codewld.imall.admin.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.admin.service.UmsAdminService;
 import pers.codewld.imall.common.config.ValidatorConfig;
+import pers.codewld.imall.log.annotation.DisableLogDBStorage;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -51,6 +52,7 @@ public class UmsAdminController {
         return umsAdminService.update(id, umsAdminParam);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/page")
     @ApiOperation("分页查询，可搜索")
     public PageVO<UmsAdminVO> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
@@ -69,6 +71,7 @@ public class UmsAdminController {
         return umsAdminService.updateRole(id, roleIdList);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/role/mark/{id}")
     @ApiOperation("查询用户拥有的角色 [标记列表]")
     public List<UmsRoleMarkVO> listRoleMark(@PathVariable @ApiParam("用户id") Long id) {

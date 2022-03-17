@@ -12,6 +12,7 @@ import pers.codewld.imall.admin.model.param.UmsMenuParam;
 import pers.codewld.imall.admin.model.vo.UmsMenuMarkVO;
 import pers.codewld.imall.admin.service.UmsMenuService;
 import pers.codewld.imall.common.config.ValidatorConfig;
+import pers.codewld.imall.log.annotation.DisableLogDBStorage;
 
 import java.util.List;
 
@@ -51,12 +52,14 @@ public class UmsMenuController {
         return umsMenuService.update(id, umsMenuParam);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/tree")
     @ApiOperation("查询树形结构的菜单")
     List<UmsMenu> tree() {
         return umsMenuService.tree();
     }
 
+    @DisableLogDBStorage
     @PreAuthorize("hasAnyAuthority('ums-menu', 'ums-role')")
     @GetMapping("/tree/mark")
     @ApiOperation("查询树形结构的菜单 [标记形式]")

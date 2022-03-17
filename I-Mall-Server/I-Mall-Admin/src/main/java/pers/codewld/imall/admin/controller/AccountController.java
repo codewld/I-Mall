@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pers.codewld.imall.admin.model.param.LoginParam;
 import pers.codewld.imall.admin.model.vo.RouterVO;
 import pers.codewld.imall.admin.service.AccountService;
+import pers.codewld.imall.log.annotation.DisableLogDBStorage;
 
 import java.util.List;
 
@@ -25,12 +26,14 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
+    @DisableLogDBStorage
     @PostMapping("/login")
     @ApiOperation("登录")
     public String login(@RequestBody @Validated LoginParam loginParam) {
         return accountService.login(loginParam);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/router")
     @ApiOperation("获取前端路由")
     public List<RouterVO> router() {

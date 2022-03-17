@@ -1,22 +1,22 @@
 package pers.codewld.imall.log.service;
 
 import pers.codewld.imall.common.model.vo.PageVO;
-import pers.codewld.imall.log.model.entity.ControllerLog;
+import pers.codewld.imall.log.model.entity.Log;
 
 /**
  * <p>
- * 接口日志 服务类
+ * 日志 服务类
  * </p>
  *
  * @author codewld
  * @since 2022-03-16
  */
-public interface ControllerLogService {
+public interface LogService {
 
     /**
      * 添加
      */
-    boolean add(ControllerLog controllerLog);
+    boolean add(Log log);
 
     /**
      * 分页查询，可搜索
@@ -27,6 +27,6 @@ public interface ControllerLogService {
      * @param username 用户名
      * @param status   执行状态
      */
-    PageVO<ControllerLog> page(Integer pageNum, Integer pageSize, String summary, String username, Boolean status);
+    PageVO<Log> page(Integer pageNum, Integer pageSize, String summary, String username, Boolean status);
 
 }

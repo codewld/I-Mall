@@ -13,6 +13,7 @@ import pers.codewld.imall.common.model.vo.PageVO;
 import pers.codewld.imall.admin.model.vo.UmsRoleMarkVO;
 import pers.codewld.imall.admin.service.UmsRoleService;
 import pers.codewld.imall.common.config.ValidatorConfig;
+import pers.codewld.imall.log.annotation.DisableLogDBStorage;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -52,6 +53,7 @@ public class UmsRoleController {
         return umsRoleService.update(id, umsRoleParam);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/page")
     @ApiOperation("分页查询，可搜索")
     public PageVO<UmsRole> page(@RequestParam(value = "pageNum", defaultValue = "1") @Min(value = 1, message = "页数最小为1") @ApiParam("当前页数") Integer pageNum,
@@ -61,6 +63,7 @@ public class UmsRoleController {
         return umsRoleService.page(pageNum, pageSize, name, code);
     }
 
+    @DisableLogDBStorage
     @PreAuthorize("hasAnyAuthority('ums-role', 'ums-admin')")
     @GetMapping("/list/mark")
     @ApiOperation("查询角色 [标记列表]")
@@ -75,6 +78,7 @@ public class UmsRoleController {
         return umsRoleService.updateMenu(id, menuIdList);
     }
 
+    @DisableLogDBStorage
     @GetMapping("/menu/id/{id}")
     @ApiOperation("查询角色拥有的菜单 [ID列表]")
     public List<Long> listMenuId(@PathVariable @ApiParam("角色id") Long id) {
