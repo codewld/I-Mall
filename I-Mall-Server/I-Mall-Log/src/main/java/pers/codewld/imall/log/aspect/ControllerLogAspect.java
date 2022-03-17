@@ -55,30 +55,38 @@ public class ControllerLogAspect {
 
         // 执行，并获取操作相关信息
         LocalDateTime startTime = LocalDateTime.now();
-        Object result = joinPoint.proceed();
-        LocalDateTime endTime = LocalDateTime.now();
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        ControllerLog controllerLog = new ControllerLog();
-        ApiOperation apiOperationAnnotation = method.getAnnotation(ApiOperation.class);
-        if (apiOperationAnnotation != null) {
-            controllerLog.setSummary(apiOperationAnnotation.value());
+        boolean success = true;
+        Object result;
+        try {
+            result = joinPoint.proceed();
+        } catch (Throwable e) {
+            success = false;
+            throw e;
+        } finally {
+            LocalDateTime endTime = LocalDateTime.now();
+            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+            Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+            ControllerLog controllerLog = new ControllerLog();
+            ApiOperation apiOperationAnnotation = method.getAnnotation(ApiOperation.class);
+            if (apiOperationAnnotation != null) {
+                controllerLog.setSummary(apiOperationAnnotation.value());
+            }
+            controllerLog.setUri(request.getRequestURI());
+            controllerLog.setMethod(request.getMethod());
+            controllerLog.setUsername(request.getRemoteUser());
+            controllerLog.setIp(request.getRemoteAddr());
+            controllerLog.setParameter(getParameter(method, joinPoint.getArgs()));
+            controllerLog.setTime(startTime);
+            controllerLog.setSpendTime(Duration.between(startTime, endTime).toMillis());
+            controllerLog.setSuccess(success);
+
+            // 通过logback保存
+            Logger log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+            log.info(controllerLog.toString());
+
+            // 通过MongoDB保存
+            controllerLogService.add(controllerLog);
         }
-        controllerLog.setUri(request.getRequestURI());
-        controllerLog.setMethod(request.getMethod());
-        controllerLog.setUsername(request.getRemoteUser());
-        controllerLog.setIp(request.getRemoteAddr());
-        controllerLog.setParameter(getParameter(method, joinPoint.getArgs()));
-        controllerLog.setTime(startTime);
-        controllerLog.setSpendTime(Duration.between(startTime, endTime).toMillis());
-
-        // 通过logback保存
-        Logger log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
-        log.info(controllerLog.toString());
-
-        // 通过MongoDB保存
-        controllerLogService.add(controllerLog);
-
         return result;
     }
 

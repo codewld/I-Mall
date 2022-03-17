@@ -60,4 +60,9 @@ public class ControllerLog {
      * 消耗时间
      */
     private Long spendTime;
+
+    /**
+     * 操作成功
+     */
+    private Boolean success;
 }
