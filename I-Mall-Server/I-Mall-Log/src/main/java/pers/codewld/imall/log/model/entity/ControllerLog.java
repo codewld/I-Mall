@@ -3,6 +3,7 @@ package pers.codewld.imall.log.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
@@ -14,10 +15,16 @@ import java.time.LocalDateTime;
  * @author codewld
  * @since 2022-03-16
  */
+@Document("log")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ControllerLog {
+
+    /**
+     * 接口概述
+     */
+    private String summary;
 
     /**
      * URI
@@ -30,7 +37,7 @@ public class ControllerLog {
     private String method;
 
     /**
-     * 操作用户
+     * 用户名
      */
     private String username;
 
@@ -53,21 +60,4 @@ public class ControllerLog {
      * 消耗时间
      */
     private Long spendTime;
-
-    /**
-     * 操作描述
-     */
-    private String description;
-
-    @Override
-    public String toString() {
-        return "uri='" + uri + '\'' +
-                ", method='" + method + '\'' +
-                ", username='" + username + '\'' +
-                ", ip='" + ip + '\'' +
-                ", parameter=" + parameter +
-                ", time=" + time +
-                ", spendTime=" + spendTime +
-                ", description='" + description + '\'';
-    }
 }

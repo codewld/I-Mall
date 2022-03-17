@@ -11,7 +11,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import pers.codewld.imall.log.model.entity.ControllerLog;
+import pers.codewld.imall.log.service.ControllerLogService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 public class ControllerLogAspect {
 
     @Autowired
-    MongoTemplate mongoTemplate;
+    ControllerLogService controllerLogService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -60,6 +60,10 @@ public class ControllerLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         ControllerLog controllerLog = new ControllerLog();
+        ApiOperation apiOperationAnnotation = method.getAnnotation(ApiOperation.class);
+        if (apiOperationAnnotation != null) {
+            controllerLog.setSummary(apiOperationAnnotation.value());
+        }
         controllerLog.setUri(request.getRequestURI());
         controllerLog.setMethod(request.getMethod());
         controllerLog.setUsername(request.getRemoteUser());
@@ -67,17 +71,13 @@ public class ControllerLogAspect {
         controllerLog.setParameter(getParameter(method, joinPoint.getArgs()));
         controllerLog.setTime(startTime);
         controllerLog.setSpendTime(Duration.between(startTime, endTime).toMillis());
-        ApiOperation apiOperationAnnotation = method.getAnnotation(ApiOperation.class);
-        if (apiOperationAnnotation != null) {
-            controllerLog.setDescription(apiOperationAnnotation.value());
-        }
 
         // 通过logback保存
         Logger log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
         log.info(controllerLog.toString());
 
         // 通过MongoDB保存
-        mongoTemplate.insert(controllerLog, "log");
+        controllerLogService.add(controllerLog);
 
         return result;
     }

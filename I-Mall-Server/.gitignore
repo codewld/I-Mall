@@ -36,4 +36,4 @@ build/
 *.yml
 
 ### 日志 ###
-/log
+/log/
