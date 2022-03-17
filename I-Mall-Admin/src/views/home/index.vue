@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { rHello } from '@/api/hello'
 import { ElMessage } from 'element-plus';
 
-let msg = ref('Hello World !')
+let msg = ref('Hello World!')
 
 const hello = () => {
   rHello().then(res => {

@@ -147,7 +147,7 @@ defineExpose({
 <template>
   <i-container>
     <!--搜索区-->
-    <i-curd-search-card v-if="hasSearch" :field-list="fieldList" @load="load">
+    <i-curd-search-card v-if="hasSearch" :field-list="fieldList" @load="doLoad">
       <template v-slot:default="{searchParam}">
         <template v-for="(field, key) in fieldList" :key="key">
           <el-form-item v-if="field?.searchConf?.display" :label="`${field.name}：`">

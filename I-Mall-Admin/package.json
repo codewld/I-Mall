@@ -44,6 +44,7 @@
         "element-plus/es/components/cascader/style/css",
         "element-plus/es/components/checkbox-group/style/css",
         "element-plus/es/components/checkbox/style/css",
+        "element-plus/es/components/collapse-transition/style/css",
         "element-plus/es/components/config-provider/style/css",
         "element-plus/es/components/container/style/css",
         "element-plus/es/components/date-picker/style/css",
