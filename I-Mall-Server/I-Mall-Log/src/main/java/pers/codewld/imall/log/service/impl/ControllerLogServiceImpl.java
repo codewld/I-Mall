@@ -38,11 +38,12 @@ public class ControllerLogServiceImpl implements ControllerLogService {
     }
 
     @Override
-    public PageVO<ControllerLog> page(Integer pageNum, Integer pageSize, String summary, String username) {
+    public PageVO<ControllerLog> page(Integer pageNum, Integer pageSize, String summary, String username, Boolean status) {
         // 搜索配置
         ControllerLog controllerLog = new ControllerLog();
         controllerLog.setSummary(summary);
         controllerLog.setUsername(username);
+        controllerLog.setStatus(status);
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
                 .withMatcher("summary", ExampleMatcher.GenericPropertyMatchers.contains())

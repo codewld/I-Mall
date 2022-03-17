@@ -55,12 +55,12 @@ public class ControllerLogAspect {
 
         // 执行，并获取操作相关信息
         LocalDateTime startTime = LocalDateTime.now();
-        boolean success = true;
+        boolean status = true;
         Object result;
         try {
             result = joinPoint.proceed();
         } catch (Throwable e) {
-            success = false;
+            status = false;
             throw e;
         } finally {
             LocalDateTime endTime = LocalDateTime.now();
@@ -78,7 +78,7 @@ public class ControllerLogAspect {
             controllerLog.setParameter(getParameter(method, joinPoint.getArgs()));
             controllerLog.setTime(startTime);
             controllerLog.setSpendTime(Duration.between(startTime, endTime).toMillis());
-            controllerLog.setSuccess(success);
+            controllerLog.setStatus(status);
 
             // 通过logback保存
             Logger log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
