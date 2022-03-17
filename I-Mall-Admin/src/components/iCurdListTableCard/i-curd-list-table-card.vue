@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
-import { PropType } from 'vue';
+import { onMounted, PropType } from 'vue';
 import { CURD } from '@/@types/curd';
 import useList from '@/composables/curd/useList';
 
@@ -35,7 +35,7 @@ const props = defineProps({
 })
 
 
-const emits = defineEmits(['currentChange'])
+const emits = defineEmits(['currentChange', 'load'])
 
 
 // -- 表格选中行相关 --
@@ -58,7 +58,15 @@ const {
   isLoading,
   doLoad,
   clearData
-} = useList(props.listFunction, props.isImmediate);
+} = useList(props.listFunction);
+
+
+/**
+ * mounted时，要求父级查询
+ */
+onMounted(() => {
+  props.isImmediate && emits('load')
+})
 
 
 defineExpose({

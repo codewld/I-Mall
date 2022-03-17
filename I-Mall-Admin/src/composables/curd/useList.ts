@@ -7,9 +7,8 @@ import { CURD } from '@/@types/curd';
 /**
  * 批量查询
  * @param listFunction 批量查询方法
- * @param isImmediate 是否立即加载数据
  */
-export default function useList(listFunction: CURD.listFunction<unknown, unknown>, isImmediate: boolean) {
+export default function useList(listFunction: CURD.listFunction<unknown, unknown>) {
 
   /**
    * 批量查询数据列表
@@ -34,10 +33,6 @@ export default function useList(listFunction: CURD.listFunction<unknown, unknown
       isLoading.value = false
     })
   }
-
-  onMounted(() => {
-    isImmediate && doLoad()
-  })
 
   /**
    * 清空数据

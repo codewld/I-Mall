@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, ref, Ref } from 'vue';
+import { defineExpose, PropType, ref, Ref } from 'vue';
 import { CURD } from '@/@types/curd';
 
 const props = defineProps({
@@ -24,8 +24,12 @@ const searchParam: Ref = ref({})
  */
 const resetSearch = () => {
   searchParam.value = {}
-  emit('load', searchParam.value)
+  emit('load')
 }
+
+defineExpose({
+  searchParam
+})
 </script>
 
 <template>
@@ -36,7 +40,7 @@ const resetSearch = () => {
         <p class="text-base">搜索区</p>
         <el-button-group>
           <el-button @click="resetSearch">重置</el-button>
-          <el-button type="primary" @click="emit('load', searchParam)">搜索</el-button>
+          <el-button type="primary" @click="emit('load')">搜索</el-button>
         </el-button-group>
       </div>
     </template>

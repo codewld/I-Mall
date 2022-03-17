@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 import usePage from '@/composables/curd/usePage';
-import { PropType } from 'vue';
+import { PropType, watch } from 'vue';
 import { CURD } from '@/@types/curd';
 
 const props = defineProps({
@@ -35,7 +35,7 @@ const props = defineProps({
 })
 
 
-const emits = defineEmits(['currentChange'])
+const emits = defineEmits(['currentChange', 'load'])
 
 
 // -- 表格选中行相关 --
@@ -59,8 +59,22 @@ const {
   isLoading,
   doLoad,
   clearData
-} = usePage(props.pageFunction, props.isImmediate)
+} = usePage(props.pageFunction)
 
+
+/**
+ * 监听以要求父级查询
+ */
+watch(
+    pageParam,
+    () => {
+      emits('load')
+    },
+    {
+      deep: true,
+      immediate: props.isImmediate
+    }
+)
 
 defineExpose({
   currentRow,

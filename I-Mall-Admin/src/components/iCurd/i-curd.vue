@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, Ref, ref } from 'vue';
+import { computed, nextTick, PropType, ref } from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd';
 import useFormCurd from '@/composables/curd/useFormCurd';
@@ -86,6 +86,20 @@ const props = defineProps({
 const emits = defineEmits(['currentChange'])
 
 
+// -- 搜索相关 --
+/**
+ * 搜索 ref
+ */
+const search = ref()
+
+/**
+ * 搜索参数
+ */
+const searchParam = computed(() => {
+  return search.value?.searchParam
+})
+
+
 // -- table相关 --
 /**
  * table ref
@@ -95,8 +109,10 @@ const table = ref()
 /**
  * 表格数据加载
  */
-const doLoad = (val?: Ref<object>) => {
-  table.value?.doLoad(val)
+const doLoad = () => {
+  nextTick(() => {
+    table.value?.doLoad(searchParam)
+  })
 }
 
 /**
@@ -144,7 +160,7 @@ defineExpose({
 <template>
   <i-container>
     <!--搜索区-->
-    <i-curd-search-card v-if="hasSearch" :field-list="fieldList" @load="doLoad">
+    <i-curd-search-card ref="search" v-if="hasSearch" :field-list="fieldList" @load="doLoad">
       <template v-slot:default="{searchParam}">
         <template v-for="(field, key) in fieldList" :key="key">
           <el-form-item v-if="field?.searchConf?.display" :label="`${field.name}：`">
@@ -159,7 +175,8 @@ defineExpose({
     <!--数据区-->
     <component :is="isPage ? ICurdPageTableCard : ICurdListTableCard"
                ref="table" :field-list="fieldList" :page-function="pageFunction" :list-function="listFunction"
-               @current-change="handleCurrentChange" :is-immediate="isImmediate" :empty-text="emptyText">
+               @current-change="handleCurrentChange" :is-immediate="isImmediate" :empty-text="emptyText"
+               @load="doLoad">
       <template v-slot:button>
         <slot name="table-button-i-front" :currentRow="currentRow"/>
         <el-button v-if="buttonList.includes('add')" type="primary" @click="beforeAdd">添加</el-button>
