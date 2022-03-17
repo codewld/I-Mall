@@ -13,7 +13,14 @@ import { getChange } from '@/utils/objUtil';
  * @param delFunction 删除方法
  * @param updateFunction 修改方法
  */
-export default function useFormCurd(doLoad: () => void, fieldList: CURD.field[], originData: Ref, addFunction: CURD.addFunction<unknown>, delFunction: CURD.delFunction, updateFunction: CURD.updateFunction<unknown>) {
+export default function useFormCurd(
+  doLoad: () => void,
+  fieldList: CURD.field[],
+  originData: Ref,
+  addFunction: CURD.addFunction<unknown> | undefined,
+  delFunction: CURD.delFunction | undefined,
+  updateFunction: CURD.updateFunction<unknown> | undefined) {
+
   /**
    * dialog是否可见
    */
@@ -48,7 +55,7 @@ export default function useFormCurd(doLoad: () => void, fieldList: CURD.field[],
    * 执行添加
    */
   const doAdd = () => {
-    addFunction(formData.value).then(() => {
+    addFunction && addFunction(formData.value).then(() => {
       ElMessage.success('操作成功')
       dialogVisible.value = false
       doLoad()
@@ -61,7 +68,7 @@ export default function useFormCurd(doLoad: () => void, fieldList: CURD.field[],
    * 执行删除
    */
   const doDel = () => {
-    delFunction(originData.value.id).then(() => {
+    delFunction && delFunction(originData.value.id).then(() => {
       ElMessage.success('操作成功')
       doLoad()
     }).catch(err => {
@@ -87,7 +94,7 @@ export default function useFormCurd(doLoad: () => void, fieldList: CURD.field[],
       ElMessage.warning('请修改')
       return
     }
-    updateFunction(originData.value.id, data).then(() => {
+    updateFunction && updateFunction(originData.value.id, data).then(() => {
       ElMessage.success('操作成功')
       dialogVisible.value = false
       doLoad()

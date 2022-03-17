@@ -16,7 +16,7 @@ export function getFormattedDateTime(dateTimeString: string): string {
     return dateTimeString
   }
   let date = dateTimeString.slice(0, dateTimeString.indexOf('T'))
-  let time = dateTimeString.slice(dateTimeString.indexOf('T') + 1)
+  let time = dateTimeString.slice(dateTimeString.indexOf('T') + 1, 19)
   return `${date} ${time}`
 }
 

@@ -20,22 +20,19 @@ const props = defineProps({
    * 新增方法
    */
   addFunction: {
-    type: Function as PropType<CURD.addFunction<unknown>>,
-    required: true
+    type: Function as PropType<CURD.addFunction<unknown>>
   },
   /**
    * 删除方法
    */
   delFunction: {
-    type: Function as PropType<CURD.delFunction>,
-    required: true
+    type: Function as PropType<CURD.delFunction>
   },
   /**
    * 修改方法
    */
   updateFunction: {
-    type: Function as PropType<CURD.updateFunction<unknown>>,
-    required: true
+    type: Function as PropType<CURD.updateFunction<unknown>>
   },
   /**
    * 是否分页
