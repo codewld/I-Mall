@@ -10,12 +10,12 @@ declare namespace CURD {
   /**
    * 删除
    */
-  type delFunction = (id: number) => Promise<string>
+  type delFunction = (id: number | string) => Promise<string>
 
   /**
    * 修改
    */
-  type updateFunction<T> = (id: number, data: T) => Promise<string>
+  type updateFunction<T> = (id: number | string, data: T) => Promise<string>
 
   /**
    * 分页查询

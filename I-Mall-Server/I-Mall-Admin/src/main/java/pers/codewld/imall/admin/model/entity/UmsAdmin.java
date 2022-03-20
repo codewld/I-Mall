@@ -1,6 +1,7 @@
 package pers.codewld.imall.admin.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -33,7 +34,8 @@ public class UmsAdmin extends MyUserDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     @ApiModelProperty("id")
     private Long id;
 

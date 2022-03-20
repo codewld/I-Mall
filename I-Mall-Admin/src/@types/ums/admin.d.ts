@@ -3,7 +3,7 @@ declare namespace Admin {
    * Admin实体
    */
   interface admin {
-    id: number,
+    id: string,
     username: string,
     status: boolean,
     nickName: string,

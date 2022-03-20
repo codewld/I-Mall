@@ -1,5 +1,6 @@
 package pers.codewld.imall.admin.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @ApiModel(value = "UmsAdminVO对象", description = "后台用户表 VO类")
 public class UmsAdminVO implements Serializable {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty("id")
     private Long id;
 
