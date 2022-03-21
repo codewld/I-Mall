@@ -17,7 +17,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum SystemCode {
 
-    ADMIN("ADMIN");
+    ADMIN("ADMIN"),
+
+    WEB("WEB");
 
     private String name;
 

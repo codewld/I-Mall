@@ -1,0 +1,7 @@
+server:
+  port: 8889
+
+spring:
+  profiles:
+    # 额外配置文件
+    include: common-common, chat-common

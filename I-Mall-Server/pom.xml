@@ -5,6 +5,7 @@
 
     <modules>
         <module>I-Mall-Admin</module>
+        <module>I-Mall-Web</module>
         <module>I-Mall-Common</module>
         <module>I-Mall-Security</module>
         <module>I-Mall-Log</module>
