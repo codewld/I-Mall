@@ -1,6 +1,8 @@
+server:
+  port: 8888
+
 spring:
   profiles:
-    active: dev
     # 额外配置文件
     include: chat-common
   # 配置jackson
@@ -13,3 +15,8 @@ spring:
 logging:
   file:
     path: log
+
+# JWT
+jwt:
+  secret:  # 密钥
+  expiration: 604800 # 过期时长，以秒为单位
