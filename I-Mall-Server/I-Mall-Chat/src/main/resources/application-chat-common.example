@@ -1,0 +1,3 @@
+chat:
+  pre-queue: chat-preQueue
+  post-queue-prefix: chat-postQueue
