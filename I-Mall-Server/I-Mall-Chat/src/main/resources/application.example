@@ -1,0 +1,6 @@
+server:
+  port: 9999
+
+chat:
+  pre-queue: chat-preQueue
+  post-queue-prefix: chat-postQueue

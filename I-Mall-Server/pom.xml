@@ -8,6 +8,7 @@
         <module>I-Mall-Common</module>
         <module>I-Mall-Security</module>
         <module>I-Mall-Log</module>
+        <module>I-Mall-Chat</module>
         <module>I-Mall-Generator</module>
     </modules>
 
