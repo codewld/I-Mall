@@ -46,6 +46,10 @@ public class MySecurityConfig extends SecurityConfig {
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 HttpServletRequest req = (HttpServletRequest) request;
                 String jwtToken = req.getHeader("authorization");
+                // WebSocket的JWT通过param携带
+                if (jwtToken == null) {
+                    jwtToken = checkWebSocketRequest(req);
+                }
                 if (req.getServletPath().contains("login")) {
                     chain.doFilter(request, response);
                     return;
@@ -82,6 +86,33 @@ public class MySecurityConfig extends SecurityConfig {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 chain.doFilter(request, response);
+            }
+
+            /**
+             *校验WebSocket请求
+             */
+            String checkWebSocketRequest(HttpServletRequest req) {
+                if (!"websocket".equals(req.getHeader("Upgrade"))) {
+                    return null;
+                }
+                String jwtToken = req.getParameter("authorization");
+                if (jwtToken == null) {
+                    return null;
+                }
+                MyUserDetails user = jwtUtil().decode(jwtToken);
+                if (user == null) {
+                    return null;
+                }
+                String uri = req.getRequestURI();
+                // 判断是否为WebSocket连接请求
+                if (!uri.startsWith("/websocket")) {
+                    return null;
+                }
+                // 判断JWT中的用户ID与路径中的用户ID是否相同
+                if (!user.getId().equals(new Long(uri.substring(uri.lastIndexOf('/') + 1)))) {
+                    return null;
+                }
+                return jwtToken;
             }
 
             /**
