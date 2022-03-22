@@ -17,4 +17,14 @@ declare namespace Account {
     children?: router[]
   }
 
+  /**
+   * 解密后的JWT
+   */
+  interface decodeJWT {
+    aud: string[],
+    exp: number,
+    iat: number,
+    roles: number[]
+  }
+
 }
