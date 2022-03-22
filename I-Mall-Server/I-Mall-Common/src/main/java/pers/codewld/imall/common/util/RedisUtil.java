@@ -2,6 +2,7 @@ package pers.codewld.imall.common.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.QueryTimeoutException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisConnectionUtils;
@@ -244,10 +245,12 @@ public class RedisUtil {
                         consumer.accept(o);
                         success = true;
                     }
-                } catch (Exception e) {
+                } catch (QueryTimeoutException ignored) {
                     // 防止堵塞式获取行为超时而抛出QueryTimeoutException 异常
+                } catch (Exception e) {
                     log.error(e.getMessage());
-                } finally {
+                }
+                finally {
                     // 若处理成功，则删除备份队列中的key
                     if (success) {
                         connection.lRem(backKeyArr, 1, res);
