@@ -112,7 +112,7 @@ public abstract class BaseWebSocketServer {
     public void onMessage(String message) throws JsonProcessingException {
         CommunicationMsg communicationMsg = getObjectMapper().readValue(message, CommunicationMsg.class);
         // 向消息队列中传递消息
-        getRedisUtil().lPush(getPreQueue(), communicationMsg);
+        getRedisUtil().lPush(getPreQueue(), communicationMsg, 0);
     }
 
     /**

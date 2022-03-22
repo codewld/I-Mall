@@ -2,6 +2,7 @@ package pers.codewld.imall.chat.model.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pers.codewld.imall.chat.model.entity.User;
 
 /**
@@ -14,6 +15,7 @@ import pers.codewld.imall.chat.model.entity.User;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserStatusMsg {
 
     /**
