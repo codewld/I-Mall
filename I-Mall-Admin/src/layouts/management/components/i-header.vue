@@ -23,9 +23,13 @@ const handleLogout = () => {
       }
   )
       .then(() => {
-        reset().then(() => {
-          ElMessage.success('退出成功')
-        })
+        reset()
+            .then(() => {
+              ElMessage.success('退出成功')
+            })
+            .catch(() => {
+              ElMessage.error('退出失败')
+            })
       })
       .catch(() => {
       })

@@ -17,9 +17,11 @@ export default function useAccount() {
     JWTStore.$reset()
     RouterStore.$reset()
     // 跳转至登录页
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       router.replace({ name: 'login' }).then(() => {
         resolve()
+      }).catch(() => {
+        reject()
       })
     })
   }
