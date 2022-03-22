@@ -10,6 +10,7 @@
         <module>I-Mall-Security</module>
         <module>I-Mall-Log</module>
         <module>I-Mall-Chat</module>
+        <module>I-Mall-Chat-Server</module>
         <module>I-Mall-Generator</module>
     </modules>
 
