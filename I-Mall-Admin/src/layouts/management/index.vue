@@ -34,7 +34,7 @@ useWebSocket()
         <i-side/>
       </el-aside>
       <el-main class="relative">
-        <i-chat class="fixed right-10 bottom-10"/>
+        <i-chat/>
         <router-view/>
       </el-main>
     </el-container>

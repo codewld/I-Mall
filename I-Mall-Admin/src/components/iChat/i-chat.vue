@@ -18,10 +18,11 @@ const msg = ref()
 </script>
 
 <template>
-  <div class="z-10">
+  <div class="z-10 fixed right-5 bottom-5">
     <!--聊天按钮-->
-    <el-badge is-dot class="absolute bottom-0 right-0">
-      <div class="p-3 box-border flex items-center justify-center rounded-3xl bg-blue-400 cursor-pointer shadow"
+    <el-badge is-dot :hidden="isShowPanel" class="absolute bottom-0 right-0">
+      <div class="p-3 box-border flex items-center justify-center rounded-3xl cursor-pointer shadow"
+           :class="{'bg-blue-400': !isShowPanel, 'bg-blue-200': isShowPanel}"
            @click="isShowPanel=!isShowPanel">
         <el-icon :size="20" color="#FFFFFF">
           <chat-dot-square/>
