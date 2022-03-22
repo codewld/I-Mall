@@ -17,7 +17,7 @@ const { reset } = useAccount()
  * axios实例
  */
 const instance = axios.create({
-  baseURL: baseURL,
+  baseURL: `http://${baseURL}`,
   timeout: 5000
 })
 
