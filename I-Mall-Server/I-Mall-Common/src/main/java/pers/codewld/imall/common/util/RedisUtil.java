@@ -1,13 +1,20 @@
 package pers.codewld.imall.common.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisConnectionUtils;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -17,11 +24,18 @@ import java.util.concurrent.TimeUnit;
  * @author codewld
  * @since 2022-02-05
  */
+@Slf4j
 @Component
 public class RedisUtil {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private RedisConnectionFactory connectionFactory;
+
+    @Autowired
+    SerializerUtil serializerUtil;
 
     /**
      * 保存属性
@@ -62,6 +76,9 @@ public class RedisUtil {
      * 设置过期时间
      */
     public Boolean expire(String key, long time) {
+        if (time == 0) {
+            return true;
+        }
         return redisTemplate.expire(key, time, TimeUnit.SECONDS);
     }
 
@@ -175,13 +192,6 @@ public class RedisUtil {
     /**
      * 向Set中添加属性
      */
-    public Long sAdd(String key, Object... values) {
-        return redisTemplate.opsForSet().add(key, values);
-    }
-
-    /**
-     * 向Set中添加属性
-     */
     public Long sAdd(String key, long time, Object... values) {
         Long count = redisTemplate.opsForSet().add(key, values);
         expire(key, time);
@@ -210,6 +220,46 @@ public class RedisUtil {
     }
 
     /**
+     * 堵塞式获取队列中的元素，并将该元素备份至备份队列中，待处理成功后删除
+     *
+     * @param key      队列key
+     * @param backKey  备份队列key
+     * @param consumer 处理消费者
+     */
+    public void brPopLPush(String key, String backKey, Consumer<Object> consumer) {
+        RedisConnection connection = RedisConnectionUtils.getConnection(connectionFactory);
+        try {
+            // 序列化键值
+            byte[] keyArr = RedisSerializer.string().serialize(key);
+            byte[] backKeyArr = RedisSerializer.string().serialize(backKey);
+            while (true) {
+                byte[] res = new byte[0];
+                boolean success = false;
+                try {
+                    Assert.notNull(keyArr, "keyArr不能为null");
+                    Assert.notNull(backKeyArr, "backKeyArr不能为null");
+                    res = connection.bRPopLPush(0, keyArr, backKeyArr);
+                    if (res != null && res.length != 0) {
+                        Object o = serializerUtil.deSerialize(new String(res));
+                        consumer.accept(o);
+                        success = true;
+                    }
+                } catch (Exception e) {
+                    // 防止堵塞式获取行为超时而抛出QueryTimeoutException 异常
+                    log.error(e.getMessage());
+                } finally {
+                    // 若处理成功，则删除备份队列中的key
+                    if (success) {
+                        connection.lRem(backKeyArr, 1, res);
+                    }
+                }
+            }
+        } finally {
+            RedisConnectionUtils.releaseConnection(connection, connectionFactory);
+        }
+    }
+
+    /**
      * 获取List中的属性
      */
     public List<Object> lRange(String key, long start, long end) {
@@ -233,32 +283,28 @@ public class RedisUtil {
     /**
      * 向List中添加属性
      */
-    public Long lPush(String key, Object value) {
-        return redisTemplate.opsForList().rightPush(key, value);
-    }
-
-    /**
-     * 向List中添加属性
-     */
     public Long lPush(String key, Object value, long time) {
-        Long index = redisTemplate.opsForList().rightPush(key, value);
+        Long index = redisTemplate.opsForList().leftPush(key, value);
         expire(key, time);
         return index;
     }
+
     /**
      * 向List中批量添加属性
      */
     public Long lPushAll(String key, Object... values) {
-        return redisTemplate.opsForList().rightPushAll(key, values);
+        return redisTemplate.opsForList().leftPushAll(key, values);
     }
+
     /**
      * 向List中批量添加属性
      */
     public Long lPushAll(String key, Long time, Object... values) {
-        Long count = redisTemplate.opsForList().rightPushAll(key, values);
+        Long count = redisTemplate.opsForList().leftPushAll(key, values);
         expire(key, time);
         return count;
     }
+
     /**
      * 从List中移除属性
      */
