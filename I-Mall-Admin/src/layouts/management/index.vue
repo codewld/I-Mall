@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import IHeader from './components/i-header.vue';
 import ISide from './components/i-side.vue';
+import IChat from '@/components/iChat/i-chat.vue';
 import { useLayoutStore } from '@/store/modules/layout';
 import { computed, onMounted } from 'vue';
 
@@ -29,6 +30,7 @@ onMounted(() => {
         <i-side/>
       </el-aside>
       <el-main class="relative">
+        <i-chat class="fixed right-10 bottom-10"/>
         <router-view/>
       </el-main>
     </el-container>
