@@ -7,7 +7,7 @@ import pers.codewld.imall.chat.model.entity.User;
 
 /**
  * <p>
- * 用户在线状态 消息类
+ * 用户状态 消息类
  * </p>
  *
  * @author codewld
@@ -24,8 +24,17 @@ public class UserStatusMsg {
     private User user;
 
     /**
-     * 状态
+     * 是否在线
      */
-    private Boolean status;
+    private Boolean online;
 
+    /**
+     * 联系人
+     */
+    private User contact;
+
+    public UserStatusMsg(User user, Boolean online) {
+        this.user = user;
+        this.online = online;
+    }
 }
