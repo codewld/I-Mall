@@ -3,8 +3,8 @@ package pers.codewld.imall.chat.server.consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pers.codewld.imall.chat.model.entity.User;
-import pers.codewld.imall.chat.model.message.CommunicationMsg;
-import pers.codewld.imall.chat.model.message.UserStatusMsg;
+import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
+import pers.codewld.imall.chat.model.message.queue.UserStatusMsg;
 import pers.codewld.imall.chat.server.util.ConfigUtilPlus;
 import pers.codewld.imall.common.util.RedisUtil;
 

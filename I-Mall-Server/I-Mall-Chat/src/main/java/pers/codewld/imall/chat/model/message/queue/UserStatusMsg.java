@@ -1,4 +1,4 @@
-package pers.codewld.imall.chat.model.message;
+package pers.codewld.imall.chat.model.message.queue;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
