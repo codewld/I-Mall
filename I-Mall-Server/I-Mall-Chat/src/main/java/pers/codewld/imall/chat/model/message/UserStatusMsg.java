@@ -29,6 +29,11 @@ public class UserStatusMsg {
     private Boolean online;
 
     /**
+     * 是否活跃
+     */
+    private Boolean active;
+
+    /**
      * 联系人
      */
     private User contact;
@@ -36,5 +41,11 @@ public class UserStatusMsg {
     public UserStatusMsg(User user, Boolean online) {
         this.user = user;
         this.online = online;
+    }
+
+    public UserStatusMsg(User user, Boolean online, Boolean active) {
+        this.user = user;
+        this.online = online;
+        this.active = active;
     }
 }

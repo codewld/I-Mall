@@ -39,20 +39,29 @@ public class MsgConsumer {
     void handleUserStatus(UserStatusMsg userStatusMsg) {
         User user = userStatusMsg.getUser();
         String idStr = String.valueOf(user.getId());
-        String userStatusHashAdmin = configUtilPlus.getUSER_STATUS_HASH_PREFIX() + "-" + "admin";
-        if (userStatusMsg.getOnline()) {
-            // 若处于会话交谈，获取交流者
-            String contactId = null;
-            User contact = userStatusMsg.getContact();
-            if (contact != null) {
-                contactId = String.valueOf(contact.getId());
+        String userStatusHashAdmin = configUtilPlus.getUSER_STATUS_HASH_PREFIX() + "-" + user.getSystem().getName();
+        if (userStatusMsg.getOnline()) { // 如果在线
+            if (userStatusMsg.getActive()) { // 如果活跃
+                String contactId = null;
+                User contact = userStatusMsg.getContact();
+                if (contact != null) {
+                    contactId = String.valueOf(contact.getId());
+                }
+                // 存在交流者时，记录交流者；否则记录状态为激活
+                contactId = contactId != null ? contactId : "__ACTIVE__";
+                redisUtil.hSet(
+                        userStatusHashAdmin,
+                        idStr,
+                        contactId,
+                        0);
+            } else { // 如果不活跃
+                redisUtil.hSet(
+                        userStatusHashAdmin,
+                        idStr,
+                        "__ONLINE__",
+                        0);
             }
-            redisUtil.hSet(
-                    userStatusHashAdmin,
-                    idStr,
-                    contactId,
-                    0);
-        } else {
+        } else { // 如果不在线
             redisUtil.hDel(
                     userStatusHashAdmin,
                     idStr);
