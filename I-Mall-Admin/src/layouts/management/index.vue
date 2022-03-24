@@ -4,7 +4,6 @@ import ISide from './components/i-side.vue';
 import IChat from '@/components/iChat/i-chat.vue';
 import { useLayoutStore } from '@/store/modules/layout';
 import { computed, onMounted } from 'vue';
-import { useWebSocket } from '@/webSocket';
 
 
 // -- 侧边栏相关 --
@@ -19,9 +18,6 @@ onMounted(() => {
   // 根据初始宽度设置侧边栏是否收缩
   layoutStore.setIsSideBarFold(width < 1000)
 })
-
-
-useWebSocket()
 </script>
 
 <template>

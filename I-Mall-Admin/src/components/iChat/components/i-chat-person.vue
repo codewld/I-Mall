@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { defineProps } from 'vue';
 
-const isChoose = ref(false)
+
+defineProps({
+  /**
+   * 是否被选中
+   */
+  isChoose: Boolean
+})
 </script>
 
 <template>
-  <div class="p-1.5 pr-2.5 box-border truncate bg-gray-100 hover:bg-gray-200" :class="{'bg-gray-300': isChoose}"
-       @click="isChoose = true">
+  <div class="p-1.5 pr-2.5 box-border truncate bg-gray-100 hover:bg-gray-200" :class="{'bg-gray-300': isChoose}">
     <div class="flex justify-between items-center">
       <p class="text-sm">
         小张

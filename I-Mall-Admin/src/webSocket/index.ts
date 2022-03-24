@@ -47,6 +47,13 @@ export function useWebSocket() {
   })
 
   /**
+   * 发送消息
+   */
+  const send = (msg: string) => {
+    socket.send(msg)
+  }
+
+  /**
    * 关闭连接
    */
   const close = () => {
@@ -54,6 +61,7 @@ export function useWebSocket() {
   }
 
   return {
+    send,
     close
   }
 }

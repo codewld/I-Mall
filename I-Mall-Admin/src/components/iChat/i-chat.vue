@@ -4,12 +4,32 @@ import { ChatDotSquare, Close } from '@element-plus/icons-vue';
 import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
+import { useWebSocket } from '@/webSocket';
 
 
+const { send } = useWebSocket()
+
+
+// -- 整体相关 --
 /**
  * 是否展示聊天面板
  */
 const isShowPanel = ref(false)
+
+
+// -- 左侧相关 --
+/**
+ * 当前联系人
+ */
+const contact = ref()
+
+/**
+ * 选择联系人
+ */
+const chooseContact = (i: number) => {
+  contact.value = i
+  send(`${i}`)
+}
 
 /**
  * 正在编辑中的消息
@@ -42,8 +62,8 @@ const msg = ref()
         <!--面板区-->
         <div class="h-full flex overflow-hidden space-x-2">
           <el-scrollbar class="w-1/3 h-full rounded-l">
-            <template v-for="() in 90">
-              <i-chat-person/>
+            <template v-for="i in 90">
+              <i-chat-person @click="chooseContact(i)" :is-choose="contact === i"/>
             </template>
           </el-scrollbar>
           <el-scrollbar class="w-2/3 rounded-r">
