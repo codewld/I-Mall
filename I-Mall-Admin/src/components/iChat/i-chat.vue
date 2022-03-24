@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { ChatDotSquare, Close } from '@element-plus/icons-vue';
 import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import 'element-plus/es/components/input/style/css';
@@ -7,7 +7,12 @@ import 'element-plus/es/components/scrollbar/style/css';
 import { useWebSocket } from '@/webSocket';
 
 
-const { send } = useWebSocket()
+// -- webSocket相关 --
+const {
+  sendActiveStatusMsg,
+  sendSessionEstablishMsg,
+  sendSessionMsg
+} = useWebSocket()
 
 
 // -- 聊天面板相关 --
@@ -21,17 +26,11 @@ const isShowPanel = ref(false)
  */
 const triggerPanel = () => {
   isShowPanel.value = !isShowPanel.value
-  let webSocketMsg: Websocket.webSocketMsg = {
-    type: 'triggerPanel',
-    data: {
-      active: isShowPanel.value
-    }
-  }
-  send(webSocketMsg)
+  sendActiveStatusMsg(isShowPanel.value)
 }
 
 
-// -- 会话相关 --
+// -- 联系人相关 --
 /**
  * 当前联系人
  */
@@ -42,20 +41,23 @@ const contact = ref()
  */
 const chooseContact = (i: number) => {
   contact.value = i
-  let webSocketMsg: Websocket.webSocketMsg = {
-    type: 'chooseContact',
-    data: {
-      system: 'WEB',
-      id: i
-    }
-  }
-  send(webSocketMsg)
+  sendSessionEstablishMsg(i)
 }
 
+
+// -- 会话相关 --
 /**
  * 正在编辑中的消息
  */
-const msg = ref()
+const msg: Ref<string> = ref('')
+
+/**
+ * 发送消息
+ */
+const sendMsg = () => {
+  sendSessionMsg(msg.value)
+  msg.value = ''
+}
 </script>
 
 <template>
@@ -94,14 +96,14 @@ const msg = ref()
               <!--消息区-->
               <el-scrollbar class="h-4/6 p-2 box-border border rounded bg-gray-50">
                 <template v-for="i in 90">
-                  <P>123</P>
+                  <p>123</p>
                 </template>
               </el-scrollbar>
               <!--输入区-->
               <div class="h-2/6 relative">
                 <el-input v-model="msg" type="textarea" resize="none" placeholder="请输入" maxlength="100"
                           show-word-limit class="h-full "/>
-                <el-button size="small" class="absolute right-2 bottom-2 w-1/4 mt-1">发送</el-button>
+                <el-button size="small" class="absolute right-2 bottom-2 w-1/4 mt-1" @click="sendMsg">发送</el-button>
               </div>
             </template>
             <el-empty v-else description="请选择联系人"/>
