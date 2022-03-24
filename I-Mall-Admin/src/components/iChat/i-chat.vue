@@ -73,7 +73,7 @@ const msg = ref()
     <!--聊天面板-->
     <transition name="el-fade-in-linear">
       <div v-if="isShowPanel"
-           class="absolute bottom-10 right-10 shadow-2xl w-112 h-112 flex flex-col py-4 px-4 bg-white bg-opacity-90 rounded">
+           class="absolute bottom-10 right-10 shadow-2xl w-112 h-112 flex flex-col py-4 px-4 bg-white bg-opacity-95 rounded">
         <!--面板头-->
         <div class="h-10 flex justify-end">
           <el-icon :size="24" class="cursor-pointer" @click="triggerPanel">
@@ -82,23 +82,30 @@ const msg = ref()
         </div>
         <!--面板区-->
         <div class="h-full flex overflow-hidden space-x-2">
-          <el-scrollbar class="w-1/3 h-full rounded-l">
+          <!--左侧-联系人列表-->
+          <el-scrollbar class="w-1/3 h-full rounded">
             <template v-for="i in 90">
               <i-chat-person @click="chooseContact(i)" :is-choose="contact === i"/>
             </template>
           </el-scrollbar>
-          <el-scrollbar class="w-2/3 rounded-r">
-            <div class="h-full flex flex-col space-y-2">
-              <div class="h-4/6 p-2 box-border border rounded bg-gray-50">
-                <!--msg-->
-              </div>
-              <div class="h-2/6 bg-white rounded-r flex flex-col items-end">
+          <!--右侧-聊天区-->
+          <div class="w-2/3 flex flex-col space-y-2">
+            <template v-if="contact">
+              <!--消息区-->
+              <el-scrollbar class="h-4/6 p-2 box-border border rounded bg-gray-50">
+                <template v-for="i in 90">
+                  <P>123</P>
+                </template>
+              </el-scrollbar>
+              <!--输入区-->
+              <div class="h-2/6 relative">
                 <el-input v-model="msg" type="textarea" resize="none" placeholder="请输入" maxlength="100"
-                          show-word-limit class="h-full rounded"/>
-                <el-button size="small" class="absolute right-3 bottom-2 w-1/4 mt-1">发送</el-button>
+                          show-word-limit class="h-full "/>
+                <el-button size="small" class="absolute right-2 bottom-2 w-1/4 mt-1">发送</el-button>
               </div>
-            </div>
-          </el-scrollbar>
+            </template>
+            <el-empty v-else description="请选择联系人"/>
+          </div>
         </div>
       </div>
     </transition>
