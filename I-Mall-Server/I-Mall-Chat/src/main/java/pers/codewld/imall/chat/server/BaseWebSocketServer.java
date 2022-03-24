@@ -1,13 +1,13 @@
 package pers.codewld.imall.chat.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import pers.codewld.imall.chat.model.entity.User;
 import pers.codewld.imall.chat.model.enums.SystemCode;
-import pers.codewld.imall.chat.model.message.CommunicationMsg;
-import pers.codewld.imall.chat.model.message.UserStatusMsg;
+import pers.codewld.imall.chat.model.message.queue.UserStatusMsg;
 import pers.codewld.imall.chat.util.ConfigUtil;
 import pers.codewld.imall.common.util.BeanUtil;
 import pers.codewld.imall.common.util.RedisUtil;
@@ -102,17 +102,33 @@ public abstract class BaseWebSocketServer {
         connections.put(String.valueOf(id), this);
         this.user = new User(getSystemCode(), id);
         // 向消息队列中传递消息
-        getRedisUtil().lPush(getPreQueue(), new UserStatusMsg(user, true), 0);
+        getRedisUtil().lPush(getPreQueue(), new UserStatusMsg(user, true, false), 0);
     }
 
     /**
      * 接收消息时的回调方法
      */
     @OnMessage
-    public void onMessage(String message) throws JsonProcessingException {
-        CommunicationMsg communicationMsg = getObjectMapper().readValue(message, CommunicationMsg.class);
-        // 向消息队列中传递消息
-        getRedisUtil().lPush(getPreQueue(), communicationMsg, 0);
+    public void onMessage(String message) {
+        JSONObject jsonObject = JSONObject.parseObject(message);
+        JSONObject data = jsonObject.getJSONObject("data");
+        switch (jsonObject.getString("type")) {
+            // 开关面板
+            case "triggerPanel":
+                Boolean active = data.getBoolean("active");
+                getRedisUtil().lPush(getPreQueue(), new UserStatusMsg(user, true, active, null), 0);
+                break;
+            // 选择联系人
+            case "chooseContact":
+                User contact = JSON.toJavaObject(data, User.class);
+                getRedisUtil().lPush(getPreQueue(), new UserStatusMsg(user, true, true, contact), 0);
+                break;
+            case "sendMsg":
+                System.out.println("sendMsg");
+                break;
+            default:
+                break;
+        }
     }
 
     /**
