@@ -38,34 +38,40 @@ public class MsgConsumer {
      */
     void handleUserStatus(UserStatusMsg userStatusMsg) {
         User user = userStatusMsg.getUser();
-        String idStr = String.valueOf(user.getId());
-        String userStatusHashAdmin = configUtilPlus.getUSER_STATUS_HASH_PREFIX() + "-" + user.getSystem().getName();
+        String userStr = getUserStr(user);
         if (userStatusMsg.getOnline()) { // 如果在线
             if (userStatusMsg.getActive()) { // 如果活跃
-                String contactId = null;
                 User contact = userStatusMsg.getContact();
-                if (contact != null) {
-                    contactId = String.valueOf(contact.getId());
-                }
+                String contactStr = getUserStr(contact);
                 // 存在交流者时，记录交流者；否则记录状态为激活
-                contactId = contactId != null ? contactId : "__ACTIVE__";
+                contactStr = contactStr != null ? contactStr : "__ACTIVE__";
                 redisUtil.hSet(
-                        userStatusHashAdmin,
-                        idStr,
-                        contactId,
+                        configUtilPlus.getUSER_STATUS_HASH(),
+                        userStr,
+                        contactStr,
                         0);
             } else { // 如果不活跃
                 redisUtil.hSet(
-                        userStatusHashAdmin,
-                        idStr,
+                        configUtilPlus.getUSER_STATUS_HASH(),
+                        userStr,
                         "__ONLINE__",
                         0);
             }
         } else { // 如果不在线
             redisUtil.hDel(
-                    userStatusHashAdmin,
-                    idStr);
+                    configUtilPlus.getUSER_STATUS_HASH(),
+                    userStr);
         }
+    }
+
+    /**
+     * 获取user的字符串表示
+     */
+    private String getUserStr(User user) {
+        if (user == null) {
+            return null;
+        }
+        return user.getSystem() + "_" + user.getId();
     }
 
 }

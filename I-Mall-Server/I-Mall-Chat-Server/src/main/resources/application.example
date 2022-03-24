@@ -10,4 +10,4 @@ chat:
   pre-queue: chat-preQueue
   post-queue-prefix: chat-postQueue
   pre-queue-back: chat-preQueue-back
-  user-status-hash-prefix: chat-user-status-hash
+  user-status-hash: chat-user-status-hash

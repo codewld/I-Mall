@@ -20,6 +20,6 @@ public class ConfigUtilPlus extends ConfigUtil {
     @Value("${chat.pre-queue-back}")
     String PRE_QUEUE_BACK;
 
-    @Value("${chat.user-status-hash-prefix}")
-    String USER_STATUS_HASH_PREFIX;
+    @Value("${chat.user-status-hash}")
+    String USER_STATUS_HASH;
 }
