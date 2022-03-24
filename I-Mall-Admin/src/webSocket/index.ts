@@ -49,8 +49,8 @@ export function useWebSocket() {
   /**
    * 发送消息
    */
-  const send = (msg: string) => {
-    socket.send(msg)
+  const send = (webSocketMsg: Websocket.webSocketMsg) => {
+    socket.send(JSON.stringify(webSocketMsg))
   }
 
   /**

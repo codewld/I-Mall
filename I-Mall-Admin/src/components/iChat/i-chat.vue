@@ -10,14 +10,28 @@ import { useWebSocket } from '@/webSocket';
 const { send } = useWebSocket()
 
 
-// -- 整体相关 --
+// -- 聊天面板相关 --
 /**
  * 是否展示聊天面板
  */
 const isShowPanel = ref(false)
 
+/**
+ * 处理聊天面板的打开与关闭
+ */
+const triggerPanel = () => {
+  isShowPanel.value = !isShowPanel.value
+  let webSocketMsg: Websocket.webSocketMsg = {
+    type: 'triggerPanel',
+    data: {
+      active: isShowPanel.value
+    }
+  }
+  send(webSocketMsg)
+}
 
-// -- 左侧相关 --
+
+// -- 会话相关 --
 /**
  * 当前联系人
  */
@@ -28,7 +42,14 @@ const contact = ref()
  */
 const chooseContact = (i: number) => {
   contact.value = i
-  send(`${i}`)
+  let webSocketMsg: Websocket.webSocketMsg = {
+    type: 'chooseContact',
+    data: {
+      system: 'WEB',
+      id: i
+    }
+  }
+  send(webSocketMsg)
 }
 
 /**
@@ -43,7 +64,7 @@ const msg = ref()
     <el-badge is-dot :hidden="isShowPanel" class="absolute bottom-0 right-0">
       <div class="p-3 box-border flex items-center justify-center rounded-3xl cursor-pointer shadow"
            :class="{'bg-blue-400': !isShowPanel, 'bg-blue-200': isShowPanel}"
-           @click="isShowPanel=!isShowPanel">
+           @click="triggerPanel">
         <el-icon :size="20" color="#FFFFFF">
           <chat-dot-square/>
         </el-icon>
@@ -55,7 +76,7 @@ const msg = ref()
            class="absolute bottom-10 right-10 shadow-2xl w-112 h-112 flex flex-col py-4 px-4 bg-white bg-opacity-90 rounded">
         <!--面板头-->
         <div class="h-10 flex justify-end">
-          <el-icon :size="24" class="cursor-pointer" @click="isShowPanel=false">
+          <el-icon :size="24" class="cursor-pointer" @click="triggerPanel">
             <close/>
           </el-icon>
         </div>
