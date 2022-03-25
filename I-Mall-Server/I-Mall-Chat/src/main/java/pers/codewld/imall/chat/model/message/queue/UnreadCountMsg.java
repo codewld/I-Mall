@@ -7,21 +7,16 @@ import pers.codewld.imall.chat.model.entity.User;
 
 /**
  * <p>
- * 通信 消息类
+ * 未读消息数量 消息类
  * </p>
  *
  * @author codewld
- * @since 2022-03-21
+ * @since 2022-03-25
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommunicationMsg {
-
-    /**
-     * 发送者
-     */
-    private User sender;
+public class UnreadCountMsg {
 
     /**
      * 接收者
@@ -29,8 +24,8 @@ public class CommunicationMsg {
     private User recipient;
 
     /**
-     * 消息
+     * 未读消息数量
      */
-    private String msg;
+    private Long count;
 
 }
