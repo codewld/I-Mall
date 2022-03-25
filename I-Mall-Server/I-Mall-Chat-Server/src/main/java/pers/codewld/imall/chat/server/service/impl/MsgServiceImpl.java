@@ -1,12 +1,16 @@
 package pers.codewld.imall.chat.server.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import pers.codewld.imall.chat.model.entity.User;
+import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
+import pers.codewld.imall.chat.model.message.queue.UnreadCountMsg;
 import pers.codewld.imall.chat.server.model.entity.Msg;
+import pers.codewld.imall.chat.server.repository.MsgRepository;
 import pers.codewld.imall.chat.server.service.MsgService;
+import pers.codewld.imall.chat.server.util.ConfigUtilPlus;
+import pers.codewld.imall.chat.server.util.TransformUtil;
+import pers.codewld.imall.common.util.RedisUtil;
 
 /**
  * <p>
@@ -20,20 +24,39 @@ import pers.codewld.imall.chat.server.service.MsgService;
 public class MsgServiceImpl implements MsgService {
 
     @Autowired
-    MongoTemplate mongoTemplate;
+    RedisUtil redisUtil;
 
-    final String UNREAD_MSG = "unreadMsg";
+    @Autowired
+    ConfigUtilPlus configUtilPlus;
+
+    @Autowired
+    MsgRepository msgRepository;
 
     @Override
     public void addUnreadMsg(Msg msg) {
-        mongoTemplate.insert(msg, UNREAD_MSG);
+        msgRepository.addUnreadMsg(msg);
     }
 
     @Override
-    public Long countUnreadMsg(String recipient) {
-        Criteria criteria = Criteria.where("recipient").is(recipient);
-        // 创建查询对象，然后将条件对象添加到其中，然后根据指定字段进行排序
-        Query query = new Query(criteria);
-        return mongoTemplate.count(query, UNREAD_MSG);
+    public void sendUnReadMsg(User recipient) {
+        redisUtil.lPush(
+                getPostQueue(recipient),
+                new UnreadCountMsg(recipient, msgRepository.countUnreadMsg(TransformUtil.transform(recipient))),
+                0);
+    }
+
+    @Override
+    public void sendCommunicationMsg(CommunicationMsg communicationMsg) {
+        redisUtil.lPush(
+                getPostQueue(communicationMsg.getRecipient()),
+                communicationMsg,
+                0);
+    }
+
+    /**
+     * 获取用户对应的处理后队列PostQueue
+     */
+    private String getPostQueue(User user) {
+        return configUtilPlus.getPOST_QUEUE_PREFIX() + "-" + user.getSystem().getName();
     }
 }

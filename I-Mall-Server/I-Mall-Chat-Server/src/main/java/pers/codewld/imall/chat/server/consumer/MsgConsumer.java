@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pers.codewld.imall.chat.model.entity.User;
 import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
-import pers.codewld.imall.chat.model.message.queue.UnreadCountMsg;
 import pers.codewld.imall.chat.model.message.queue.UserStatusMsg;
 import pers.codewld.imall.chat.server.service.MsgService;
 import pers.codewld.imall.chat.server.util.ConfigUtilPlus;
@@ -86,25 +85,15 @@ public class MsgConsumer {
             msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
         } else if (recipientStatus.equals("__ONLINE__")) { // 接收者在线
             msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
-            // 发送未读消息数
-            redisUtil.lPush(getPostQueue(recipient), new UnreadCountMsg(recipient, msgService.countUnreadMsg(recipientStr)), 0);
+            msgService.sendUnReadMsg(recipient);
         } else if (recipientStatus.equals("__ACTIVE__") || !recipientStatus.equals(senderStr)) { // 接收者活跃或接收者正在与其它用户对话
             msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
-            // 发送消息
-            redisUtil.lPush(getPostQueue(recipient), communicationMsg, 0);
+            msgService.sendCommunicationMsg(communicationMsg);
         } else { // 接收者正在与发送者对话
-            // 发送消息
-            redisUtil.lPush(getPostQueue(recipient), communicationMsg, 0);
+            msgService.sendCommunicationMsg(communicationMsg);
         }
     }
 
-    /**
-     * 获取用户对应的处理后队列PostQueue
-     * @param user
-     * @return
-     */
-    private String getPostQueue(User user) {
-        return configUtilPlus.getPOST_QUEUE_PREFIX() + "-" + user.getSystem().getName();
-    }
+
 
 }
