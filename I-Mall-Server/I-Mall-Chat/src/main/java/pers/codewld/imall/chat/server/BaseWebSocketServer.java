@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import pers.codewld.imall.chat.model.entity.User;
 import pers.codewld.imall.chat.model.enums.SystemCode;
+import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
 import pers.codewld.imall.chat.model.message.queue.UserStatusMsg;
 import pers.codewld.imall.chat.util.ConfigUtil;
 import pers.codewld.imall.common.util.BeanUtil;
@@ -94,6 +95,11 @@ public abstract class BaseWebSocketServer {
     private User user;
 
     /**
+     * 联系人
+     */
+    private User contact;
+
+    /**
      * 连接成功的回调方法
      */
     @OnOpen
@@ -113,18 +119,24 @@ public abstract class BaseWebSocketServer {
         JSONObject jsonObject = JSONObject.parseObject(message);
         JSONObject data = jsonObject.getJSONObject("data");
         switch (jsonObject.getString("type")) {
-            // 开关面板
-            case "triggerPanel":
+            // 活跃状态
+            case "activeStatus":
                 Boolean active = data.getBoolean("active");
+                contact = null;
+                // 传递信息至消息队列
                 getRedisUtil().lPush(getPreQueue(), new UserStatusMsg(user, true, active, null), 0);
                 break;
-            // 选择联系人
-            case "chooseContact":
-                User contact = JSON.toJavaObject(data, User.class);
+            // 会话建立
+            case "sessionEstablish":
+                contact = JSON.toJavaObject(data.getJSONObject("contact"), User.class);
+                // 传递信息至消息队列
                 getRedisUtil().lPush(getPreQueue(), new UserStatusMsg(user, true, true, contact), 0);
                 break;
+            // 发送消息
             case "sendMsg":
-                System.out.println("sendMsg");
+                String msg = data.getString("msg");
+                // 传递信息至消息队列
+                getRedisUtil().lPush(getPreQueue(), new CommunicationMsg(user, contact, msg), 0);
                 break;
             default:
                 break;

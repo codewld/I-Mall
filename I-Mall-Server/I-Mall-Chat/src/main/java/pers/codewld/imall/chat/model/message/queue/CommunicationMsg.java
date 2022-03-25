@@ -24,9 +24,9 @@ public class CommunicationMsg {
     private User sender;
 
     /**
-     * 接收者
+     * 联系者
      */
-    private User recipient;
+    private User contact;
 
     /**
      * 消息
