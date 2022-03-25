@@ -16,6 +16,7 @@ import pers.codewld.imall.common.util.RedisUtil;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -136,7 +137,7 @@ public abstract class BaseWebSocketServer {
             case "sendMsg":
                 String msg = data.getString("msg");
                 // 传递信息至消息队列
-                getRedisUtil().lPush(getPreQueue(), new CommunicationMsg(user, contact, msg), 0);
+                getRedisUtil().lPush(getPreQueue(), new CommunicationMsg(user, contact, msg, LocalDateTime.now()), 0);
                 break;
             default:
                 break;

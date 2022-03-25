@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pers.codewld.imall.chat.model.entity.User;
 
+import java.time.LocalDateTime;
+
 /**
  * <p>
  * 通信 消息类
@@ -32,5 +34,10 @@ public class CommunicationMsg {
      * 消息
      */
     private String msg;
+
+    /**
+     * 发送时间
+     */
+    private LocalDateTime time;
 
 }

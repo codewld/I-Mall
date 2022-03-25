@@ -23,6 +23,7 @@ public class TransformUtil extends pers.codewld.imall.chat.util.TransformUtil {
         msg.setSender(TransformUtil.transform(communicationMsg.getSender()));
         msg.setRecipient(TransformUtil.transform(communicationMsg.getRecipient()));
         msg.setMsg(communicationMsg.getMsg());
+        msg.setTime(communicationMsg.getTime());
         msg.setTime(LocalDateTime.now());
         return msg;
     }
