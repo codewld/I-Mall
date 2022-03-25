@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -228,38 +229,40 @@ public class RedisUtil {
      * @param consumer 处理消费者
      */
     public void brPopLPush(String key, String backKey, Consumer<Object> consumer) {
-        RedisConnection connection = RedisConnectionUtils.getConnection(connectionFactory);
-        try {
-            // 序列化键值
-            byte[] keyArr = RedisSerializer.string().serialize(key);
-            byte[] backKeyArr = RedisSerializer.string().serialize(backKey);
-            Assert.notNull(keyArr, "keyArr不能为null");
-            Assert.notNull(backKeyArr, "backKeyArr不能为null");
-            while (true) {
-                byte[] res = new byte[0];
-                boolean success = false;
-                try {
-                    res = connection.bRPopLPush(0, keyArr, backKeyArr);
-                    if (res != null && res.length != 0) {
-                        Object o = serializerUtil.deSerialize(new String(res));
-                        consumer.accept(o);
-                        success = true;
+        CompletableFuture.runAsync(() -> {
+            RedisConnection connection = RedisConnectionUtils.getConnection(connectionFactory);
+            try {
+                // 序列化键值
+                byte[] keyArr = RedisSerializer.string().serialize(key);
+                byte[] backKeyArr = RedisSerializer.string().serialize(backKey);
+                Assert.notNull(keyArr, "keyArr不能为null");
+                Assert.notNull(backKeyArr, "backKeyArr不能为null");
+                while (true) {
+                    byte[] res = new byte[0];
+                    boolean success = false;
+                    try {
+                        res = connection.bRPopLPush(0, keyArr, backKeyArr);
+                        if (res != null && res.length != 0) {
+                            Object o = serializerUtil.deSerialize(new String(res));
+                            consumer.accept(o);
+                            success = true;
+                        }
+                    } catch (QueryTimeoutException ignored) {
+                        // 防止堵塞式获取行为超时而抛出QueryTimeoutException 异常
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
                     }
-                } catch (QueryTimeoutException ignored) {
-                    // 防止堵塞式获取行为超时而抛出QueryTimeoutException 异常
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                }
-                finally {
-                    // 若处理成功，则删除备份队列中的key
-                    if (success) {
-                        connection.lRem(backKeyArr, 1, res);
+                    finally {
+                        // 若处理成功，则删除备份队列中的key
+                        if (success) {
+                            connection.lRem(backKeyArr, 1, res);
+                        }
                     }
                 }
+            } finally {
+                RedisConnectionUtils.releaseConnection(connection, connectionFactory);
             }
-        } finally {
-            RedisConnectionUtils.releaseConnection(connection, connectionFactory);
-        }
+        });
     }
 
     /**
