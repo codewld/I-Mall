@@ -233,12 +233,12 @@ public class RedisUtil {
             // 序列化键值
             byte[] keyArr = RedisSerializer.string().serialize(key);
             byte[] backKeyArr = RedisSerializer.string().serialize(backKey);
+            Assert.notNull(keyArr, "keyArr不能为null");
+            Assert.notNull(backKeyArr, "backKeyArr不能为null");
             while (true) {
                 byte[] res = new byte[0];
                 boolean success = false;
                 try {
-                    Assert.notNull(keyArr, "keyArr不能为null");
-                    Assert.notNull(backKeyArr, "backKeyArr不能为null");
                     res = connection.bRPopLPush(0, keyArr, backKeyArr);
                     if (res != null && res.length != 0) {
                         Object o = serializerUtil.deSerialize(new String(res));
