@@ -4,7 +4,7 @@ import { ChatDotSquare, Close } from '@element-plus/icons-vue';
 import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
-import { useWebSocket } from '@/webSocket';
+import { useWebSocket } from '@/composables/webSocket';
 
 
 // -- webSocket相关 --

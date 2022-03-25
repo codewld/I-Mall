@@ -49,7 +49,11 @@ export function useWebSocket() {
   /**
    * 发送
    */
-  const send = (webSocketMsg: Websocket.webSocketMsg) => {
+  const send = (type: string, data: object) => {
+    let webSocketMsg: Websocket.webSocketMsg = {
+      type: type,
+      data: data
+    }
     socket.send(JSON.stringify(webSocketMsg))
   }
 
@@ -64,40 +68,33 @@ export function useWebSocket() {
    * 发送"活跃状态"信息
    */
   const sendActiveStatusMsg = (active: boolean) => {
-    let webSocketMsg: Websocket.webSocketMsg = {
-      type: 'activeStatus',
-      data: {
-        active: active
-      }
+    let data = {
+      active: active
     }
-    send(webSocketMsg)
+    send('activeStatus', data)
   }
 
   /**
    * 发送"会话建立"信息
    */
   const sendSessionEstablishMsg = (id: number) => {
-    let webSocketMsg: Websocket.webSocketMsg = {
-      type: 'sessionEstablish',
-      data: {
+    let data = {
+      contact: {
         system: 'WEB',
         id: id
       }
     }
-    send(webSocketMsg)
+    send('sessionEstablish', data)
   }
 
   /**
    * 发送"发送消息"消息
    */
   const sendSessionMsg = (msg: string) => {
-    let webSocketMsg: Websocket.webSocketMsg = {
-      type: 'sendMsg',
-      data: {
-        msg: msg
-      }
+    let data = {
+      msg: msg
     }
-    send(webSocketMsg)
+    send('sendMsg', data)
   }
 
   return {

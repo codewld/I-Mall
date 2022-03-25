@@ -13,7 +13,7 @@ declare namespace Websocket {
    */
   interface webSocketMsg {
     type: string,
-    data: unknown
+    data: object
   }
 
 }
