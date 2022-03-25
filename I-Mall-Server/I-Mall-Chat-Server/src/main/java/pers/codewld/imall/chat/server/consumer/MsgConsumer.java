@@ -1,25 +1,35 @@
 package pers.codewld.imall.chat.server.consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import pers.codewld.imall.chat.model.entity.User;
 import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
 import pers.codewld.imall.chat.model.message.queue.UserStatusMsg;
 import pers.codewld.imall.chat.server.service.MsgService;
-import pers.codewld.imall.chat.server.util.ConfigUtilPlus;
+import pers.codewld.imall.chat.server.util.ConfigUtil;
 import pers.codewld.imall.chat.server.util.TransformUtil;
 import pers.codewld.imall.common.util.RedisUtil;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * <p>
+ * 消息 消费者类
+ * </p>
+ *
+ * @author codewld
+ * @since 2022-03-25
+ */
 @Component
 public class MsgConsumer {
 
     @Autowired
     RedisUtil redisUtil;
 
+    @Qualifier("myConfigUtil")
     @Autowired
-    ConfigUtilPlus configUtilPlus;
+    ConfigUtil configUtil;
 
     @Autowired
     MsgService msgService;
@@ -27,8 +37,8 @@ public class MsgConsumer {
     @PostConstruct
     public void init() {
         redisUtil.brPopLPush(
-                configUtilPlus.getPRE_QUEUE(),
-                configUtilPlus.getPRE_QUEUE_BACK(),
+                configUtil.getPRE_QUEUE(),
+                configUtil.getPRE_QUEUE() + "-" + "back",
                 o -> {
                     if (o instanceof UserStatusMsg) {
                         handleUserStatus((UserStatusMsg) o);
@@ -52,20 +62,20 @@ public class MsgConsumer {
                     contactStr = TransformUtil.transform(contact);
                 }
                 redisUtil.hSet(
-                        configUtilPlus.getUSER_STATUS_HASH(),
+                        configUtil.getUSER_STATUS_HASH(),
                         userStr,
                         contactStr,
                         0);
             } else { // 如果不活跃
                 redisUtil.hSet(
-                        configUtilPlus.getUSER_STATUS_HASH(),
+                        configUtil.getUSER_STATUS_HASH(),
                         userStr,
                         "__ONLINE__",
                         0);
             }
         } else { // 如果不在线
             redisUtil.hDel(
-                    configUtilPlus.getUSER_STATUS_HASH(),
+                    configUtil.getUSER_STATUS_HASH(),
                     userStr);
         }
     }
@@ -79,7 +89,7 @@ public class MsgConsumer {
         String recipientStr = TransformUtil.transform(recipient);
         // Redis 中查询接收者状态
         String recipientStatus = (String) redisUtil.hGet(
-                configUtilPlus.getUSER_STATUS_HASH(),
+                configUtil.getUSER_STATUS_HASH(),
                 recipientStr);
         if (recipientStatus == null) { // 接收者离线
             msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
@@ -93,7 +103,4 @@ public class MsgConsumer {
             msgService.sendCommunicationMsg(communicationMsg);
         }
     }
-
-
-
 }

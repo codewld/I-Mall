@@ -1,6 +1,7 @@
 package pers.codewld.imall.chat.server.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pers.codewld.imall.chat.model.entity.User;
 import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
@@ -8,7 +9,7 @@ import pers.codewld.imall.chat.model.message.queue.UnreadCountMsg;
 import pers.codewld.imall.chat.server.model.entity.Msg;
 import pers.codewld.imall.chat.server.repository.MsgRepository;
 import pers.codewld.imall.chat.server.service.MsgService;
-import pers.codewld.imall.chat.server.util.ConfigUtilPlus;
+import pers.codewld.imall.chat.server.util.ConfigUtil;
 import pers.codewld.imall.chat.server.util.TransformUtil;
 import pers.codewld.imall.common.util.RedisUtil;
 
@@ -26,8 +27,9 @@ public class MsgServiceImpl implements MsgService {
     @Autowired
     RedisUtil redisUtil;
 
+    @Qualifier("myConfigUtil")
     @Autowired
-    ConfigUtilPlus configUtilPlus;
+    ConfigUtil configUtil;
 
     @Autowired
     MsgRepository msgRepository;
@@ -57,6 +59,6 @@ public class MsgServiceImpl implements MsgService {
      * 获取用户对应的处理后队列PostQueue
      */
     private String getPostQueue(User user) {
-        return configUtilPlus.getPOST_QUEUE_PREFIX() + "-" + user.getSystem().getName();
+        return configUtil.getPOST_QUEUE_PREFIX() + "-" + user.getSystem().getName();
     }
 }
