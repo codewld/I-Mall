@@ -63,14 +63,14 @@ public class MsgConsumer {
                         userStr,
                         contactStr != null ? contactStr : "__ACTIVE__", // 存在交流者时，记录交流者；否则记录状态为激活
                         0);
-                // todo 发送所有未读的消息
+                msgService.sendUnreadMsg(user);
             } else { // 如果不活跃
                 redisUtil.hSet(
                         configUtil.getUSER_STATUS_HASH(),
                         userStr,
                         "__ONLINE__",
                         0);
-                msgService.sendUnReadMsg(user);
+                msgService.sendUnreadCount(user);
             }
         } else { // 如果不在线
             redisUtil.hDel(
@@ -94,7 +94,7 @@ public class MsgConsumer {
             msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
         } else if (recipientStatus.equals("__ONLINE__")) { // 接收者在线
             msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
-            msgService.sendUnReadMsg(recipient);
+            msgService.sendUnreadCount(recipient);
         } else if (recipientStatus.equals("__ACTIVE__") || !recipientStatus.equals(senderStr)) { // 接收者活跃或接收者正在与其它用户对话
             msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
             msgService.sendCommunicationMsg(communicationMsg);

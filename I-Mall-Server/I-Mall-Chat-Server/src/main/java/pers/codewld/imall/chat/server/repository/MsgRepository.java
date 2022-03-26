@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import pers.codewld.imall.chat.server.model.entity.Msg;
 
+import java.util.List;
+
 /**
  * <p>
  * 信息 Repository类
@@ -31,11 +33,19 @@ public class MsgRepository {
     }
 
     /**
+     * 查询接收者的未读消息
+     */
+    public List<Msg> listUnreadMsg(String recipient) {
+        Criteria criteria = Criteria.where("recipient").is(recipient);
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Msg.class, UNREAD_MSG);
+    }
+
+    /**
      * 查询接收者的未读消息数
      */
     public Long countUnreadMsg(String recipient) {
         Criteria criteria = Criteria.where("recipient").is(recipient);
-        // 创建查询对象，然后将条件对象添加到其中，然后根据指定字段进行排序
         Query query = new Query(criteria);
         return mongoTemplate.count(query, UNREAD_MSG);
     }

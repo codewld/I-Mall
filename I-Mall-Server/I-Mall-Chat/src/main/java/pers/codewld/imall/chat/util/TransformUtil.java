@@ -28,7 +28,7 @@ public class TransformUtil {
             int index = str.indexOf("_");
             User user = new User();
             user.setSystem(SystemCode.valueOf(str.substring(0, index)));
-            user.setId(Long.valueOf(str.substring(index)));
+            user.setId(Long.valueOf(str.substring(index + 1)));
             return user;
         } catch (Exception e) {
             return null;

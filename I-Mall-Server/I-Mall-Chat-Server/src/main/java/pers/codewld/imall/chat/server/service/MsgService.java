@@ -22,7 +22,12 @@ public interface MsgService {
     /**
      * 发送未读信息数
      */
-    void sendUnReadMsg(User recipient);
+    void sendUnreadCount(User recipient);
+
+    /**
+     * 发送未读消息
+     */
+    void sendUnreadMsg(User recipient);
 
     /**
      * 发送消息

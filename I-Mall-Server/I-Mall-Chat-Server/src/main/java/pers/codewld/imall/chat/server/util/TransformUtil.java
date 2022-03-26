@@ -3,8 +3,6 @@ package pers.codewld.imall.chat.server.util;
 import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
 import pers.codewld.imall.chat.server.model.entity.Msg;
 
-import java.time.LocalDateTime;
-
 /**
  * <p>
  * 结构体转换 工具类
@@ -24,8 +22,16 @@ public class TransformUtil extends pers.codewld.imall.chat.util.TransformUtil {
         msg.setRecipient(TransformUtil.transform(communicationMsg.getRecipient()));
         msg.setMsg(communicationMsg.getMsg());
         msg.setTime(communicationMsg.getTime());
-        msg.setTime(LocalDateTime.now());
         return msg;
+    }
+
+    public static CommunicationMsg transform(Msg msg) {
+        CommunicationMsg communicationMsg = new CommunicationMsg();
+        communicationMsg.setSender(TransformUtil.transform(msg.getSender()));
+        communicationMsg.setRecipient(TransformUtil.transform(msg.getRecipient()));
+        communicationMsg.setMsg(msg.getMsg());
+        communicationMsg.setTime(msg.getTime());
+        return communicationMsg;
     }
 
 }
