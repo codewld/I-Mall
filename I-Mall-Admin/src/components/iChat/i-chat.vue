@@ -6,13 +6,11 @@ import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
 import { useWebSocket } from '@/composables/webSocket';
 
-
-// -- webSocket相关 --
-const {
-  sendActiveStatusMsg,
-  sendSessionEstablishMsg,
-  sendSessionMsg
-} = useWebSocket()
+// -- 聊天按钮相关 --
+/**
+ * 未读消息数量
+ */
+const unreadCount = ref(0)
 
 
 // -- 聊天面板相关 --
@@ -26,6 +24,10 @@ const isShowPanel = ref(false)
  */
 const triggerPanel = () => {
   isShowPanel.value = !isShowPanel.value
+  if (!isShowPanel.value) {
+    contact.value = undefined
+    msg.value = ''
+  }
   sendActiveStatusMsg(isShowPanel.value)
 }
 
@@ -58,12 +60,64 @@ const sendMsg = () => {
   sendSessionMsg(msg.value)
   msg.value = ''
 }
+
+
+// -- webSocket相关 --
+/**
+ * 接收消息
+ */
+const receiveMsg = (webSocketMsg: Websocket.webSocketMsg): void => {
+  const data = JSON.parse(webSocketMsg.data.toString());
+  switch (webSocketMsg.type) {
+    // 未读消息
+    case "unreadCount":
+      unreadCount.value = data.count
+      break
+  }
+}
+
+/**
+ * 发送"活跃状态"信息
+ */
+const sendActiveStatusMsg = (active: boolean) => {
+  let data = {
+    active: active
+  }
+  send('activeStatus', data)
+}
+
+/**
+ * 发送"会话建立"信息
+ */
+const sendSessionEstablishMsg = (id: number) => {
+  let data = {
+    contact: {
+      system: 'ADMIN',
+      id: '1505001300199129090'
+    }
+  }
+  send('sessionEstablish', data)
+}
+
+/**
+ * 发送"发送消息"消息
+ */
+const sendSessionMsg = (msg: string) => {
+  let data = {
+    msg: msg
+  }
+  send('sendMsg', data)
+}
+
+const {
+  send
+} = useWebSocket(receiveMsg)
 </script>
 
 <template>
   <div class="z-10 fixed right-5 bottom-5">
     <!--聊天按钮-->
-    <el-badge is-dot :hidden="isShowPanel" class="absolute bottom-0 right-0">
+    <el-badge :value="unreadCount" :max="99" :hidden="unreadCount === 0 || isShowPanel" class="absolute bottom-0 right-0">
       <div class="p-3 box-border flex items-center justify-center rounded-3xl cursor-pointer shadow"
            :class="{'bg-blue-400': !isShowPanel, 'bg-blue-200': isShowPanel}"
            @click="triggerPanel">
@@ -117,6 +171,8 @@ const sendMsg = () => {
 <style scoped>
 :deep(.el-badge__content--danger) {
   @apply bg-blue-600;
+  @apply select-none;
+  transform: translateY(-50%) translateX(100%) scale(0.8);
 }
 
 :deep(.el-scrollbar__view) {

@@ -6,8 +6,9 @@ import { useJWTStore } from '@/store';
 
 /**
  * webSocket
+ * @param onmessage 接收消息的回调方法
  */
-export function useWebSocket() {
+export function useWebSocket(onmessage: (webSocketMsg: Websocket.webSocketMsg) => void) {
 
   const jwtStore = useJWTStore()
 
@@ -31,7 +32,8 @@ export function useWebSocket() {
     }
 
     socket.onmessage = event => {
-      console.log(event)
+      let webSocketMsg = JSON.parse(event.data)
+      onmessage(webSocketMsg)
     }
 
     socket.onclose = () => {
@@ -64,44 +66,8 @@ export function useWebSocket() {
     socket.close()
   }
 
-  /**
-   * 发送"活跃状态"信息
-   */
-  const sendActiveStatusMsg = (active: boolean) => {
-    let data = {
-      active: active
-    }
-    send('activeStatus', data)
-  }
-
-  /**
-   * 发送"会话建立"信息
-   */
-  const sendSessionEstablishMsg = (id: number) => {
-    let data = {
-      contact: {
-        system: 'WEB',
-        id: id
-      }
-    }
-    send('sessionEstablish', data)
-  }
-
-  /**
-   * 发送"发送消息"消息
-   */
-  const sendSessionMsg = (msg: string) => {
-    let data = {
-      msg: msg
-    }
-    send('sendMsg', data)
-  }
-
   return {
     send,
-    close,
-    sendActiveStatusMsg,
-    sendSessionEstablishMsg,
-    sendSessionMsg
+    close
   }
 }
