@@ -42,7 +42,9 @@ const handleLogout = () => {
     <h1 @click="router.push({name: 'home'})" class="text-4xl font-bold tracking-wider cursor-pointer">
       I-Mall
     </h1>
-    <div>
+    <div class="space-x-4">
+      <el-link href="https://codewld.github.io/I-Mall-Docs/" target="_blank" type="success">项目文档</el-link>
+      <el-link href="https://github.com/codewld/I-Mall" target="_blank" type="primary">开源地址</el-link>
       <el-button type="text" class="text-red-500" @click="handleLogout">退出登录</el-button>
     </div>
   </div>
