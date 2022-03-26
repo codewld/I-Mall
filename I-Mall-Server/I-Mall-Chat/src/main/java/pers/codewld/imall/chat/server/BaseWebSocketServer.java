@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import pers.codewld.imall.chat.model.entity.User;
 import pers.codewld.imall.chat.model.enums.SystemCode;
-import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
+import pers.codewld.imall.chat.model.message.queue.MsgMsg;
 import pers.codewld.imall.chat.model.message.queue.UserStatusMsg;
 import pers.codewld.imall.chat.model.message.websocket.WebSocketMsg;
 import pers.codewld.imall.chat.util.ConfigUtil;
@@ -121,7 +121,7 @@ public abstract class BaseWebSocketServer {
             // 发送消息
             case "sendMsg":
                 String msg = data.getString("msg");
-                sendMsgToPreQueue(new CommunicationMsg(user, contact, msg, LocalDateTime.now()));
+                sendMsgToPreQueue(new MsgMsg(user, contact, msg, LocalDateTime.now()));
                 break;
             default:
                 break;

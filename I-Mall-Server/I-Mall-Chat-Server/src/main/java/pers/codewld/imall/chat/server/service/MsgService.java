@@ -1,8 +1,7 @@
 package pers.codewld.imall.chat.server.service;
 
 import pers.codewld.imall.chat.model.entity.User;
-import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
-import pers.codewld.imall.chat.server.model.entity.Msg;
+import pers.codewld.imall.chat.model.message.queue.MsgMsg;
 
 /**
  * <p>
@@ -17,7 +16,7 @@ public interface MsgService {
     /**
      * 添加未读消息
      */
-    void addUnreadMsg(Msg msg);
+    void addUnreadMsg(MsgMsg msgMsg);
 
     /**
      * 发送未读信息数
@@ -32,6 +31,6 @@ public interface MsgService {
     /**
      * 发送消息
      */
-    void sendCommunicationMsg(CommunicationMsg communicationMsg);
+    void sendMsg(MsgMsg msgMsg);
 
 }

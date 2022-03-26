@@ -1,14 +1,13 @@
 package pers.codewld.imall.chat.server.consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import pers.codewld.imall.chat.model.entity.User;
-import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
+import pers.codewld.imall.chat.model.message.queue.MsgMsg;
 import pers.codewld.imall.chat.model.message.queue.UserStatusMsg;
 import pers.codewld.imall.chat.server.service.MsgService;
 import pers.codewld.imall.chat.server.util.ConfigUtil;
-import pers.codewld.imall.chat.server.util.TransformUtil;
+import pers.codewld.imall.chat.util.TransformUtil;
 import pers.codewld.imall.common.util.RedisUtil;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +26,6 @@ public class MsgConsumer {
     @Autowired
     RedisUtil redisUtil;
 
-    @Qualifier("myConfigUtil")
     @Autowired
     ConfigUtil configUtil;
 
@@ -42,8 +40,8 @@ public class MsgConsumer {
                 o -> {
                     if (o instanceof UserStatusMsg) {
                         handleUserStatus((UserStatusMsg) o);
-                    } else if (o instanceof CommunicationMsg) {
-                        handleCommunication((CommunicationMsg) o);
+                    } else if (o instanceof MsgMsg) {
+                        handleCommunication((MsgMsg) o);
                     }
                 });
     }
@@ -82,24 +80,24 @@ public class MsgConsumer {
     /**
      * 处理通信
      */
-    void handleCommunication(CommunicationMsg communicationMsg) {
-        User recipient = communicationMsg.getRecipient();
-        String senderStr = TransformUtil.transform(communicationMsg.getSender());
+    void handleCommunication(MsgMsg msgMsg) {
+        User recipient = msgMsg.getRecipient();
+        String senderStr = TransformUtil.transform(msgMsg.getSender());
         String recipientStr = TransformUtil.transform(recipient);
         // Redis 中查询接收者状态
         String recipientStatus = (String) redisUtil.hGet(
                 configUtil.getUSER_STATUS_HASH(),
                 recipientStr);
         if (recipientStatus == null) { // 接收者离线
-            msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
+            msgService.addUnreadMsg(msgMsg);
         } else if (recipientStatus.equals("__ONLINE__")) { // 接收者在线
-            msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
+            msgService.addUnreadMsg(msgMsg);
             msgService.sendUnreadCount(recipient);
         } else if (recipientStatus.equals("__ACTIVE__") || !recipientStatus.equals(senderStr)) { // 接收者活跃或接收者正在与其它用户对话
-            msgService.addUnreadMsg(TransformUtil.transform(communicationMsg));
-            msgService.sendCommunicationMsg(communicationMsg);
+            msgService.addUnreadMsg(msgMsg);
+            msgService.sendMsg(msgMsg);
         } else { // 接收者正在与发送者对话
-            msgService.sendCommunicationMsg(communicationMsg);
+            msgService.sendMsg(msgMsg);
         }
     }
 }

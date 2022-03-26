@@ -5,20 +5,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pers.codewld.imall.chat.model.entity.User;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- * 未读消息 消息类
+ * 消息 消息类
  * </p>
  *
  * @author codewld
- * @since 2022-03-25
+ * @since 2022-03-21
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UnreadMsgMsg {
+public class MsgMsg {
+
+    /**
+     * 发送者
+     */
+    private User sender;
 
     /**
      * 接收者
@@ -26,8 +31,13 @@ public class UnreadMsgMsg {
     private User recipient;
 
     /**
-     * 未读消息列表
+     * 消息
      */
-    private List<CommunicationMsg> msgList;
+    private String msg;
+
+    /**
+     * 发送时间
+     */
+    private LocalDateTime time;
 
 }

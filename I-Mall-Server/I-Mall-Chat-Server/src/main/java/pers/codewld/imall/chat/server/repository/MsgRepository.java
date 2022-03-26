@@ -5,7 +5,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
-import pers.codewld.imall.chat.server.model.entity.Msg;
+import pers.codewld.imall.chat.model.entity.User;
+import pers.codewld.imall.chat.model.message.queue.MsgMsg;
 
 import java.util.List;
 
@@ -28,24 +29,24 @@ public class MsgRepository {
     /**
      * 添加未读消息
      */
-    public void addUnreadMsg(Msg msg) {
-        mongoTemplate.insert(msg, UNREAD_MSG);
+    public void addUnreadMsg(MsgMsg msgMsg) {
+        mongoTemplate.insert(msgMsg, UNREAD_MSG);
     }
 
     /**
-     * 查询接收者的未读消息
+     * 查询用户的未读消息
      */
-    public List<Msg> listUnreadMsg(String recipient) {
-        Criteria criteria = Criteria.where("recipient").is(recipient);
+    public List<MsgMsg> listUnreadMsg(User user) {
+        Criteria criteria = Criteria.where("recipient").is(user);
         Query query = new Query(criteria);
-        return mongoTemplate.find(query, Msg.class, UNREAD_MSG);
+        return mongoTemplate.find(query, MsgMsg.class, UNREAD_MSG);
     }
 
     /**
-     * 查询接收者的未读消息数
+     * 查询用户的未读消息数
      */
-    public Long countUnreadMsg(String recipient) {
-        Criteria criteria = Criteria.where("recipient").is(recipient);
+    public Long countUnreadMsg(User user) {
+        Criteria criteria = Criteria.where("recipient").is(user);
         Query query = new Query(criteria);
         return mongoTemplate.count(query, UNREAD_MSG);
     }

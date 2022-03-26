@@ -5,25 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pers.codewld.imall.chat.model.entity.User;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
- * 通信 消息类
+ * 消息列表 消息类
  * </p>
  *
  * @author codewld
- * @since 2022-03-21
+ * @since 2022-03-25
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommunicationMsg {
-
-    /**
-     * 发送者
-     */
-    private User sender;
+public class MsgListMsg {
 
     /**
      * 接收者
@@ -31,13 +26,8 @@ public class CommunicationMsg {
     private User recipient;
 
     /**
-     * 消息
+     * 消息列表
      */
-    private String msg;
-
-    /**
-     * 发送时间
-     */
-    private LocalDateTime time;
+    private List<MsgMsg> list;
 
 }

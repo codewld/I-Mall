@@ -4,18 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pers.codewld.imall.chat.model.entity.User;
-import pers.codewld.imall.chat.model.message.queue.CommunicationMsg;
+import pers.codewld.imall.chat.model.message.queue.MsgMsg;
 import pers.codewld.imall.chat.model.message.queue.UnreadCountMsg;
-import pers.codewld.imall.chat.model.message.queue.UnreadMsgMsg;
-import pers.codewld.imall.chat.server.model.entity.Msg;
+import pers.codewld.imall.chat.model.message.queue.MsgListMsg;
 import pers.codewld.imall.chat.server.repository.MsgRepository;
 import pers.codewld.imall.chat.server.service.MsgService;
 import pers.codewld.imall.chat.server.util.ConfigUtil;
-import pers.codewld.imall.chat.server.util.TransformUtil;
 import pers.codewld.imall.common.util.RedisUtil;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -39,13 +37,13 @@ public class MsgServiceImpl implements MsgService {
     MsgRepository msgRepository;
 
     @Override
-    public void addUnreadMsg(Msg msg) {
-        msgRepository.addUnreadMsg(msg);
+    public void addUnreadMsg(MsgMsg msgMsg) {
+        msgRepository.addUnreadMsg(msgMsg);
     }
 
     @Override
     public void sendUnreadCount(User recipient) {
-        Long unreadMsgCount = msgRepository.countUnreadMsg(TransformUtil.transform(recipient));
+        Long unreadMsgCount = msgRepository.countUnreadMsg(recipient);
         redisUtil.lPush(
                 getPostQueue(recipient),
                 new UnreadCountMsg(recipient, unreadMsgCount),
@@ -53,25 +51,27 @@ public class MsgServiceImpl implements MsgService {
     }
 
     @Override
-    public void sendUnreadMsg(User recipient) {
-        List<Msg> unreadMsgList = msgRepository.listUnreadMsg(TransformUtil.transform(recipient));
-        List<CommunicationMsg> unreadCommunicationMsgList = unreadMsgList
-                .stream()
-                .map(TransformUtil::transform)
-                .collect(Collectors.toList());
-        redisUtil.lPush(
-                getPostQueue(recipient),
-                new UnreadMsgMsg(recipient, unreadCommunicationMsgList),
-                0
-        );
+    public void sendUnreadMsg(User user) {
+        List<MsgMsg> unreadMsgList = msgRepository.listUnreadMsg(user);
+        sendMsgList(user, unreadMsgList);
     }
 
     @Override
-    public void sendCommunicationMsg(CommunicationMsg communicationMsg) {
+    public void sendMsg(MsgMsg msgMsg) {
+        List<MsgMsg> list = new ArrayList<>();
+        list.add(msgMsg);
+        sendMsgList(msgMsg.getRecipient(), list);
+    }
+
+    /**
+     * 发送消息列表
+     */
+    private void sendMsgList(User recipient, List<MsgMsg> list) {
         redisUtil.lPush(
-                getPostQueue(communicationMsg.getRecipient()),
-                communicationMsg,
-                0);
+                getPostQueue(recipient),
+                new MsgListMsg(recipient, list),
+                0
+        );
     }
 
     /**

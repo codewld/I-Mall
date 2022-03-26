@@ -7,7 +7,7 @@ import pers.codewld.imall.chat.model.enums.SystemCode;
 
 /**
  * <p>
- * 用户
+ * 用户 实体类
  * </p>
  *
  * @author codewld
