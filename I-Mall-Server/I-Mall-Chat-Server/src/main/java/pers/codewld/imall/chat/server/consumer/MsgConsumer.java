@@ -52,26 +52,25 @@ public class MsgConsumer {
      * 处理用户的在线状态
      */
     void handleUserStatus(UserStatusMsg userStatusMsg) {
-        String userStr = TransformUtil.transform(userStatusMsg.getUser());
+        User user = userStatusMsg.getUser();
+        String userStr = TransformUtil.transform(user);
         if (userStatusMsg.getOnline()) { // 如果在线
             if (userStatusMsg.getActive()) { // 如果活跃
-                // 存在交流者时，记录交流者；否则记录状态为激活
-                String contactStr = "__ACTIVE__";
                 User contact = userStatusMsg.getContact();
-                if (contact != null) {
-                    contactStr = TransformUtil.transform(contact);
-                }
+                String contactStr = TransformUtil.transform(contact);
                 redisUtil.hSet(
                         configUtil.getUSER_STATUS_HASH(),
                         userStr,
-                        contactStr,
+                        contactStr != null ? contactStr : "__ACTIVE__", // 存在交流者时，记录交流者；否则记录状态为激活
                         0);
+                // todo 发送所有未读的消息
             } else { // 如果不活跃
                 redisUtil.hSet(
                         configUtil.getUSER_STATUS_HASH(),
                         userStr,
                         "__ONLINE__",
                         0);
+                msgService.sendUnReadMsg(user);
             }
         } else { // 如果不在线
             redisUtil.hDel(
