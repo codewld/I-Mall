@@ -7,7 +7,7 @@ import { baseURL } from '@/config';
 import { unref } from 'vue';
 import { useJWTStore } from '@/store';
 import { removeNull } from '@/utils/objUtil'
-import useAccount from '@/composables/useAccount';
+import useAccount from '@/composables/system/useAccount';
 import { reloadRouter } from '@/router';
 
 const { reset } = useAccount()

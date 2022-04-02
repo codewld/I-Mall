@@ -1,4 +1,4 @@
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import request from '@/api/request';
 import { unref } from 'vue';
 

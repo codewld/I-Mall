@@ -1,6 +1,6 @@
 import useCurdApi from '@/composables/curd/useCurdApi';
 import request from '@/api/request';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 
 const PREFIX = '/sms/dict'
 

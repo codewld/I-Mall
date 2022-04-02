@@ -2,7 +2,7 @@
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 import usePage from '@/composables/curd/usePage';
 import { PropType, watch } from 'vue';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 
 const props = defineProps({
   /**

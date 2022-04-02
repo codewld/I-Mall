@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineExpose, PropType, ref, Ref } from 'vue';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 
 const props = defineProps({
   /**

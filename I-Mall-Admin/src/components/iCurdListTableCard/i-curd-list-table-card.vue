@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 import { onMounted, PropType } from 'vue';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import useList from '@/composables/curd/useList';
 
 const props = defineProps({

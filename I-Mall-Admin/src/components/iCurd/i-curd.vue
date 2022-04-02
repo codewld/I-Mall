@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, PropType, ref } from 'vue';
 import IContainer from '@/components/iContainer';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import useFormCurd from '@/composables/curd/useFormCurd';
 import ICurdSearchCard from '@/components/iCurdSearchCard/i-curd-search-card.vue';
 import ICurdPageTableCard from '@/components/iCurdPageTableCard/i-curd-page-table-card.vue';

@@ -4,7 +4,7 @@ import {
   rAdd, rDel, rUpdate, rPage,
   rAddDetail, rDelDetail, rUpdateDetail, rListDetail
 } from '@/api/sms/dict';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 import { ref, watch } from 'vue';

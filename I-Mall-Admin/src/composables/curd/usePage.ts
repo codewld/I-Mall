@@ -1,7 +1,7 @@
 import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 
 /**
  * 分页查询

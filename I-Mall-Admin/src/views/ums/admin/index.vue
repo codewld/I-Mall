@@ -4,7 +4,7 @@ import { rListMark } from '@/api/ums/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import ICurd from '@/components/iCurd';
 import IStatusIcon from '@/components/iStatusIcon';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';

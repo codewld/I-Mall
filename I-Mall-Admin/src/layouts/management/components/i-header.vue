@@ -3,7 +3,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
 import 'element-plus/es/components/message-box/style/css';
 import { useRouter } from 'vue-router';
-import useAccount from '@/composables/useAccount';
+import useAccount from '@/composables/system/useAccount';
 
 const router = useRouter();
 

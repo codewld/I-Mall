@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { rPage } from '@/api/sms/log';
 import ICurd from '@/components/iCurd';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import IStatusIcon from '@/components/iStatusIcon';
 

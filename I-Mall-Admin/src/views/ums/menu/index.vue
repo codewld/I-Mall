@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { rAdd, rDel, rUpdate, rTree } from '@/api/ums/menu';
 import ICurd from '@/components/iCurd';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import { Document, Folder } from '@element-plus/icons-vue';
 import { getFormattedDateTime } from '@/utils/dateUtil';
 import IMenuPicker from '@/components/iMenuPicker';

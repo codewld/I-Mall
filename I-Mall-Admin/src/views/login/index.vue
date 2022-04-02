@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { rLogin } from '@/api/account'
+import { rLogin } from '@/api/system/account'
 import { useJWTStore } from '@/store';
 import { useRouter } from 'vue-router';
 

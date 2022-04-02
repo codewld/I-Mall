@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { rAdd, rDel, rUpdate, rPage, rListMenuId, rUpdateMenu } from '@/api/ums/role';
 import { getFormattedDateTime } from '@/utils/dateUtil';
-import { CURD } from '@/@types/curd';
+import { CURD } from '@/@types/curd/curd';
 import ICurd from '@/components/iCurd/i-curd.vue';
 import { Ref, ref } from 'vue';
 import { ElMessage } from 'element-plus/es';

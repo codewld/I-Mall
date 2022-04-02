@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { useJWTStore, useRouterStore } from '@/store';
-import { rGetRouter } from '@/api/account';
+import { rGetRouter } from '@/api/system/account';
 import { ElMessage } from 'element-plus';
 import 'element-plus/es/components/message/style/css';
-import useAccount from '@/composables/useAccount'
+import useAccount from '@/composables/system/useAccount'
 
 const managementLayout = () => import('@/layouts/management/index.vue')
 const login = () => import('@/views/login/index.vue')
