@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia';
 
 interface layoutState {
+  /**
+   * 侧边栏是否折叠
+   */
   isSideBarFold: boolean
 }
 
@@ -19,11 +22,7 @@ export const useLayoutStore = defineStore({
      * 设置侧边栏是否折叠
      */
     setIsSideBarFold(value?: boolean) {
-      if (value === undefined) {
-        this.isSideBarFold = !this.isSideBarFold
-      } else {
-        this.isSideBarFold = value
-      }
+      this.isSideBarFold = value ?? !this.isSideBarFold
     }
   },
   persist: {

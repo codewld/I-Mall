@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia';
 
 interface JWTState {
-  value: string | undefined
+  value: string
 }
 
 export const useJWTStore = defineStore({
   id: 'JWT',
   state: (): JWTState => {
     return {
-      value: undefined
+      value: ''
     }
   },
   actions: {
@@ -24,9 +24,6 @@ export const useJWTStore = defineStore({
      * 获取当前用户的ID
      */
     getId() {
-      if (this.value === undefined) {
-        return null
-      }
       let decodeJWT: Account.decodeJWT = JSON.parse(window.atob(this.value.split('.')[1]))
       return decodeJWT.aud[0]
     }

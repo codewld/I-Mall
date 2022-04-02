@@ -27,8 +27,7 @@ const instance = axios.create({
  */
 instance.interceptors.request.use(
   (config: any) => {
-    const JWTStore = useJWTStore()
-    config.headers.Authorization = JWTStore.value
+    config.headers.Authorization = useJWTStore().value
     return config
   }, () => {
     ElMessage.error('请检查网络')
