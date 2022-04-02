@@ -26,7 +26,7 @@ const triggerPanel = () => {
   isShowPanel.value = !isShowPanel.value
   if (!isShowPanel.value) {
     contact.value = undefined
-    msg.value = ''
+    editingMsg.value = ''
   }
   sendActiveStatusMsg(isShowPanel.value)
 }
@@ -51,14 +51,14 @@ const chooseContact = (i: number) => {
 /**
  * 正在编辑中的消息
  */
-const msg: Ref<string> = ref('')
+const editingMsg: Ref<string> = ref('')
 
 /**
  * 发送消息
  */
 const sendMsg = () => {
-  sendSessionMsg(msg.value)
-  msg.value = ''
+  sendSessionMsg(editingMsg.value)
+  editingMsg.value = ''
 }
 
 
@@ -69,8 +69,8 @@ const sendMsg = () => {
 const receiveMsg = (webSocketMsg: Websocket.webSocketMsg): void => {
   const data = JSON.parse(webSocketMsg.data.toString());
   switch (webSocketMsg.type) {
-    // 未读消息
-    case "unreadCount":
+      // 未读消息数
+    case 'unreadCount':
       unreadCount.value = data.count
       break
   }
@@ -117,7 +117,8 @@ const {
 <template>
   <div class="z-10 fixed right-5 bottom-5">
     <!--聊天按钮-->
-    <el-badge :value="unreadCount" :max="99" :hidden="unreadCount === 0 || isShowPanel" class="absolute bottom-0 right-0">
+    <el-badge :value="unreadCount" :max="99" :hidden="unreadCount === 0 || isShowPanel"
+              class="absolute bottom-0 right-0">
       <div class="p-3 box-border flex items-center justify-center rounded-3xl cursor-pointer shadow"
            :class="{'bg-blue-400': !isShowPanel, 'bg-blue-200': isShowPanel}"
            @click="triggerPanel">
@@ -155,7 +156,7 @@ const {
               </el-scrollbar>
               <!--输入区-->
               <div class="h-2/6 relative">
-                <el-input v-model="msg" type="textarea" resize="none" placeholder="请输入" maxlength="100"
+                <el-input v-model="editingMsg" type="textarea" resize="none" placeholder="请输入" maxlength="100"
                           show-word-limit class="h-full "/>
                 <el-button size="small" class="absolute right-2 bottom-2 w-1/4 mt-1" @click="sendMsg">发送</el-button>
               </div>

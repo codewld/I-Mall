@@ -3,9 +3,19 @@ declare namespace Websocket {
   /**
    * 用户
    */
-  interface User {
+  interface user {
     system: string
-    id: number,
+    id: string,
+  }
+
+  /**
+   * 消息
+   */
+  interface msg {
+    sender: user,
+    recipient: user,
+    msg: string,
+    time: string
   }
 
   /**

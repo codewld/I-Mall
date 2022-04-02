@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
-
 defineProps({
   /**
    * 是否被选中
