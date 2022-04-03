@@ -64,36 +64,13 @@ const sendMsg = () => {
 }
 
 
-// -- webSocket相关 --
-/**
- * 接收消息
- */
-const receiveMsg = (webSocketMsg: Websocket.webSocketMsg): void => {
-  const data = JSON.parse(webSocketMsg.data.toString());
-  switch (webSocketMsg.type) {
-      // 未读消息数
-    case 'unreadCount':
-      unreadCount.value = data.count
-      break
-  }
-}
-
-/**
- * 发送"活跃状态"信息
- */
-const sendActiveStatusMsg = (active: boolean) => {
-  let data = {
-    active: active
-  }
-  send('activeStatus', data)
-}
-
-
 // -- 聊天通信相关 --
 const {
   sendActiveStatusMsg,
   sendSessionEstablishMsg,
-  sendCommunicateMsg
+  sendCommunicateMsg,
+  allMsg,
+  contactList
 } = useChat()
 </script>
 
@@ -124,18 +101,16 @@ const {
         <div class="h-full flex overflow-hidden space-x-2">
           <!--左侧-联系人列表-->
           <el-scrollbar class="w-1/3 h-full rounded">
-            <template v-for="i in 90">
-              <i-chat-person @click="chooseContact(i)" :is-choose="contact === i"/>
+            <template v-for="item in contactList">
+              <i-chat-person @click="chooseContact(1)" :is-choose="currentContact === item"/>
             </template>
           </el-scrollbar>
           <!--右侧-聊天区-->
           <div class="w-2/3 flex flex-col space-y-2">
-            <template v-if="contact">
+            <template v-if="currentContact">
               <!--消息区-->
               <el-scrollbar class="h-4/6 p-2 box-border border rounded bg-gray-50">
-                <template v-for="i in 90">
-                  <p>123</p>
-                </template>
+                {{ allMsg }}
               </el-scrollbar>
               <!--输入区-->
               <div class="h-2/6 relative">

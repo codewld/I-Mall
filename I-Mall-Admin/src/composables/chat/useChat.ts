@@ -1,5 +1,7 @@
 import { useWebSocket } from '@/composables/chat/useWebSocket';
 import { useChatState } from '@/store/modules/chat';
+import { computed } from 'vue';
+import { getUserStr } from '@/utils/chatUtil';
 
 /**
  * chat
@@ -10,16 +12,16 @@ export function useChat() {
    * 接收消息
    */
   const receiveMsg = (webSocketMsg: Websocket.webSocketMsg): void => {
-    const msgStore = useChatState()
+    const chatState = useChatState()
     const data = JSON.parse(webSocketMsg.data.toString())
     switch (webSocketMsg.type) {
       // 未读消息数
       case 'unreadCount':
-        msgStore.setUnreadCount(data.count)
+        chatState.setUnreadCount(data.count)
         break
       // 消息
       case 'msg':
-        msgStore.addMsg(data.list)
+        chatState.addMsg(data.list)
         break
       default:
         break
@@ -56,9 +58,37 @@ export function useChat() {
     send('communicateMsg', data)
   }
 
+
+  /**
+  * 所有聊天消息
+  */
+  const allMsg = computed(() => {
+    return useChatState().getMsgArchive
+  })
+
+  /**
+   * 联系人列表
+   */
+  const contactList = computed(() => {
+    const set = new Set(allMsg.value.map(o => {
+      const userStr = getUserStr()
+      const senderStr = getUserStr(o.sender)
+      const recipientStr = getUserStr(o.recipient)
+      if (senderStr !== userStr) {
+        return senderStr
+      } else if (recipientStr != userStr) {
+        return recipientStr
+      }
+    }))
+    return [...set]
+  })
+
+
   return {
     sendActiveStatusMsg,
     sendSessionEstablishMsg,
-    sendCommunicateMsg
+    sendCommunicateMsg,
+    allMsg,
+    contactList
   }
 }

@@ -8,7 +8,7 @@ interface chatState {
    * <br>
    * 对象中每一个属性对应一个用户的聊天记录
    */
-  msgArchiveMap: Map<string, Set<Chat.msg>>,
+  msgArchiveMap: Map<string, Set<string>>,
   /**
    * 未读消息数
    */
@@ -19,7 +19,7 @@ export const useChatState = defineStore({
   id: 'chat',
   state: (): chatState => {
     return {
-      msgArchiveMap: new Map<string, Set<Chat.msg>>(),
+      msgArchiveMap: new Map<string, Set<string>>(),
       unreadCount: 0
     }
   },
@@ -29,7 +29,8 @@ export const useChatState = defineStore({
      */
     addMsg(msgList: Chat.msg[]) {
       let msgSet = this.msgArchiveMap.get(getUserStr()) ?? new Set()
-      msgList.forEach(o => msgSet.add(o))
+      // 以字符串存储，以避免重复
+      msgList.forEach(o => msgSet.add(stringifyPlus(o)))
       this.msgArchiveMap.set(getUserStr(), msgSet)
     },
     /**
@@ -44,13 +45,13 @@ export const useChatState = defineStore({
      * 获取消息存档
      */
     getMsgArchive(): Chat.msg[] {
-      return [...this.msgArchiveMap.get(getUserStr()) ?? []]
+      return [...this.msgArchiveMap.get(getUserStr()) ?? []].map(o => parsePlus(o))
     }
   },
   persist: {
     serializer: {
       serialize: val => stringifyPlus(val),
-      deserialize: val => parsePlus(val),
+      deserialize: val => parsePlus(val)
     }
   }
 })
