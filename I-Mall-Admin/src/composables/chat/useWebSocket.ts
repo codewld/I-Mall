@@ -8,7 +8,7 @@ import { useJWTStore } from '@/store';
  * webSocket
  * @param onmessage 接收消息的回调方法
  */
-export function useWebSocket(onmessage: (webSocketMsg: Websocket.webSocketMsg) => void) {
+export function useWebSocket(onmessage?: (webSocketMsg: Websocket.webSocketMsg) => void) {
 
   const jwtStore = useJWTStore()
 
@@ -33,7 +33,7 @@ export function useWebSocket(onmessage: (webSocketMsg: Websocket.webSocketMsg) =
 
     socket.onmessage = event => {
       let webSocketMsg = JSON.parse(event.data)
-      onmessage(webSocketMsg)
+      onmessage && onmessage(webSocketMsg)
     }
 
     socket.onclose = () => {

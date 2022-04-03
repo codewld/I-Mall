@@ -1,4 +1,4 @@
-declare namespace Websocket {
+declare namespace Chat {
 
   /**
    * 用户
@@ -16,14 +16,6 @@ declare namespace Websocket {
     recipient: user,
     msg: string,
     time: string
-  }
-
-  /**
-   * websocket 消息类
-   */
-  interface webSocketMsg {
-    type: string,
-    data: object
   }
 
 }

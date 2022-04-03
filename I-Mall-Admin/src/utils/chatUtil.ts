@@ -4,7 +4,7 @@ import { system } from '@/config';
 /**
  * 获取当前用户
  */
-export function getUser(): Websocket.user {
+export function getUser(): Chat.user {
   const jwtStore = useJWTStore()
   const id = jwtStore.getId
   return {
@@ -18,6 +18,6 @@ export function getUser(): Websocket.user {
  * <br>
  * 若传入用户，则转换指定用户；否则转换当前用户
  */
-export function getUserStr(user: Websocket.user = getUser()): string {
+export function getUserStr(user: Chat.user = getUser()): string {
   return user.system + '_' + user.id
 }

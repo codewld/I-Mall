@@ -4,7 +4,7 @@ import { ChatDotSquare, Close } from '@element-plus/icons-vue';
 import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
-import { useWebSocket } from '@/composables/webSocket';
+import { useChat } from '@/composables/chat/useChat';
 
 // -- 聊天按钮相关 --
 /**
@@ -24,10 +24,8 @@ const isShowPanel = ref(false)
  */
 const triggerPanel = () => {
   isShowPanel.value = !isShowPanel.value
-  if (!isShowPanel.value) {
-    contact.value = undefined
-    editingMsg.value = ''
-  }
+  currentContact.value = undefined
+  editingMsg.value = ''
   sendActiveStatusMsg(isShowPanel.value)
 }
 
@@ -36,14 +34,18 @@ const triggerPanel = () => {
 /**
  * 当前联系人
  */
-const contact = ref()
+const currentContact = ref()
 
 /**
  * 选择联系人
  */
 const chooseContact = (i: number) => {
-  contact.value = i
-  sendSessionEstablishMsg(i)
+  currentContact.value = i
+  let contact = {
+    system: 'ADMIN',
+    id: '1505001300199129090'
+  }
+  sendSessionEstablishMsg(contact)
 }
 
 
@@ -57,7 +59,7 @@ const editingMsg: Ref<string> = ref('')
  * 发送消息
  */
 const sendMsg = () => {
-  sendSessionMsg(editingMsg.value)
+  sendCommunicateMsg(editingMsg.value)
   editingMsg.value = ''
 }
 
@@ -86,32 +88,13 @@ const sendActiveStatusMsg = (active: boolean) => {
   send('activeStatus', data)
 }
 
-/**
- * 发送"会话建立"信息
- */
-const sendSessionEstablishMsg = (id: number) => {
-  let data = {
-    contact: {
-      system: 'ADMIN',
-      id: '1505001300199129090'
-    }
-  }
-  send('sessionEstablish', data)
-}
 
-/**
- * 发送"发送消息"消息
- */
-const sendSessionMsg = (msg: string) => {
-  let data = {
-    msg: msg
-  }
-  send('sendMsg', data)
-}
-
+// -- 聊天通信相关 --
 const {
-  send
-} = useWebSocket(receiveMsg)
+  sendActiveStatusMsg,
+  sendSessionEstablishMsg,
+  sendCommunicateMsg
+} = useChat()
 </script>
 
 <template>
