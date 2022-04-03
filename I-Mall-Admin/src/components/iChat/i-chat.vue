@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { computed, Ref, ref } from 'vue';
 import { ChatDotSquare, Close } from '@element-plus/icons-vue';
 import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
 import { useChat } from '@/composables/chat/useChat';
 import { isSame } from '@/utils/objUtil';
+import { useChatState } from '@/store/modules/chatState';
 
 // -- 聊天按钮相关 --
 /**
  * 未读消息数量
  */
-const unreadCount = ref(0)
+const unreadCount = computed(() => useChatState().unreadCount)
 
 
 // -- 聊天面板相关 --
