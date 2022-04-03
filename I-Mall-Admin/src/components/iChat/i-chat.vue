@@ -5,6 +5,7 @@ import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
 import { useChat } from '@/composables/chat/useChat';
+import { isSame } from '@/utils/objUtil';
 
 // -- 聊天按钮相关 --
 /**
@@ -39,13 +40,13 @@ const currentContact = ref()
 /**
  * 选择联系人
  */
-const chooseContact = (i: number) => {
-  currentContact.value = i
-  let contact = {
+const chooseContact = (contact: Chat.user) => {
+  currentContact.value = contact
+  let contact1 = {
     system: 'ADMIN',
     id: '1505001300199129090'
   }
-  sendSessionEstablishMsg(contact)
+  sendSessionEstablishMsg(contact1)
 }
 
 
@@ -101,8 +102,9 @@ const {
         <div class="h-full flex overflow-hidden space-x-2">
           <!--左侧-联系人列表-->
           <el-scrollbar class="w-1/3 h-full rounded">
-            <template v-for="item in contactList">
-              <i-chat-person @click="chooseContact(1)" :is-choose="currentContact === item"/>
+            <template v-for="contact in contactList">
+              <i-chat-person :person-info="contact" @click="chooseContact(contact)"
+                             :is-choose="isSame(currentContact, contact)"/>
             </template>
           </el-scrollbar>
           <!--右侧-聊天区-->

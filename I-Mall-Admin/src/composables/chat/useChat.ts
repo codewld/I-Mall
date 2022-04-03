@@ -1,7 +1,8 @@
 import { useWebSocket } from '@/composables/chat/useWebSocket';
 import { useChatState } from '@/store/modules/chat';
 import { computed } from 'vue';
-import { getUserStr } from '@/utils/chatUtil';
+import { getUser } from '@/utils/chatUtil';
+import { parsePlus, stringifyPlus } from '@/utils/objUtil';
 
 /**
  * chat
@@ -71,16 +72,16 @@ export function useChat() {
    */
   const contactList = computed(() => {
     const set = new Set(allMsg.value.map(o => {
-      const userStr = getUserStr()
-      const senderStr = getUserStr(o.sender)
-      const recipientStr = getUserStr(o.recipient)
+      const userStr = stringifyPlus(getUser())
+      const senderStr = stringifyPlus(o.sender)
+      const recipientStr = stringifyPlus(o.recipient)
       if (senderStr !== userStr) {
         return senderStr
       } else if (recipientStr != userStr) {
         return recipientStr
       }
     }))
-    return [...set]
+    return [...set].map(o => o && parsePlus(o))
   })
 
 
