@@ -1,4 +1,4 @@
-import request from '@/api/request';
+import request from '@/api';
 import { Ref } from 'vue';
 import useCurdApi from '@/composables/curd/useCurdApi';
 

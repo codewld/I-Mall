@@ -1,4 +1,4 @@
-import request from '@/api/request';
+import request from '@/api';
 import { Ref } from 'vue';
 
 const PREFIX = '/account'

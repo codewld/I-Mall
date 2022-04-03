@@ -1,5 +1,5 @@
 import { CURD } from '@/@types/curd/curd';
-import request from '@/api/request';
+import request from '@/api';
 import { unref } from 'vue';
 
 /**

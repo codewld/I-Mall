@@ -2,7 +2,7 @@
 import IHeader from './components/i-header.vue';
 import ISide from './components/i-side.vue';
 import IChat from '@/components/iChat/i-chat.vue';
-import { useLayoutStore } from '@/store/modules/layout';
+import { useLayoutStore } from '@/store/modules/layoutState';
 import { computed, onMounted } from 'vue';
 
 

@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { useRouterStore } from '@/store';
 import ISideItem from '@/layouts/management/components/i-side-item.vue';
 import { Fold, Expand } from '@element-plus/icons-vue';
-import { useLayoutStore } from '@/store/modules/layout';
+import { useLayoutStore } from '@/store/modules/layoutState';
 
 // -- 路由相关 --
 // 当前路由

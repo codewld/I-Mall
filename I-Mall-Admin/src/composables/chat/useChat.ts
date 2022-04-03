@@ -1,5 +1,5 @@
 import { useWebSocket } from '@/composables/chat/useWebSocket';
-import { useChatState } from '@/store/modules/chat';
+import { useChatState } from '@/store/modules/chatState';
 import { computed } from 'vue';
 import { getUser } from '@/utils/chatUtil';
 import { parsePlus, stringifyPlus } from '@/utils/objUtil';

@@ -3,9 +3,9 @@ import { computed, nextTick, PropType, ref } from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd/curd';
 import useFormCurd from '@/composables/curd/useFormCurd';
-import ICurdSearchCard from '@/components/iCurdSearchCard/i-curd-search-card.vue';
-import ICurdPageTableCard from '@/components/iCurdPageTableCard/i-curd-page-table-card.vue';
-import ICurdListTableCard from '@/components/iCurdListTableCard/i-curd-list-table-card.vue';
+import ICurdSearchCard from '@/components/iCurd/components/iCurdSearchCard/i-curd-search-card.vue';
+import ICurdPageTableCard from '@/components/iCurd/components/iCurdPageTableCard/i-curd-page-table-card.vue';
+import ICurdListTableCard from '@/components/iCurd/components/iCurdListTableCard/i-curd-list-table-card.vue';
 import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
 
 const props = defineProps({

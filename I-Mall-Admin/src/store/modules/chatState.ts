@@ -49,6 +49,7 @@ export const useChatState = defineStore({
     }
   },
   persist: {
+    storage: localStorage,
     serializer: {
       serialize: val => stringifyPlus(val),
       deserialize: val => parsePlus(val)
