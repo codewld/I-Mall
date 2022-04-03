@@ -25,7 +25,5 @@ export const useLayoutStore = defineStore({
       this.isSideBarFold = value ?? !this.isSideBarFold
     }
   },
-  persist: {
-    enabled: true
-  }
+  persist: true
 })

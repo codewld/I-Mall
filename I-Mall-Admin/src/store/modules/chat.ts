@@ -51,12 +51,5 @@ export const useChatState = defineStore({
       return [...(this.msgArchiveMap?.[getUserStr()] ?? [])]
     }
   },
-  persist: {
-    enabled: true,
-    strategies: [
-      {
-        storage: localStorage
-      }
-    ]
-  }
+  persist: true
 })

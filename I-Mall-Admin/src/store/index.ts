@@ -1,12 +1,12 @@
 import { createPinia } from 'pinia';
-import piniaPluginPersist from 'pinia-plugin-persist'
 import { useJWTStore } from './modules/jwt';
 import { useRouterStore } from './modules/router';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 const store = createPinia()
 
 // 持久化插件
-store.use(piniaPluginPersist)
+store.use(piniaPluginPersistedstate)
 
 export default store
 

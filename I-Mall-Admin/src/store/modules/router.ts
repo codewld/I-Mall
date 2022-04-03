@@ -19,7 +19,5 @@ export const useRouterStore = defineStore({
       this.value = list
     }
   },
-  persist: {
-    enabled: true
-  }
+  persist: true
 })

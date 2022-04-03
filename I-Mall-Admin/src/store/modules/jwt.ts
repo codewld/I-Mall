@@ -28,7 +28,5 @@ export const useJWTStore = defineStore({
       return decodeJWT.aud[0]
     }
   },
-  persist: {
-    enabled: true
-  }
+  persist: true
 })

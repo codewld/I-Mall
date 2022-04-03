@@ -12,7 +12,7 @@
     "axios": "^0.26.0",
     "element-plus": "^2.0.1",
     "pinia": "^2.0.11",
-    "pinia-plugin-persist": "^0.0.93",
+    "pinia-plugin-persistedstate": "^1.5.1",
     "vite-plugin-optimize-persist": "^0.1.2",
     "vite-plugin-package-config": "^0.1.1",
     "vue": "^3.2.30",
@@ -78,7 +78,7 @@
         "element-plus/es/components/table/style/css",
         "element-plus/lib/locale/lang/zh-cn",
         "pinia",
-        "pinia-plugin-persist",
+        "pinia-plugin-persistedstate",
         "vue",
         "vue-router"
       ]
