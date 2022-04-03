@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getUserStr } from '@/utils/chatUtil';
-import { parsePlus, stringifyPlus } from '@/utils/serializeUtil';
+import { parsePlus, stringifyPlus } from '@/utils/objUtil';
 
 interface chatState {
   /**
