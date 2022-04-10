@@ -92,7 +92,7 @@ public abstract class BaseWebSocketServer {
      * 连接成功的回调方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("id") Long id) {
+    public void onOpen(Session session, @PathParam("id") String id) {
         this.session = session;
         connections.put(String.valueOf(id), this);
         this.user = new User(getSystemCode(), id);
