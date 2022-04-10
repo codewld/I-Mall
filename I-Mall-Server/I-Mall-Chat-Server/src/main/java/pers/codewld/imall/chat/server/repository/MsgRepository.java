@@ -37,7 +37,7 @@ public class MsgRepository {
      * 查询用户的未读消息
      */
     public List<MsgMsg> listUnreadMsg(User user) {
-        Criteria criteria = Criteria.where("recipient").is(user);
+        Criteria criteria = Criteria.where("receiver").is(user);
         Query query = new Query(criteria);
         return mongoTemplate.find(query, MsgMsg.class, UNREAD_MSG);
     }
@@ -46,7 +46,7 @@ public class MsgRepository {
      * 查询用户的未读消息数
      */
     public Long countUnreadMsg(User user) {
-        Criteria criteria = Criteria.where("recipient").is(user);
+        Criteria criteria = Criteria.where("receiver").is(user);
         Query query = new Query(criteria);
         return mongoTemplate.count(query, UNREAD_MSG);
     }

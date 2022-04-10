@@ -42,11 +42,11 @@ public class MsgServiceImpl implements MsgService {
     }
 
     @Override
-    public void sendUnreadCount(User recipient) {
-        Long unreadMsgCount = msgRepository.countUnreadMsg(recipient);
+    public void sendUnreadCount(User user) {
+        Long unreadMsgCount = msgRepository.countUnreadMsg(user);
         redisUtil.lPush(
-                getPostQueue(recipient),
-                new UnreadCountMsg(recipient, unreadMsgCount),
+                getPostQueue(user),
+                new UnreadCountMsg(user, unreadMsgCount),
                 0);
     }
 
@@ -60,16 +60,16 @@ public class MsgServiceImpl implements MsgService {
     public void sendMsg(MsgMsg msgMsg) {
         List<MsgMsg> list = new ArrayList<>();
         list.add(msgMsg);
-        sendMsgList(msgMsg.getRecipient(), list);
+        sendMsgList(msgMsg.getReceiver(), list);
     }
 
     /**
      * 发送消息列表
      */
-    private void sendMsgList(User recipient, List<MsgMsg> list) {
+    private void sendMsgList(User user, List<MsgMsg> list) {
         redisUtil.lPush(
-                getPostQueue(recipient),
-                new MsgListMsg(recipient, list),
+                getPostQueue(user),
+                new MsgListMsg(user, list),
                 0
         );
     }

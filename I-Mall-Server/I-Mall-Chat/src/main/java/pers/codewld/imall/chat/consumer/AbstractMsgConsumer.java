@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import pers.codewld.imall.chat.model.entity.User;
 import pers.codewld.imall.chat.model.enums.SystemCode;
-import pers.codewld.imall.chat.model.message.queue.MsgMsg;
 import pers.codewld.imall.chat.model.message.queue.UnreadCountMsg;
 import pers.codewld.imall.chat.model.message.queue.MsgListMsg;
 import pers.codewld.imall.chat.model.message.websocket.WebSocketMsg;
@@ -49,12 +48,12 @@ public abstract class AbstractMsgConsumer {
                         UnreadCountMsg unreadCountMsg = (UnreadCountMsg) o;
                         JSONObject data = new JSONObject();
                         data.put("count", unreadCountMsg.getCount());
-                        sendMsg(unreadCountMsg.getRecipient(), "unreadCount", data);
+                        sendMsg(unreadCountMsg.getReceiver(), "unreadCount", data);
                     } else if (o instanceof MsgListMsg) {
                         MsgListMsg msgListMsg = (MsgListMsg) o;
                         JSONObject data = new JSONObject();
                         data.put("list", msgListMsg.getList());
-                        sendMsg(msgListMsg.getRecipient(), "msg", data);
+                        sendMsg(msgListMsg.getReceiver(), "msg", data);
                     }
                 }
         );

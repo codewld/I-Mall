@@ -81,19 +81,19 @@ public class MsgConsumer {
      * 处理通信
      */
     void handleCommunication(MsgMsg msgMsg) {
-        User recipient = msgMsg.getRecipient();
-        String senderStr = TransformUtil.transform(msgMsg.getSender());
-        String recipientStr = TransformUtil.transform(recipient);
+        User receiver = msgMsg.getReceiver();
         // Redis 中查询接收者状态
-        String recipientStatus = (String) redisUtil.hGet(
+        String receiverStatus = (String) redisUtil.hGet(
                 configUtil.getUSER_STATUS_HASH(),
-                recipientStr);
-        if (recipientStatus == null) { // 接收者离线
+                TransformUtil.transform(receiver)
+        );
+        if (receiverStatus == null) { // 接收者离线
             msgService.addUnreadMsg(msgMsg);
-        } else if (recipientStatus.equals("__ONLINE__")) { // 接收者在线
+        } else if (receiverStatus.equals("__ONLINE__")) { // 接收者在线
             msgService.addUnreadMsg(msgMsg);
-            msgService.sendUnreadCount(recipient);
-        } else if (recipientStatus.equals("__ACTIVE__") || !recipientStatus.equals(senderStr)) { // 接收者活跃或接收者正在与其它用户对话
+            msgService.sendUnreadCount(receiver);
+        } else if (receiverStatus.equals("__ACTIVE__")
+                || !receiverStatus.equals(TransformUtil.transform(msgMsg.getSender()))) { // 接收者活跃或接收者正在与其它用户对话
             msgService.addUnreadMsg(msgMsg);
             msgService.sendMsg(msgMsg);
         } else { // 接收者正在与发送者对话

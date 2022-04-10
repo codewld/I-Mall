@@ -21,7 +21,7 @@ public class UnreadCountMsg {
     /**
      * 接收者
      */
-    private User recipient;
+    private User receiver;
 
     /**
      * 未读消息数量

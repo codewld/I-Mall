@@ -28,7 +28,7 @@ public class MsgMsg {
     /**
      * 接收者
      */
-    private User recipient;
+    private User receiver;
 
     /**
      * 消息

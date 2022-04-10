@@ -23,7 +23,7 @@ public class MsgListMsg {
     /**
      * 接收者
      */
-    private User recipient;
+    private User receiver;
 
     /**
      * 消息列表
