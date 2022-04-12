@@ -24,8 +24,12 @@ export const useJWTStore = defineStore({
      * 获取当前用户的ID
      */
     getId() {
-      let decodeJWT: Account.decodeJWT = JSON.parse(window.atob(this.value.split('.')[1]))
-      return decodeJWT.aud[0]
+      try {
+        let decodeJWT: Account.decodeJWT = JSON.parse(window.atob(this.value.split('.')[1]))
+        return decodeJWT.aud[0]
+      } catch (e) {
+          return ''
+      }
     }
   },
   persist: true
