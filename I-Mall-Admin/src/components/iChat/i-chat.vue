@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import { computed, Ref, ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { ChatDotSquare, Close } from '@element-plus/icons-vue';
 import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
 import { useChat } from '@/composables/chat/useChat';
 import { isSame } from '@/utils/objUtil';
-import { useChatStore } from '@/store/modules/chatState';
-
-// -- 聊天按钮相关 --
-/**
- * 未读消息数量
- */
-const unreadCount = computed(() => useChatStore().unreadCount)
 
 
 // -- 聊天面板相关 --
@@ -28,26 +21,7 @@ const triggerPanel = () => {
   isShowPanel.value = !isShowPanel.value
   currentContact.value = undefined
   editingMsg.value = ''
-  sendActiveStatusMsg(isShowPanel.value)
-}
-
-
-// -- 联系人相关 --
-/**
- * 当前联系人
- */
-const currentContact = ref()
-
-/**
- * 选择联系人
- */
-const chooseContact = (contact: Chat.user) => {
-  currentContact.value = contact
-  let contact1 = {
-    system: 'ADMIN',
-    id: '1505001300199129090'
-  }
-  sendSessionEstablishMsg(contact1)
+  setActiveStatus(isShowPanel.value)
 }
 
 
@@ -68,10 +42,12 @@ const sendMsg = () => {
 
 // -- 聊天通信相关 --
 const {
-  sendActiveStatusMsg,
-  sendSessionEstablishMsg,
+  setActiveStatus,
+  currentContact,
+  establishSession,
   sendCommunicateMsg,
-  allMsg,
+  sessionMsg,
+  unreadCount,
   contactList
 } = useChat()
 </script>
@@ -104,7 +80,7 @@ const {
           <!--左侧-联系人列表-->
           <el-scrollbar class="w-1/3 h-full rounded">
             <template v-for="contact in contactList">
-              <i-chat-person :person-info="contact" @click="chooseContact(contact)"
+              <i-chat-person :person-info="contact" @click="establishSession(contact)"
                              :is-choose="isSame(currentContact, contact)"/>
             </template>
           </el-scrollbar>
@@ -113,7 +89,7 @@ const {
             <template v-if="currentContact">
               <!--消息区-->
               <el-scrollbar class="h-4/6 p-2 box-border border rounded bg-gray-50">
-                {{ allMsg }}
+                {{ sessionMsg }}
               </el-scrollbar>
               <!--输入区-->
               <div class="h-2/6 relative">

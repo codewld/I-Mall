@@ -1,7 +1,7 @@
 import { useWebSocket } from '@/composables/chat/useWebSocket';
 import { useChatStore } from '@/store/modules/chatState';
-import { computed, Ref } from 'vue';
-import { parsePlus } from '@/utils/objUtil';
+import { computed, ref, Ref } from 'vue';
+import { parsePlus, stringifyPlus } from '@/utils/objUtil';
 
 /**
  * chat
@@ -32,9 +32,9 @@ export function useChat() {
 
 
   /**
-   * 发送"活跃状态"信息
+   * 设置"活跃状态"
    */
-  const sendActiveStatusMsg = (active: boolean) => {
+  const setActiveStatus = (active: boolean) => {
     let data = {
       active: active
     }
@@ -42,10 +42,19 @@ export function useChat() {
   }
 
   /**
-   * 发送"会话建立"信息
+   * 当前联系人
    */
-  const sendSessionEstablishMsg = (contact: Chat.user) => {
-    send('sessionEstablish', contact)
+  const currentContact = ref()
+
+  /**
+   * 建立会话
+   */
+  const establishSession = (contact: Chat.user) => {
+    currentContact.value = contact
+    let data = {
+      contact: contact
+    }
+    send('sessionEstablish', data)
   }
 
   /**
@@ -66,6 +75,18 @@ export function useChat() {
   })
 
   /**
+   * 当前会话的聊天信息
+   */
+  const sessionMsg = computed(() => {
+    return allMsg.value.get(stringifyPlus(currentContact.value))
+  })
+
+  /**
+   * 未读消息数量
+   */
+  const unreadCount = computed(() => useChatStore().unreadCount)
+
+  /**
    * 联系人列表
    */
   const contactList: Ref<Chat.user[]> = computed(() => {
@@ -78,10 +99,13 @@ export function useChat() {
 
 
   return {
-    sendActiveStatusMsg,
-    sendSessionEstablishMsg,
+    setActiveStatus,
+    currentContact,
+    establishSession,
     sendCommunicateMsg,
     allMsg,
+    sessionMsg,
+    unreadCount,
     contactList
   }
 }

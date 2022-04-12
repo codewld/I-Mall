@@ -38,7 +38,7 @@ export const useChatStore = defineStore({
       msgList.forEach(msg => {
         const contactStringify = stringifyPlus(getContact(msg))
         const msgSet = msgArchiveMap.get(contactStringify) ?? new Set<string>()
-        msgSet.add(stringifyPlus(msg))
+        msgSet.add(stringifyPlus({ msg: msg.msg, time: msg.time }))
         msgArchiveMap.set(contactStringify, msgSet)
       })
       this.setMsgArchiveMap(msgArchiveMap)
