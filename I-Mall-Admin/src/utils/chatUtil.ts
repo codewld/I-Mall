@@ -1,5 +1,6 @@
 import { useJWTStore } from '@/store';
 import { system } from '@/config';
+import { stringifyPlus } from '@/utils/objUtil';
 
 /**
  * 获取当前用户
@@ -14,10 +15,15 @@ export function getUser(): Chat.user {
 }
 
 /**
- * 获取用户的字符串表示
- * <br>
- * 若传入用户，则转换指定用户；否则转换当前用户
+ * 获取联系人
  */
-export function getUserStr(user: Chat.user = getUser()): string {
-  return user.system + '_' + user.id
+export function getContact(msg: Chat.msg): Chat.user {
+  const userStringify = stringifyPlus(getUser())
+  if (userStringify === stringifyPlus(msg.sender)) {
+    return msg.receiver
+  } else if (userStringify === stringifyPlus(msg.receiver)) {
+    return msg.sender
+  } else {
+    throw new Error('联系人不存在')
+  }
 }

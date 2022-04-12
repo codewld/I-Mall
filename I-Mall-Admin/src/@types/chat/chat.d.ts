@@ -13,7 +13,7 @@ declare namespace Chat {
    */
   interface msg {
     sender: user,
-    recipient: user,
+    receiver: user,
     msg: string,
     time: string
   }

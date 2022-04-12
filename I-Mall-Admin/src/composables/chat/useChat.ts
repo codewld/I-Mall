@@ -1,8 +1,7 @@
 import { useWebSocket } from '@/composables/chat/useWebSocket';
 import { useChatState } from '@/store/modules/chatState';
-import { computed } from 'vue';
-import { getUser } from '@/utils/chatUtil';
-import { parsePlus, stringifyPlus } from '@/utils/objUtil';
+import { computed, Ref } from 'vue';
+import { parsePlus } from '@/utils/objUtil';
 
 /**
  * chat
@@ -59,29 +58,22 @@ export function useChat() {
     send('communicateMsg', data)
   }
 
-
   /**
-  * 所有聊天消息
-  */
+   * 所有聊天消息
+   */
   const allMsg = computed(() => {
-    return useChatState().getMsgArchive
+    return useChatState().msgArchiveMap
   })
 
   /**
    * 联系人列表
    */
-  const contactList = computed(() => {
-    const set = new Set(allMsg.value.map(o => {
-      const userStr = stringifyPlus(getUser())
-      const senderStr = stringifyPlus(o.sender)
-      const recipientStr = stringifyPlus(o.recipient)
-      if (senderStr !== userStr) {
-        return senderStr
-      } else if (recipientStr != userStr) {
-        return recipientStr
-      }
-    }))
-    return [...set].map(o => o && parsePlus(o))
+  const contactList: Ref<Chat.user[]> = computed(() => {
+    let contactList: Chat.user[] = []
+    allMsg.value.forEach((value, key) => {
+      contactList.push(parsePlus(key))
+    })
+    return contactList
   })
 
 
