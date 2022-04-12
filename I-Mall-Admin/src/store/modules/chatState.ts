@@ -8,7 +8,7 @@ interface chatState {
    * <br>
    * 消息存档Map的Map<用户, 消息存档Map<联系人, 消息Set<Chat.msg>>>
    */
-  msgArchiveMapMap: Map<string, Map<string, Set<Chat.msg>>>,
+  msgArchiveMapMap: Map<string, Map<string, Set<string>>>,
   /**
    * 未读消息数
    */
@@ -19,7 +19,7 @@ export const useChatStore = defineStore({
   id: 'chat',
   state: (): chatState => {
     return {
-      msgArchiveMapMap: new Map<string, Map<string, Set<Chat.msg>>>(),
+      msgArchiveMapMap: new Map<string, Map<string, Set<string>>>(),
       unreadCount: 0
     }
   },
@@ -27,7 +27,7 @@ export const useChatStore = defineStore({
     /**
      * 设置消息存档Map
      */
-    setMsgArchiveMap(msgArchiveMap: Map<string, Set<Chat.msg>>) {
+    setMsgArchiveMap(msgArchiveMap: Map<string, Set<string>>) {
       this.msgArchiveMapMap.set(stringifyPlus(getUser()), msgArchiveMap)
     },
     /**
@@ -37,8 +37,8 @@ export const useChatStore = defineStore({
       const msgArchiveMap = this.getMsgArchiveMap
       msgList.forEach(msg => {
         const contactStringify = stringifyPlus(getContact(msg))
-        const msgSet = msgArchiveMap.get(contactStringify) ?? new Set<Chat.msg>()
-        msgSet.add(msg)
+        const msgSet = msgArchiveMap.get(contactStringify) ?? new Set<string>()
+        msgSet.add(stringifyPlus(msg))
         msgArchiveMap.set(contactStringify, msgSet)
       })
       this.setMsgArchiveMap(msgArchiveMap)
@@ -54,8 +54,8 @@ export const useChatStore = defineStore({
     /**
      * 获取消息存档Map
      */
-    getMsgArchiveMap(): Map<string, Set<Chat.msg>> {
-      return this.msgArchiveMapMap.get(stringifyPlus(getUser())) ?? new Map<string, Set<Chat.msg>>()
+    getMsgArchiveMap(): Map<string, Set<string>> {
+      return this.msgArchiveMapMap.get(stringifyPlus(getUser())) ?? new Map<string, Set<string>>()
     }
   },
   persist: {
