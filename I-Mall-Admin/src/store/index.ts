@@ -1,6 +1,8 @@
 import { createPinia } from 'pinia';
 import { useJWTStore } from './modules/jwtState';
 import { useRouterStore } from './modules/routerState';
+import { useLayoutStore} from './modules/layoutState';
+import { useChatStore } from './modules/chatState';
 import { createPersistedState } from 'pinia-plugin-persistedstate';
 
 const store = createPinia()
@@ -14,5 +16,7 @@ export default store
 
 export {
   useJWTStore,
-  useRouterStore
+  useRouterStore,
+  useLayoutStore,
+  useChatStore
 }

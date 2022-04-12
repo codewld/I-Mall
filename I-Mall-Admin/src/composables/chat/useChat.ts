@@ -1,5 +1,5 @@
 import { useWebSocket } from '@/composables/chat/useWebSocket';
-import { useChatState } from '@/store/modules/chatState';
+import { useChatStore } from '@/store/modules/chatState';
 import { computed, Ref } from 'vue';
 import { parsePlus } from '@/utils/objUtil';
 
@@ -12,7 +12,7 @@ export function useChat() {
    * 接收消息
    */
   const receiveMsg = (webSocketMsg: Websocket.webSocketMsg): void => {
-    const chatState = useChatState()
+    const chatState = useChatStore()
     const data = JSON.parse(webSocketMsg.data.toString())
     switch (webSocketMsg.type) {
       // 未读消息数
@@ -62,7 +62,7 @@ export function useChat() {
    * 所有聊天消息
    */
   const allMsg = computed(() => {
-    return useChatState().msgArchiveMap
+    return useChatStore().msgArchiveMap
   })
 
   /**

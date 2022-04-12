@@ -6,13 +6,13 @@ import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
 import { useChat } from '@/composables/chat/useChat';
 import { isSame } from '@/utils/objUtil';
-import { useChatState } from '@/store/modules/chatState';
+import { useChatStore } from '@/store/modules/chatState';
 
 // -- 聊天按钮相关 --
 /**
  * 未读消息数量
  */
-const unreadCount = computed(() => useChatState().unreadCount)
+const unreadCount = computed(() => useChatStore().unreadCount)
 
 
 // -- 聊天面板相关 --
