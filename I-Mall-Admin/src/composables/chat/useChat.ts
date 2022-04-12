@@ -62,7 +62,7 @@ export function useChat() {
    * 所有聊天消息
    */
   const allMsg = computed(() => {
-    return useChatStore().msgArchiveMap
+    return useChatStore().getMsgArchiveMap
   })
 
   /**
