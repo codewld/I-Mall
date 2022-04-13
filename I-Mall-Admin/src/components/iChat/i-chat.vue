@@ -2,6 +2,7 @@
 import { Ref, ref } from 'vue';
 import { ChatDotSquare, Close } from '@element-plus/icons-vue';
 import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
+import IChatMessages from '@/components/iChat/components/i-chat-messages.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
 import { useChat } from '@/composables/chat/useChat';
@@ -88,9 +89,7 @@ const {
           <div class="w-2/3 flex flex-col space-y-2">
             <template v-if="currentContact">
               <!--消息区-->
-              <el-scrollbar class="h-4/6 p-2 box-border border rounded bg-gray-50">
-                {{ sessionMsg }}
-              </el-scrollbar>
+              <i-chat-messages :messages="sessionMsg"/>
               <!--输入区-->
               <div class="h-2/6 relative">
                 <el-input v-model="editingMsg" type="textarea" resize="none" placeholder="请输入" maxlength="100"
