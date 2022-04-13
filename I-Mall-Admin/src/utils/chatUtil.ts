@@ -27,3 +27,12 @@ export function getContact(msg: Chat.msg): Chat.user {
     throw new Error('联系人不存在')
   }
 }
+
+/**
+ * 判断两个用户是否相等
+ * @param user1 用户1
+ * @param user2 用户2 [默认为当前用户]
+ */
+export function isEqual(user1: Chat.user, user2: Chat.user = getUser()): boolean {
+  return stringifyPlus(user1) === stringifyPlus(user2)
+}
