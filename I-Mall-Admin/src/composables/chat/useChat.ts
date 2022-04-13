@@ -1,7 +1,9 @@
 import { useWebSocket } from '@/composables/chat/useWebSocket';
 import { useChatStore } from '@/store/modules/chatState';
-import { computed, ref, Ref } from 'vue';
+import { computed, ref, Ref, toRaw } from 'vue';
 import { parsePlus, stringifyPlus } from '@/utils/objUtil';
+import { getUser } from '@/utils/chatUtil';
+import { format } from '@/utils/dateUtil';
 
 /**
  * chat
@@ -21,7 +23,7 @@ export function useChat() {
         break
       // 消息
       case 'msg':
-        chatState.addMsg(data.list)
+        chatState.addMsg(...data.list)
         break
       default:
         break
@@ -65,6 +67,13 @@ export function useChat() {
       msg: msg
     }
     send('communicateMsg', data)
+    let aMsg: Chat.msg = {
+      msg: msg,
+      receiver: toRaw(currentContact.value),
+      sender: getUser(),
+      time: format(new Date(), 'yyyy-MM-ddTHH:mm:ss.S')
+    }
+    useChatStore().addMsg(aMsg)
   }
 
   /**
@@ -77,8 +86,11 @@ export function useChat() {
   /**
    * 当前会话的聊天信息
    */
-  const sessionMsg = computed(() => {
-    return allMsg.value.get(stringifyPlus(currentContact.value))
+  const sessionMsg = computed((): Chat.msg[] => {
+    let stringSet = allMsg.value.get(stringifyPlus(currentContact.value)) ?? new Set<string>()
+    return [...stringSet]
+      .sort((a, b) => parsePlus(a).time - parsePlus(b).time)
+      .map(string => parsePlus(string))
   })
 
   /**

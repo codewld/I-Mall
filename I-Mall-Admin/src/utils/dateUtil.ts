@@ -3,7 +3,7 @@
  */
 export function getFormattedDate(dateTimeString: string): string {
   if (!dateTimeString || dateTimeString.indexOf('T') !== 10) {
-    return dateTimeString
+    return ''
   }
   return dateTimeString.slice(0, dateTimeString.indexOf('T'))
 }
@@ -13,7 +13,7 @@ export function getFormattedDate(dateTimeString: string): string {
  */
 export function getFormattedDateTime(dateTimeString: string): string {
   if (!dateTimeString || dateTimeString.indexOf('T') !== 10) {
-    return dateTimeString
+    return ''
   }
   let date = dateTimeString.slice(0, dateTimeString.indexOf('T'))
   let time = dateTimeString.slice(dateTimeString.indexOf('T') + 1, 19)
