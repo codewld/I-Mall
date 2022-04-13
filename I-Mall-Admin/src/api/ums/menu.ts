@@ -1,5 +1,5 @@
 import request from '@/api';
-import useCurdApi from '@/composables/curd/useCurdApi';
+import useCurdApi from '@/components/iCurd/composables/useCurdApi';
 
 const PREFIX = '/ums/menu'
 

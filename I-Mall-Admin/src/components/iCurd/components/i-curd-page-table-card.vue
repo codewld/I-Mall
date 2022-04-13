@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
-import { onMounted, PropType } from 'vue';
+import useTableCurrentRow from '@/components/iCurd/composables/useTableCurrentRow';
+import usePage from '@/components/iCurd/composables/usePage';
+import { PropType, watch } from 'vue';
 import { CURD } from '@/@types/curd/curd';
-import useList from '@/composables/curd/useList';
 
 const props = defineProps({
   /**
@@ -13,10 +13,10 @@ const props = defineProps({
     required: true
   },
   /**
-   * 批量查询方法
+   * 分页查询方法
    */
-  listFunction: {
-    type: Function as PropType<CURD.listFunction<unknown, unknown>>,
+  pageFunction: {
+    type: Function as PropType<CURD.pageFunction<unknown, unknown>>,
     required: true
   },
   /**
@@ -52,22 +52,29 @@ const {
 } = useTableCurrentRow(emitCurrentChange)
 
 
-// -- 批量查询相关 --
+// -- 分页查询相关 --
 const {
-  listData,
+  pageParam,
+  pageData,
   isLoading,
   doLoad,
   clearData
-} = useList(props.listFunction);
+} = usePage(props.pageFunction)
 
 
 /**
- * mounted时，要求父级查询
+ * 监听以要求父级查询
  */
-onMounted(() => {
-  props.isImmediate && emits('load')
-})
-
+watch(
+    pageParam,
+    () => {
+      emits('load')
+    },
+    {
+      deep: true,
+      immediate: props.isImmediate
+    }
+)
 
 defineExpose({
   currentRow,
@@ -88,9 +95,14 @@ defineExpose({
       </div>
     </template>
     <!--表格-->
-    <el-table v-loading="isLoading" :data="listData" stripe highlight-current-row row-key="id"
+    <el-table v-loading="isLoading" :data="pageData.list" stripe highlight-current-row
               @current-change="handleCurrentChange" :empty-text="emptyText">
       <slot name="table"></slot>
     </el-table>
+    <!--分页-->
+    <el-pagination :page-sizes="[2, 4, 8, 16]" layout="total, sizes, prev, pager, next, jumper" :total="pageData.total"
+                   v-model:current-page="pageParam.pageNum" v-model:page-size="pageParam.pageSize"
+                   class="justify-center mt-5">
+    </el-pagination>
   </el-card>
 </template>

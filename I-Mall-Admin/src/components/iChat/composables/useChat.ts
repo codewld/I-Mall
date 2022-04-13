@@ -1,4 +1,4 @@
-import { useWebSocket } from '@/composables/chat/useWebSocket';
+import { useWebSocket } from '@/components/iChat/composables/useWebSocket';
 import { useChatStore } from '@/store/modules/chatState';
 import { computed, ref, Ref, toRaw } from 'vue';
 import { parsePlus, stringifyPlus } from '@/utils/objUtil';

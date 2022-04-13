@@ -6,7 +6,7 @@ import {
 } from '@/api/sms/dict';
 import { CURD } from '@/@types/curd/curd';
 import { getFormattedDateTime } from '@/utils/dateUtil';
-import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
+import useTableCurrentRow from '@/components/iCurd/composables/useTableCurrentRow';
 import { ref, watch } from 'vue';
 
 // -- 字典CURD相关 --

@@ -2,11 +2,11 @@
 import { computed, nextTick, PropType, ref } from 'vue';
 import IContainer from '@/components/iContainer';
 import { CURD } from '@/@types/curd/curd';
-import useFormCurd from '@/composables/curd/useFormCurd';
-import ICurdSearchCard from '@/components/iCurd/components/iCurdSearchCard/i-curd-search-card.vue';
-import ICurdPageTableCard from '@/components/iCurd/components/iCurdPageTableCard/i-curd-page-table-card.vue';
-import ICurdListTableCard from '@/components/iCurd/components/iCurdListTableCard/i-curd-list-table-card.vue';
-import useTableCurrentRow from '@/composables/curd/useTableCurrentRow';
+import useFormCurd from '@/components/iCurd/composables/useFormCurd';
+import ICurdSearchCard from '@/components/iCurd/components/i-curd-search-card.vue';
+import ICurdPageTableCard from '@/components/iCurd/components/i-curd-page-table-card.vue';
+import ICurdListTableCard from '@/components/iCurd/components/i-curd-list-table-card.vue';
+import useTableCurrentRow from '@/components/iCurd/composables/useTableCurrentRow';
 
 const props = defineProps({
   /**

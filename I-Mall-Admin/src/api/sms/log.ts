@@ -1,4 +1,4 @@
-import useCurdApi from '@/composables/curd/useCurdApi';
+import useCurdApi from '@/components/iCurd/composables/useCurdApi';
 
 const PREFIX = '/sms/log'
 

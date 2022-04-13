@@ -5,7 +5,7 @@ import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
 import IChatMessages from '@/components/iChat/components/i-chat-messages.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
-import { useChat } from '@/composables/chat/useChat';
+import { useChat } from '@/components/iChat/composables/useChat';
 import { isSame } from '@/utils/objUtil';
 
 
