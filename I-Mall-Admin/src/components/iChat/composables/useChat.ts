@@ -101,12 +101,12 @@ export function useChat() {
   /**
    * 联系人列表
    */
-  const contactList: Ref<Chat.user[]> = computed(() => {
-    let contactList: Chat.user[] = []
+  const contacts: Ref<Chat.user[]> = computed(() => {
+    let contacts: Chat.user[] = []
     allMsg.value.forEach((value, key) => {
-      contactList.push(parsePlus(key))
+      contacts.push(parsePlus(key))
     })
-    return contactList
+    return contacts
   })
 
 
@@ -118,6 +118,6 @@ export function useChat() {
     allMsg,
     sessionMsg,
     unreadCount,
-    contactList
+    contacts
   }
 }

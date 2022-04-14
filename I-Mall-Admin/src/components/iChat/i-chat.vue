@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
 import { ChatDotSquare, Close } from '@element-plus/icons-vue';
-import IChatPerson from '@/components/iChat/components/i-chat-person.vue';
+import IChatContacts from '@/components/iChat/components/i-chat-contacts.vue';
 import IChatMessages from '@/components/iChat/components/i-chat-messages.vue';
 import 'element-plus/es/components/input/style/css';
 import 'element-plus/es/components/scrollbar/style/css';
 import { useChat } from '@/components/iChat/composables/useChat';
-import { isSame } from '@/utils/objUtil';
 
 
 // -- 聊天面板相关 --
@@ -49,7 +48,7 @@ const {
   sendCommunicateMsg,
   sessionMsg,
   unreadCount,
-  contactList
+  contacts
 } = useChat()
 </script>
 
@@ -78,18 +77,17 @@ const {
         </div>
         <!--面板区-->
         <div class="h-full flex overflow-hidden space-x-2">
-          <!--左侧-联系人列表-->
-          <el-scrollbar class="w-1/3 h-full rounded">
-            <template v-for="contact in contactList">
-              <i-chat-person :person-info="contact" @click="establishSession(contact)"
-                             :is-choose="isSame(currentContact, contact)"/>
-            </template>
-          </el-scrollbar>
-          <!--右侧-聊天区-->
+          <!--联系人列表-->
+          <div class="w-1/3 h-full">
+            <i-chat-contacts :contacts="contacts" :current-contact="currentContact" @selectContact="establishSession"/>
+          </div>
+          <!--聊天区-->
           <div class="w-2/3 flex flex-col space-y-2">
             <template v-if="currentContact">
               <!--消息区-->
-              <i-chat-messages :messages="sessionMsg"/>
+              <div class="h-4/6 flex-none">
+                <i-chat-messages :messages="sessionMsg"/>
+              </div>
               <!--输入区-->
               <div class="h-2/6 relative">
                 <el-input v-model="editingMsg" type="textarea" resize="none" placeholder="请输入" maxlength="100"
@@ -110,24 +108,6 @@ const {
   @apply bg-blue-600;
   @apply select-none;
   transform: translateY(-50%) translateX(100%) scale(0.8);
-}
-
-:deep(.el-scrollbar__view) {
-  @apply h-full;
-}
-
-:deep(::-webkit-scrollbar) {
-  width: 6px;
-}
-
-:deep(::-webkit-scrollbar-thumb) {
-  background-color: #0003;
-  border-radius: 10px;
-  transition: all .2s ease-in-out;
-}
-
-:deep(::-webkit-scrollbar-track) {
-  border-radius: 10px;
 }
 
 :deep(.el-textarea__inner) {
